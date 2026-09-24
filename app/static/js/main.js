@@ -171,4 +171,34 @@ document.addEventListener("DOMContentLoaded", () => {
             btnElement.classList.add("active");
         }
     };
+
+    // 10. Dynamic Luxury Editorial Text Switcher (Ultra-Smooth 120FPS Fade & Slide)
+    const textSwitcher = document.getElementById("hero-dynamic-text");
+    if (textSwitcher) {
+        const phrases = [
+            "Couture Standard",
+            "Runway Elegance",
+            "Italian Wool & Silk",
+            "Artisan Tailoring",
+            "Everyday Luxury"
+        ];
+        let phraseIdx = 0;
+
+        setInterval(() => {
+            textSwitcher.classList.add("text-switch-out");
+            setTimeout(() => {
+                phraseIdx = (phraseIdx + 1) % phrases.length;
+                textSwitcher.textContent = phrases[phraseIdx];
+                textSwitcher.classList.remove("text-switch-out");
+                textSwitcher.classList.add("text-switch-in");
+
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        textSwitcher.classList.remove("text-switch-in");
+                    });
+                });
+            }, 350);
+        }, 3600);
+    }
 });
+

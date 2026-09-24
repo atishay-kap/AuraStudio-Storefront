@@ -134,7 +134,7 @@ input[type="number"] {
 }
 
 /* ==========================================================================
-   Marquee Runway Ticker
+   Marquee Runway Ticker (Seamless Infinite 120FPS GPU Scroll)
    ========================================================================== */
 
 .marquee-banner {
@@ -145,13 +145,27 @@ input[type="number"] {
     position: relative;
     z-index: 60;
     padding: 8px 0;
+    user-select: none;
 }
 
 .marquee-track {
-    display: inline-flex;
-    gap: 48px;
-    animation: marqueeScroll 35s linear infinite;
+    display: flex;
+    width: max-content;
+    animation: marqueeScroll 28s linear infinite;
     will-change: transform;
+    transform: translate3d(0, 0, 0);
+}
+
+.marquee-banner:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+.marquee-group {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    padding-right: 48px;
+    flex-shrink: 0;
 }
 
 .marquee-item {
@@ -455,12 +469,10 @@ input[type="number"] {
     height: 650px;
     top: -150px;
     right: -100px;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.22) 0%, rgba(99, 102, 241, 0.12) 40%, rgba(236, 72, 153, 0.05) 70%, transparent 80%);
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, rgba(99, 102, 241, 0.08) 40%, transparent 70%);
     border-radius: 50%;
-    filter: blur(80px);
     pointer-events: none;
     z-index: 1;
-    animation: ambientGlowPulse 8s ease-in-out infinite alternate;
 }
 
 .hero-container-cinematic {
@@ -518,6 +530,18 @@ input[type="number"] {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.hero-title-italic.text-switch-out {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.hero-title-italic.text-switch-in {
+    opacity: 0;
+    transform: translateY(10px);
 }
 
 .hero-lead {

@@ -12,17 +12,21 @@
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
 <body>
-    <!-- Luxury Runway Ticker -->
+    <!-- Luxury Runway Ticker (Seamless Infinite Scroll) -->
     <div class="marquee-banner">
         <div class="marquee-track">
-            <span class="marquee-item"><span class="marquee-dot"></span> AUTUMN / WINTER 2026 RUNWAY CAPSULE</span>
-            <span class="marquee-item"><span class="marquee-dot"></span> COMPLIMENTARY PAN-INDIA EXPRESS DELIVERY</span>
-            <span class="marquee-item"><span class="marquee-dot"></span> 100% ETHICALLY SOURCED LUXURY FABRICS</span>
-            <span class="marquee-item"><span class="marquee-dot"></span> HAND-FINISHED ITALIAN TAILORING</span>
-            <span class="marquee-item"><span class="marquee-dot"></span> AUTUMN / WINTER 2026 RUNWAY CAPSULE</span>
-            <span class="marquee-item"><span class="marquee-dot"></span> COMPLIMENTARY PAN-INDIA EXPRESS DELIVERY</span>
-            <span class="marquee-item"><span class="marquee-dot"></span> 100% ETHICALLY SOURCED LUXURY FABRICS</span>
-            <span class="marquee-item"><span class="marquee-dot"></span> HAND-FINISHED ITALIAN TAILORING</span>
+            <div class="marquee-group">
+                <span class="marquee-item"><span class="marquee-dot"></span> AUTUMN / WINTER 2026 RUNWAY CAPSULE</span>
+                <span class="marquee-item"><span class="marquee-dot"></span> COMPLIMENTARY PAN-INDIA EXPRESS DELIVERY</span>
+                <span class="marquee-item"><span class="marquee-dot"></span> 100% ETHICALLY SOURCED LUXURY FABRICS</span>
+                <span class="marquee-item"><span class="marquee-dot"></span> HAND-FINISHED ITALIAN TAILORING</span>
+            </div>
+            <div class="marquee-group" aria-hidden="true">
+                <span class="marquee-item"><span class="marquee-dot"></span> AUTUMN / WINTER 2026 RUNWAY CAPSULE</span>
+                <span class="marquee-item"><span class="marquee-dot"></span> COMPLIMENTARY PAN-INDIA EXPRESS DELIVERY</span>
+                <span class="marquee-item"><span class="marquee-dot"></span> 100% ETHICALLY SOURCED LUXURY FABRICS</span>
+                <span class="marquee-item"><span class="marquee-dot"></span> HAND-FINISHED ITALIAN TAILORING</span>
+            </div>
         </div>
     </div>
 
@@ -104,7 +108,7 @@
 
                 <h1 class="hero-title-cinematic">
                     THE ARCHIVE <br>
-                    <span class="hero-title-italic">Couture Standard</span>
+                    <span class="hero-title-italic" id="hero-dynamic-text">Couture Standard</span>
                 </h1>
 
                 <p class="hero-lead">

@@ -1,5 +1,13 @@
 # AURA STUDIO — Haute Couture E-Commerce Platform
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://aura-fashion-storefront.onrender.com/)
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Flask](https://img.shields.io/badge/Framework-Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+
+> **🚀 Live Storefront URL:** **[https://aura-fashion-storefront.onrender.com/](https://aura-fashion-storefront.onrender.com/)**  
+> **⚡ Admin Operations Portal:** **[https://aura-fashion-storefront.onrender.com/admin/login](https://aura-fashion-storefront.onrender.com/admin/login)**
+
 A production-ready luxury fashion storefront and back-office management system built with **Python (Flask)**, **SQLAlchemy**, and **Razorpay India Payment Gateway**. Crafted with a dark-mode editorial aesthetic, typography hierarchy (*Playfair Display*, *Cormorant Garamond*, *Plus Jakarta Sans*), multi-size garment selections, live order tracking, and role-separated admin dashboards.
 
 ---
@@ -27,12 +35,12 @@ A production-ready luxury fashion storefront and back-office management system b
 
 Both customer and admin demo accounts are automatically seeded into the database upon startup with guaranteed 1-click login helpers.
 
-| Role | Portal URL | Email / Username | Password | Access Capabilities |
+| Role | Live Portal Link | Email / Username | Password | Access Capabilities |
 | :--- | :--- | :--- | :--- | :--- |
-| **Demo Customer** | [`/login`](http://127.0.0.1:5000/login) | `customer@example.com` | `customer123` | Storefront, Wishlist, Order History, Checkout |
-| **Secondary Customer** | [`/login`](http://127.0.0.1:5000/login) | `demo@example.com` | `demo123` | Storefront, Cart, Profile |
-| **Store Administrator** | [`/admin/login`](http://127.0.0.1:5000/admin/login) | `admin@store.com` | `admin123` | Full Back-Office Admin Operations |
-| **Legacy Admin** | [`/admin/login`](http://127.0.0.1:5000/admin/login) | `admin` | `admin123` | Full Back-Office Admin Operations |
+| **Demo Customer** | [`/login`](https://aura-fashion-storefront.onrender.com/login) | `customer@example.com` | `customer123` | Storefront, Wishlist, Order History, Checkout |
+| **Secondary Customer** | [`/login`](https://aura-fashion-storefront.onrender.com/login) | `demo@example.com` | `demo123` | Storefront, Cart, Profile |
+| **Store Administrator** | [`/admin/login`](https://aura-fashion-storefront.onrender.com/admin/login) | `admin@store.com` | `admin123` | Full Back-Office Admin Operations |
+| **Legacy Admin** | [`/admin/login`](https://aura-fashion-storefront.onrender.com/admin/login) | `admin` | `admin123` | Full Back-Office Admin Operations |
 
 ---
 
@@ -40,8 +48,8 @@ Both customer and admin demo accounts are automatically seeded into the database
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/fashion-storefront.git
-cd fashion-storefront
+git clone https://github.com/atishay-kap/AuraStudio-Storefront.git
+cd AuraStudio-Storefront
 ```
 
 ### 2. Create and activate a virtual environment

@@ -4,15 +4,6 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 0. Quick Luxury Runway Top Hairline Loader Bar
-    if (!document.getElementById("aura-entrance-bar")) {
-        const bar = document.createElement("div");
-        bar.id = "aura-entrance-bar";
-        bar.className = "aura-entrance-bar";
-        document.body.appendChild(bar);
-        setTimeout(() => bar.remove(), 600);
-    }
-
     // 4. File Upload Drag-and-Drop & Instant Live Image Preview
     const fileInputs = document.querySelectorAll('input[type="file"][data-preview-target]');
     fileInputs.forEach(input => {
@@ -171,34 +162,5 @@ document.addEventListener("DOMContentLoaded", () => {
             btnElement.classList.add("active");
         }
     };
-
-    // 10. Dynamic Luxury Editorial Text Switcher (Ultra-Smooth 120FPS Fade & Slide)
-    const textSwitcher = document.getElementById("hero-dynamic-text");
-    if (textSwitcher) {
-        const phrases = [
-            "Couture Standard",
-            "Runway Elegance",
-            "Italian Wool & Silk",
-            "Artisan Tailoring",
-            "Everyday Luxury"
-        ];
-        let phraseIdx = 0;
-
-        setInterval(() => {
-            textSwitcher.classList.add("text-switch-out");
-            setTimeout(() => {
-                phraseIdx = (phraseIdx + 1) % phrases.length;
-                textSwitcher.textContent = phrases[phraseIdx];
-                textSwitcher.classList.remove("text-switch-out");
-                textSwitcher.classList.add("text-switch-in");
-
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        textSwitcher.classList.remove("text-switch-in");
-                    });
-                });
-            }, 350);
-        }, 3600);
-    }
 });
 

@@ -106,27 +106,8 @@ input[type="number"] {
 }
 
 /* ==========================================================================
-   Luxury Initial Load & Ultra-Smooth 120FPS GPU Motion System
+   Luxury Motion System & Runway Elements
    ========================================================================== */
-
-.aura-entrance-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 2px;
-    width: 0%;
-    background: var(--accent-gradient);
-    z-index: 9999;
-    pointer-events: none;
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
-    animation: auraBarLoad 0.4s ease-out forwards;
-}
-
-@keyframes auraBarLoad {
-    0% { width: 0%; opacity: 1; }
-    80% { width: 100%; opacity: 1; }
-    100% { width: 100%; opacity: 0; }
-}
 
 @keyframes buttonShine {
     0% { transform: translateX(-150%) skewX(-20deg); }
@@ -134,7 +115,7 @@ input[type="number"] {
 }
 
 /* ==========================================================================
-   Marquee Runway Ticker (Seamless Infinite 120FPS GPU Scroll)
+   Marquee Runway Ticker (Relaxed & Seamless Infinite Luxury Scroll)
    ========================================================================== */
 
 .marquee-banner {
@@ -144,14 +125,14 @@ input[type="number"] {
     white-space: nowrap;
     position: relative;
     z-index: 60;
-    padding: 8px 0;
+    padding: 9px 0;
     user-select: none;
 }
 
 .marquee-track {
     display: flex;
     width: max-content;
-    animation: marqueeScroll 28s linear infinite;
+    animation: marqueeScroll 60s linear infinite;
     will-change: transform;
     transform: translate3d(0, 0, 0);
 }
@@ -530,18 +511,6 @@ input[type="number"] {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
-    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-}
-
-.hero-title-italic.text-switch-out {
-    opacity: 0;
-    transform: translateY(-10px);
-}
-
-.hero-title-italic.text-switch-in {
-    opacity: 0;
-    transform: translateY(10px);
 }
 
 .hero-lead {

@@ -108,58 +108,58 @@ input[type="number"] {
 }
 
 /* ==========================================================================
-   Luxury Initial Load & Entrance Motion System (Haute Couture Experience)
+   Luxury Initial Load & Ultra-Smooth 120FPS GPU Motion System
    ========================================================================== */
 
 .aura-entrance-bar {
     position: fixed;
     top: 0;
     left: 0;
-    height: 3px;
+    height: 2.5px;
     width: 0%;
     background: var(--accent-gradient);
     z-index: 9999;
     pointer-events: none;
-    box-shadow: 0 0 16px rgba(168, 85, 247, 0.8), 0 0 30px rgba(99, 102, 241, 0.6);
-    animation: auraBarLoad 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
+    animation: auraBarLoad 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    will-change: width, opacity;
 }
 
 @keyframes auraBarLoad {
     0% { width: 0%; opacity: 1; }
-    50% { width: 75%; opacity: 1; }
-    85% { width: 100%; opacity: 1; }
+    60% { width: 80%; opacity: 1; }
     100% { width: 100%; opacity: 0; }
 }
 
 @keyframes auraPageEntrance {
-    0% { opacity: 0; filter: blur(4px); }
-    100% { opacity: 1; filter: blur(0); }
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 @keyframes auraSlideDown {
-    0% { opacity: 0; transform: translateY(-16px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% { opacity: 0; transform: translate3d(0, -14px, 0); }
+    100% { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 @keyframes auraSlideUp {
-    0% { opacity: 0; transform: translateY(28px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% { opacity: 0; transform: translate3d(0, 20px, 0); }
+    100% { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 @keyframes auraScaleReveal {
-    0% { opacity: 0; transform: scale(0.92) translateY(24px); filter: blur(4px); }
-    100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    0% { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.96); }
+    100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 
 @keyframes auraCardCascade {
-    0% { opacity: 0; transform: translateY(32px) scale(0.96); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
+    0% { opacity: 0; transform: translate3d(0, 22px, 0); }
+    100% { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 @keyframes ambientGlowPulse {
-    0% { opacity: 0.3; transform: scale(0.95); }
-    50% { opacity: 0.65; transform: scale(1.08) translate(15px, -15px); }
-    100% { opacity: 0.3; transform: scale(0.95); }
+    0% { opacity: 0.35; transform: scale(0.98); }
+    50% { opacity: 0.6; transform: scale(1.04); }
+    100% { opacity: 0.35; transform: scale(0.98); }
 }
 
 @keyframes buttonShine {
@@ -168,8 +168,8 @@ input[type="number"] {
 }
 
 @keyframes editorialBadgeFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -5px, 0); }
 }
 
 /* ==========================================================================
@@ -184,7 +184,7 @@ input[type="number"] {
     position: relative;
     z-index: 60;
     padding: 8px 0;
-    animation: auraSlideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: auraSlideDown 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .marquee-track {
@@ -214,8 +214,8 @@ input[type="number"] {
 }
 
 @keyframes marqueeScroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
 }
 
 /* ==========================================================================
@@ -223,14 +223,15 @@ input[type="number"] {
    ========================================================================== */
 
 .site-header {
-    background: rgba(7, 9, 14, 0.94);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(7, 9, 14, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-subtle);
     position: sticky;
     top: 0;
     z-index: 50;
-    animation: auraSlideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: auraSlideDown 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: transform, opacity;
 }
 
 .nav-container {

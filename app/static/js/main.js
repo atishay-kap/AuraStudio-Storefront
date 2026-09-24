@@ -20,42 +20,67 @@ document.addEventListener("DOMContentLoaded", () => {
         card.classList.add("stagger-in");
     });
 
-    // 2. Ambient Mouse Spotlight Effect on Hero & Interactive Containers
-    const hero = document.querySelector(".hero-container-cinematic, .hero-cinematic, .hero-container");
-    if (hero) {
-        window.addEventListener("mousemove", (e) => {
+    // 2. High-Performance RAF-Throttled Mouse Spotlight on Hero
+    const hero = document.querySelector(".hero-container-cinematic");
+    if (hero && window.matchMedia("(pointer: fine)").matches) {
+        let rafPending = false;
+        let lastX = 0, lastY = 0;
+
+        hero.addEventListener("mousemove", (e) => {
             const rect = hero.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            hero.style.setProperty("--mouse-x", `${x}px`);
-            hero.style.setProperty("--mouse-y", `${y}px`);
-        });
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+
+            if (!rafPending) {
+                rafPending = true;
+                requestAnimationFrame(() => {
+                    hero.style.setProperty("--mouse-x", `${lastX}px`);
+                    hero.style.setProperty("--mouse-y", `${lastY}px`);
+                    rafPending = false;
+                });
+            }
+        }, { passive: true });
     }
 
-    // 3. Interactive 3D Card Hover Tilt Effect for High-Fashion Products
-    const tiltCards = document.querySelectorAll(".product-card-fast, .product-card, .tilt-card, .metric-card, .hero-image-frame");
-    tiltCards.forEach(card => {
-        card.addEventListener("mousemove", (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            
-            const rotateX = (-y / rect.height) * 6;
-            const rotateY = (x / rect.width) * 6;
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-        });
+    // 3. Lightweight Hardware-Accelerated 3D Tilt for Desktop
+    if (window.matchMedia("(pointer: fine)").matches) {
+        const tiltCards = document.querySelectorAll(".product-card-fast, .hero-image-frame");
+        tiltCards.forEach(card => {
+            let tiltRaf = false;
+            let cardRect = null;
 
-        card.addEventListener("mouseleave", () => {
-            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+            card.addEventListener("mouseenter", () => {
+                cardRect = card.getBoundingClientRect();
+            }, { passive: true });
+
+            card.addEventListener("mousemove", (e) => {
+                if (!cardRect) cardRect = card.getBoundingClientRect();
+                const x = e.clientX - cardRect.left - cardRect.width / 2;
+                const y = e.clientY - cardRect.top - cardRect.height / 2;
+
+                if (!tiltRaf) {
+                    tiltRaf = true;
+                    requestAnimationFrame(() => {
+                        const rotateX = (-y / cardRect.height) * 4;
+                        const rotateY = (x / cardRect.width) * 4;
+                        card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translate3d(0, -4px, 0)`;
+                        tiltRaf = false;
+                    });
+                }
+            }, { passive: true });
+
+            card.addEventListener("mouseleave", () => {
+                cardRect = null;
+                card.style.transform = "";
+            }, { passive: true });
         });
-    });
+    }
 
     // 4. Smooth Intersection Observer for Scroll Reveals
     const revealElements = document.querySelectorAll(".reveal-on-scroll, .metric-card, .invoice-card, .review-card, .card");
     const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -40px 0px"
+        threshold: 0.08,
+        rootMargin: "0px 0px -20px 0px"
     };
 
     const revealObserver = new IntersectionObserver((entries) => {

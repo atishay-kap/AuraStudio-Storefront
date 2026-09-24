@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Directory &amp; LTV — AURA STUDIO Admin</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body class="admin-body">
+    <header class="site-header admin-header">
+        <div class="nav-container">
+            <span class="logo">AURA<span>ADMIN</span></span>
+            <nav class="admin-nav" style="display: flex; gap: 14px; align-items: center;">
+                <a href="{{ url_for('admin.dashboard') }}" class="nav-pill">Orders</a>
+                <a href="{{ url_for('admin.products') }}" class="nav-pill">Products</a>
+                <a href="{{ url_for('admin.users') }}" class="nav-pill active">Customers &amp; Roles</a>
+                <a href="{{ url_for('storefront.index') }}" target="_blank" class="admin-quick-link" style="color: #fbbf24; font-weight: 700;">Live Storefront &nearr;</a>
+                <a href="{{ url_for('admin.logout') }}" class="btn-danger btn-small" style="padding: 6px 14px; border-radius: var(--radius-full);">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+            <div>
+                <h1 style="font-family: var(--font-display); font-size: 2rem; color: #ffffff; letter-spacing: -0.01em;">Customer Accounts &amp; Roles</h1>
+                <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Directory of all registered client profiles, purchase histories, and permission levels</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('admin.dashboard') }}" class="nav-pill">&larr; Back to Orders</a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, m in messages %}
+                        <li class="flash-{{ category }}">{{ m }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Metric Stat Summary -->
+        <div class="metrics-grid" style="margin-bottom: 32px;">
+            <div class="metric-card">
+                <h3>Total Accounts</h3>
+                <div class="metric-value">{{ user_data|length }}</div>
+            </div>
+            <div class="metric-card">
+                <h3>Customer Lifetime Value (INR)</h3>
+                <div class="metric-value" style="color: #34d399;">₹{{ "{:,.2f}".format(user_data|sum(attribute='ltv')) }}</div>
+            </div>
+            <div class="metric-card">
+                <h3>Active Buying Customers</h3>
+                <div class="metric-value" style="color: #a78bfa;">{{ user_data|selectattr('completed_orders', 'greaterthan', 0)|list|length }}</div>
+            </div>
+        </div>
+
+        <!-- Luxury Dark Table -->
+        <div class="card" style="background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; overflow-x: auto;">
+            <table class="cart-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                        <th style="padding: 10px;">User Profile</th>
+                        <th style="padding: 10px;">Email Address</th>
+                        <th style="padding: 10px;">Role / Permission</th>
+                        <th style="padding: 10px;">Total Orders</th>
+                        <th style="padding: 10px;">Completed</th>
+                        <th style="padding: 10px;">Customer LTV (INR)</th>
+                        <th style="padding: 10px;">Registered Date</th>
+                        <th style="padding: 10px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in user_data %}
+                        {% set u = item.user %}
+                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                            <td style="padding: 14px 10px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div class="user-avatar-circle" style="width: 34px; height: 34px; border-radius: 50%; background: var(--accent-gradient); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">{{ u.name[0]|upper }}</div>
+                                    <div>
+                                        <strong style="color: #ffffff; font-weight: 600;">{{ u.name }}</strong>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">Account #{{ u.id }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 14px 10px; color: var(--text-secondary);">{{ u.email }}</td>
+                            <td style="padding: 14px 10px;">
+                                {% if u.is_admin %}
+                                    <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4);">&starf; Administrator</span>
+                                {% else %}
+                                    <span class="badge" style="background: rgba(255, 255, 255, 0.08); color: #94a3b8;">Customer</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 14px 10px; font-weight: 600; color: #ffffff;">{{ item.total_orders }}</td>
+                            <td style="padding: 14px 10px; color: #93c5fd;">{{ item.completed_orders }}</td>
+                            <td style="padding: 14px 10px;">
+                                <strong style="color: #34d399;">₹{{ "{:,.2f}".format(item.ltv) }}</strong>
+                            </td>
+                            <td style="padding: 14px 10px; color: var(--text-muted); font-size: 0.85rem;">{{ u.created_at.strftime("%b %d, %Y") }}</td>
+                            <td style="padding: 14px 10px;">
+                                <form action="{{ url_for('admin.toggle_user_admin', user_id=u.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Change admin role for {{ u.name }}?');">
+                                    {% if u.is_admin %}
+                                        <button type="submit" class="btn-secondary btn-small" style="padding: 4px 10px; font-size: 0.75rem; color: #fca5a5;" title="Revoke admin access">Demote to Customer</button>
+                                    {% else %}
+                                        <button type="submit" class="btn-secondary btn-small" style="padding: 4px 10px; font-size: 0.75rem;" title="Grant admin access">Promote to Admin</button>
+                                    {% endif %}
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);">No client accounts registered yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

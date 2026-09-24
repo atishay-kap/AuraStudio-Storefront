@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure INR Payment — AURA STUDIO Haute Couture</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body class="pay-page-body">
+    <div class="auth-container">
+        <div class="auth-card" style="text-align: center; border-color: rgba(99, 102, 241, 0.35); max-width: 480px; box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.9);">
+            <div style="font-size: 2.2rem; margin-bottom: 12px; color: var(--accent-cyan);">&#128274;</div>
+            <h2 style="font-family: var(--font-display); color: #ffffff; font-size: 1.6rem; letter-spacing: -0.01em;">Encrypted Indian Rupee Gateway</h2>
+            <p class="auth-subtitle" style="margin-bottom: 20px;">
+                Order #{{ order.id }} &bull; Total Payable: <strong style="color: #ffffff; font-size: 1.25rem;">₹{{ "{:,.2f}".format(order.total_amount) }}</strong>
+            </p>
+
+            <!-- Indian Payment Methods Badges -->
+            <div class="indian-payments-strip" style="margin: 0 0 24px 0;">
+                <span class="pay-badge-pill"><span class="pay-badge-icon">&#9889;</span> UPI / QR</span>
+                <span class="pay-badge-pill"><span class="pay-badge-icon">&#128179;</span> Cards / RuPay</span>
+                <span class="pay-badge-pill"><span class="pay-badge-icon">&#127974;</span> NetBanking</span>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <button id="pay-btn" class="btn-primary" style="width: 100%; padding: 15px; font-size: 1.05rem; font-weight: 700; border-radius: var(--radius-sm); letter-spacing: 0.02em;">
+                    Proceed to Pay ₹{{ "{:,.2f}".format(order.total_amount) }}
+                </button>
+            </div>
+
+            {% if razorpay_order_id.startswith('mock_order_') %}
+                <div style="margin-top: 24px; padding: 18px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md);">
+                    <p style="margin: 0 0 12px 0; color: #fde68a; font-size: 0.85rem;"><strong>⚡ Razorpay Test Sandbox:</strong> Simulated Indian Payment Gateway</p>
+                    <form method="POST" action="{{ url_for('storefront.verify_payment') }}">
+                        <input type="hidden" name="razorpay_order_id" value="{{ razorpay_order_id }}">
+                        <input type="hidden" name="razorpay_payment_id" value="mock_pay_{{ order.id }}">
+                        <input type="hidden" name="razorpay_signature" value="mock_sig">
+                        <button type="submit" class="btn-secondary" style="width: 100%; background: rgba(245, 158, 11, 0.18); color: #ffffff; border-color: rgba(245, 158, 11, 0.4); font-size: 0.88rem;">
+                            Simulate Instant ₹ Payment Success &rarr;
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+
+            <div class="auth-footer" style="margin-top: 24px;">
+                <p><a href="{{ url_for('storefront.view_cart') }}">&larr; Return to Shopping Bag</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const isMock = "{{ razorpay_order_id }}".startsWith("mock_order_");
+
+        if (!isMock) {
+            const options = {
+                key: "{{ razorpay_key_id }}",
+                amount: "{{ amount_paise }}",
+                currency: "INR",
+                name: "AURA STUDIO",
+                description: "Runway Order #{{ order.id }}",
+                order_id: "{{ razorpay_order_id }}",
+                handler: function (response) {
+                    const form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = "{{ url_for('storefront.verify_payment') }}";
+
+                    const fields = {
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature
+                    };
+                    for (const key in fields) {
+                        const input = document.createElement("input");
+                        input.type = "hidden";
+                        input.name = key;
+                        input.value = fields[key];
+                        form.appendChild(input);
+                    }
+                    document.body.appendChild(form);
+                    form.submit();
+                },
+                prefill: {
+                    name: "{{ order.customer_name }}",
+                    email: "{{ order.customer_email }}"
+                },
+                theme: {
+                    color: "#6366f1"
+                }
+            };
+
+            try {
+                const rzp = new Razorpay(options);
+                rzp.open();
+
+                document.getElementById("pay-btn").onclick = function () {
+                    rzp.open();
+                };
+            } catch (err) {
+                console.warn("Razorpay script not ready or network issue:", err);
+            }
+        }
+    </script>
+</body>
+</html>

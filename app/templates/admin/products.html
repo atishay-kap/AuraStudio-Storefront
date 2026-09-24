@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Products Inventory &amp; Catalog</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+    <header class="site-header admin-header">
+        <div class="nav-container">
+            <span class="logo">AURA<span>ADMIN</span></span>
+            <nav class="admin-nav" style="display: flex; gap: 14px; align-items: center;">
+                <a href="{{ url_for('admin.dashboard') }}" class="nav-pill">Orders</a>
+                <a href="{{ url_for('admin.products') }}" class="nav-pill active">Products</a>
+                <a href="{{ url_for('admin.users') }}" class="nav-pill">Customers</a>
+                <a href="{{ url_for('storefront.index') }}" target="_blank" class="admin-quick-link" style="color: #fbbf24; font-weight: 700;">Live Storefront &nearr;</a>
+                <a href="{{ url_for('admin.logout') }}" class="btn-danger btn-small" style="padding: 6px 14px; border-radius: var(--radius-full);">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+            <div>
+                <h1 style="font-family: var(--font-display); font-size: 2rem; color: #ffffff; letter-spacing: -0.01em;">Products &amp; Inventory Catalog</h1>
+                <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Manage couture apparel, INR pricing, real-time inventory, and direct photo uploads</p>
+            </div>
+            <div>
+                <a href="#add-product-section" class="btn-primary">+ Add New Product</a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, m in messages %}
+                        <li class="flash-{{ category }}">{{ m }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Filter tabs for inventory -->
+        <div class="storefront-toolbar" style="margin-bottom: 24px; display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="{{ url_for('admin.products') }}" class="nav-pill {{ 'active' if not selected_category and not stock_filter }}">All ({{ products|length }})</a>
+            <a href="{{ url_for('admin.products', stock='low') }}" class="nav-pill {{ 'active' if stock_filter == 'low' }}">Low Stock (&le; 5 units)</a>
+            <a href="{{ url_for('admin.products', stock='out') }}" class="nav-pill {{ 'active' if stock_filter == 'out' }}">Out of Stock</a>
+            {% for cat in categories %}
+                <a href="{{ url_for('admin.products', category=cat) }}" class="nav-pill {{ 'active' if selected_category == cat }}">{{ cat }}</a>
+            {% endfor %}
+        </div>
+
+        <!-- Existing Products Table -->
+        <div class="card" style="background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); margin-bottom: 40px; overflow-x: auto; padding: 20px;">
+            <table class="cart-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                        <th style="padding: 10px;">Visual</th>
+                        <th style="padding: 10px;">Item &amp; Specifications</th>
+                        <th style="padding: 10px;">Category</th>
+                        <th style="padding: 10px;">Live Status</th>
+                        <th style="padding: 10px;">Quick Price (INR) / Stock</th>
+                        <th style="padding: 10px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04); {{ 'opacity: 0.55;' if not product.is_active }}">
+                        <td style="padding: 12px 10px; width: 70px;">
+                            <img src="{{ product.image_url }}" alt="{{ product.name }}" style="width: 54px; height: 68px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                        </td>
+                        <td style="padding: 12px 10px;">
+                            <strong style="color: #ffffff; font-size: 0.95rem;">{{ product.name }}</strong>
+                            <div class="meta-tag" style="color: var(--text-muted); font-size: 0.8rem; margin-top: 3px; display: flex; align-items: center; gap: 6px;">
+                                <span>Sizes:</span> <span class="badge-size" style="font-size: 0.65rem; padding: 1px 6px;">{{ product.available_sizes|join(', ') }}</span>
+                                <span>&bull; {{ product.color }} &bull; ID #{{ product.id }} &bull; Rating: &#9733; {{ "%.1f"|format(product.rating) }}</span>
+                            </div>
+                        </td>
+                        <td style="padding: 12px 10px;"><span class="runway-tag-pill accent">{{ product.category }}</span></td>
+                        <td style="padding: 12px 10px;">
+                            {% if not product.is_active %}
+                                <span class="badge" style="background: rgba(255,255,255,0.08); color: #94a3b8;">Draft / Hidden</span>
+                            {% elif product.stock <= 0 %}
+                                <span class="badge badge-danger">Out of Stock</span>
+                            {% elif product.stock <= 5 %}
+                                <span class="badge badge-warning">Low: {{ product.stock }} left</span>
+                            {% else %}
+                                <span class="badge badge-success">In Stock ({{ product.stock }})</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 12px 10px;">
+                            <form action="{{ url_for('admin.update_product', product_id=product.id) }}" method="POST" style="display: flex; align-items: center; gap: 8px;">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <span style="color: var(--text-muted); font-weight: 700;">₹</span>
+                                    <input type="number" step="0.01" name="price" value="{{ product.price }}" style="width: 90px; padding: 6px; background: #101420; border: 1px solid var(--border-subtle); color: #ffffff; border-radius: var(--radius-sm);" title="Price in INR">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <span style="color: var(--text-muted); font-size: 0.8rem;">Qty:</span>
+                                    <input type="number" name="stock" value="{{ product.stock }}" style="width: 65px; padding: 6px; background: #101420; border: 1px solid var(--border-subtle); color: #ffffff; border-radius: var(--radius-sm);" title="Stock" min="0">
+                                </div>
+                                <button type="submit" class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">Save</button>
+                            </form>
+                        </td>
+                        <td style="padding: 12px 10px;">
+                            <div style="display: flex; gap: 6px; align-items: center;">
+                                <a href="{{ url_for('admin.edit_product', product_id=product.id) }}" class="btn-primary btn-small" style="padding: 6px 12px; font-size: 0.78rem;">Edit</a>
+                                <form action="{{ url_for('admin.toggle_product_active', product_id=product.id) }}" method="POST" style="display: inline;">
+                                    <button type="submit" class="btn-secondary btn-small" style="padding: 6px 12px; font-size: 0.78rem;" title="Toggle Published/Draft">
+                                        {{ 'Hide' if product.is_active else 'Publish' }}
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6" style="text-align: center; padding: 36px; color: var(--text-muted);">No products found matching this filter.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Add Product Section with Photo Upload Dropzone -->
+        <div class="card add-product-card" id="add-product-section" style="background: #0d111a; border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-lg); padding: 32px;">
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-family: var(--font-display); font-size: 1.5rem; color: #ffffff; letter-spacing: -0.01em;">Create New Runway Fashion Piece</h3>
+                <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Upload photography or specify an image URL to publish to the INR storefront</p>
+            </div>
+
+            <form action="{{ url_for('admin.add_product') }}" method="POST" enctype="multipart/form-data" class="grid-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Product Title *</label>
+                    <input type="text" name="name" required placeholder="e.g. Italian Silk Camp Collar Shirt">
+                </div>
+                <div class="form-group">
+                    <label>Category *</label>
+                    <input type="text" name="category" list="category-options" required placeholder="e.g. Shirts, Hoodies, Jackets, Pants">
+                    <datalist id="category-options">
+                        {% for cat in categories %}
+                            <option value="{{ cat }}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label>Retail Price (INR / ₹) *</label>
+                    <input type="number" step="0.01" name="price" required placeholder="3499.00">
+                </div>
+                <div class="form-group">
+                    <label>Available Sizes (Comma-separated) *</label>
+                    <input type="text" name="size" value="XS, S, M, L, XL" required placeholder="XS, S, M, L, XL, 32, 34">
+                </div>
+                <div class="form-group">
+                    <label>Colorway / Shade</label>
+                    <input type="text" name="color" placeholder="Midnight Black, Sage Green, Heather Grey">
+                </div>
+                <div class="form-group">
+                    <label>Initial Stock Ready to Ship</label>
+                    <input type="number" name="stock" value="15" min="0">
+                </div>
+
+                <!-- Drag & Drop Photo Upload Zone -->
+                <div class="form-group span-2" style="grid-column: span 2;">
+                    <label>Upload High-Res Fashion Photo (PNG, JPG, WEBP)</label>
+                    <div class="dropzone-box">
+                        <div class="dropzone-icon" style="font-size: 2rem; margin-bottom: 8px;">&#128247;</div>
+                        <strong style="color: #ffffff; display: block; margin-bottom: 4px;">Drag &amp; Drop Product Image or Click to Browse</strong>
+                        <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0;">Supports high-resolution JPG, PNG, WEBP files up to 10MB</p>
+                        <input type="file" name="image_file" accept="image/*" data-preview-target="add-preview-img" style="display: none;">
+                    </div>
+                    <div class="preview-container" style="margin-top: 12px; text-align: center;">
+                        <img id="add-preview-img" class="preview-thumb" style="display: none; max-height: 180px; border-radius: var(--radius-sm); margin: 0 auto;" alt="Upload Preview">
+                    </div>
+                </div>
+
+                <div class="form-group span-2" style="grid-column: span 2;">
+                    <label>Or Static Path / Image URL (Fallback)</label>
+                    <input type="text" name="image_url" placeholder="/static/images/products/tee_white.jpg">
+                </div>
+
+                <div class="form-group span-2" style="grid-column: span 2;">
+                    <label>Editorial Description</label>
+                    <textarea name="description" rows="3" placeholder="Describe the silhouette, organic fabric weave, artisan tailoring, and runway fit..."></textarea>
+                </div>
+
+                <div class="form-actions span-2" style="grid-column: span 2;">
+                    <button type="submit" class="btn-primary btn-large btn-block" style="padding: 14px; font-size: 1rem; border-radius: var(--radius-sm);">Publish Product to Storefront &rarr;</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

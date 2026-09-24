@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Bag ({{ cart_count }}) — AURA STUDIO Haute Couture</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
+            <div class="header-actions">
+                <a href="{{ url_for('storefront.index') }}" class="nav-pill">&larr; Continue Shopping</a>
+                {% if current_user %}
+                    <a href="{{ url_for('storefront.wishlist') }}" class="nav-pill">
+                        &hearts; Wishlist <span class="cart-badge">{{ wishlist_count }}</span>
+                    </a>
+                    <div class="user-menu-pill">
+                        <span class="user-greeting">Hi, <strong>{{ current_user.name.split(' ')[0] }}</strong></span>
+                        <a href="{{ url_for('storefront.my_orders') }}" class="nav-link-subtle">Orders</a>
+                        <a href="{{ url_for('storefront.logout') }}" class="nav-link-subtle">Logout</a>
+                    </div>
+                {% else %}
+                    <div class="auth-group">
+                        <a href="{{ url_for('storefront.login') }}" class="btn-ghost">Log In</a>
+                        <a href="{{ url_for('storefront.register') }}" class="btn-primary-pill">Join Atelier</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <div style="margin-bottom: 28px;">
+            <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: #ffffff; letter-spacing: -0.02em;">Your Shopping Bag</h1>
+            <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Review your selected runway fashion items before proceeding to secure checkout</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, msg in messages %}
+                        <li class="flash-{{ category }}">{{ msg }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% if items %}
+            <div class="cart-layout" style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 32px; align-items: start;">
+                <div class="cart-items-column">
+                    <div class="card" style="padding: 20px; background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow-x: auto;">
+                        <table class="cart-table" style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.08); text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.08em;">
+                                    <th style="padding: 12px 14px;">Couture Item</th>
+                                    <th style="padding: 12px 14px;">Unit Price</th>
+                                    <th style="padding: 12px 14px;">Quantity</th>
+                                    <th style="padding: 12px 14px;">Subtotal</th>
+                                    <th style="padding: 12px 14px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                                    <td style="padding: 16px 14px;">
+                                        <div class="cart-product-cell" style="display: flex; align-items: center; gap: 14px;">
+                                            <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="cart-thumb" style="width: 60px; height: 75px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                            <div>
+                                                <a href="{{ url_for('storefront.product_detail', product_id=item.product.id) }}" class="cart-item-name" style="color: #ffffff; font-weight: 700; font-size: 0.95rem;">
+                                                    {{ item.product.name }}
+                                                </a>
+                                                <div class="meta-tag" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                                                    <span class="badge-size">Size {{ item.size }}</span>
+                                                    <span style="color: var(--text-muted); font-size: 0.8rem;">&bull; {{ item.product.color }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 16px 14px; color: #ffffff; font-weight: 600; font-size: 0.95rem;">₹{{ "{:,.2f}".format(item.product.price) }}</td>
+                                    <td style="padding: 16px 14px;">
+                                        <form action="{{ url_for('storefront.update_cart', item_key=item.cart_key) }}" method="POST" style="display: flex; align-items: center; gap: 6px;">
+                                            <input type="number" name="quantity" value="{{ item.qty }}" min="0" max="{{ item.product.stock }}" style="width: 55px; padding: 6px; text-align: center; background: #101420; border: 1px solid var(--border-subtle); color: #ffffff; border-radius: var(--radius-sm); font-weight: 700;">
+                                            <button type="submit" class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">Update</button>
+                                        </form>
+                                    </td>
+                                    <td style="padding: 16px 14px; color: var(--accent-cyan); font-weight: 700; font-size: 1.05rem;">₹{{ "{:,.2f}".format(item.subtotal) }}</td>
+                                    <td style="padding: 16px 14px; text-align: center;">
+                                        <form action="{{ url_for('storefront.remove_from_cart', item_key=item.cart_key) }}" method="POST">
+                                            <button type="submit" class="btn-remove" title="Remove item" style="background: transparent; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer;">&times;</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="cart-summary-column">
+                    <div class="card summary-card" style="background: #0d111a; border: 1px solid rgba(99, 102, 241, 0.35); border-radius: var(--radius-lg); padding: 28px; box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.85);">
+                        <h3 style="font-family: var(--font-display); font-size: 1.3rem; color: #ffffff; margin-bottom: 20px;">Order Summary</h3>
+                        
+                        <div class="summary-line" style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                            <span>Subtotal ({{ cart_count }} items):</span>
+                            <span style="color: #ffffff; font-weight: 600;">₹{{ "{:,.2f}".format(total) }}</span>
+                        </div>
+                        <div class="summary-line" style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                            <span>Pan-India Delivery:</span>
+                            <span class="badge badge-success">Free Express</span>
+                        </div>
+                        <div class="summary-line" style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                            <span>GST (Indian Taxes):</span>
+                            <span style="color: var(--accent-cyan);">Inclusive</span>
+                        </div>
+                        
+                        <hr style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 18px 0;">
+                        
+                        <div class="summary-line total-line" style="display: flex; justify-content: space-between; align-items: baseline; font-size: 1.25rem; font-weight: 800; color: #ffffff;">
+                            <span>Total Due:</span>
+                            <span style="font-size: 1.6rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">₹{{ "{:,.2f}".format(total) }}</span>
+                        </div>
+
+                        {% if not current_user %}
+                            <div class="auth-callout-box" style="margin: 20px 0; padding: 14px; background: rgba(99, 102, 241, 0.1); border-left: 3px solid var(--accent-indigo); border-radius: var(--radius-sm);">
+                                <p style="font-size: 0.82rem; color: #c7d2fe; margin: 0;">✦ <strong>Tip:</strong> <a href="{{ url_for('storefront.login', next=url_for('storefront.checkout')) }}" style="text-decoration: underline; font-weight: 700; color: #ffffff;">Log in</a> or <a href="{{ url_for('storefront.register', next=url_for('storefront.checkout')) }}" style="text-decoration: underline; font-weight: 700; color: #ffffff;">Join Atelier</a> to track live delivery.</p>
+                            </div>
+                        {% endif %}
+
+                        <a href="{{ url_for('storefront.checkout') }}" class="btn-primary btn-block" style="display: block; width: 100%; text-align: center; margin-top: 20px; padding: 14px; font-size: 1rem; border-radius: var(--radius-sm);">Proceed to Secure Checkout &rarr;</a>
+                        <a href="{{ url_for('storefront.index') }}" class="btn-secondary btn-block" style="display: block; width: 100%; text-align: center; margin-top: 10px; padding: 10px; font-size: 0.88rem; border-radius: var(--radius-sm);">Continue Browsing Collections</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="card empty-state" style="text-align: center; padding: 80px 20px; background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
+                <div style="font-size: 3rem; margin-bottom: 12px;">🛍️</div>
+                <h2 style="font-family: var(--font-display); color: #ffffff; margin-bottom: 8px;">Your Shopping Bag is Empty</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">Explore our runway collections and save your favorite tailored styles.</p>
+                <a href="{{ url_for('storefront.index') }}" class="btn-primary-pill" style="padding: 12px 28px; font-size: 0.95rem;">Browse Runway Collections</a>
+            </div>
+        {% endif %}
+    </main>
+</body>
+</html>

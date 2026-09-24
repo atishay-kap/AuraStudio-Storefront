@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Saved Wishlist — AURA STUDIO Haute Couture</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
+            <div class="header-actions">
+                <a href="{{ url_for('storefront.view_cart') }}" class="nav-pill">
+                    Cart <span class="cart-badge">{{ cart_count }}</span>
+                </a>
+                <div class="user-menu-pill">
+                    <span class="user-greeting">Hi, <strong>{{ current_user.name.split(' ')[0] }}</strong></span>
+                    <a href="{{ url_for('storefront.my_orders') }}" class="nav-link-subtle">Orders</a>
+                    <a href="{{ url_for('storefront.profile') }}" class="nav-link-subtle">Profile</a>
+                    <a href="{{ url_for('storefront.logout') }}" class="nav-link-subtle">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+            <div>
+                <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: #ffffff; letter-spacing: -0.02em;">My Saved Wishlist</h1>
+                <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">{{ wishlist_entries|length }} curated styles saved for your wardrobe</p>
+            </div>
+            <a href="{{ url_for('storefront.index') }}" class="nav-pill">&larr; Continue Browsing</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, msg in messages %}
+                        <li class="flash-{{ category }}">{{ msg }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% if wishlist_entries %}
+            <div class="product-grid-fast">
+                {% for entry in wishlist_entries %}
+                    {% set product = entry.product %}
+                    <div class="product-card-fast">
+                        <div class="product-media-box">
+                            <a href="{{ url_for('storefront.product_detail', product_id=product.id) }}">
+                                <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+                            </a>
+                            {% if product.stock <= 0 %}
+                                <span class="stock-pill sold-out">Sold Out</span>
+                            {% elif product.stock <= 5 %}
+                                <span class="stock-pill low-stock">Only {{ product.stock }} Left</span>
+                            {% endif %}
+                            <form action="{{ url_for('storefront.toggle_wishlist', product_id=product.id) }}" method="POST" class="wishlist-overlay-form">
+                                <button type="submit" class="wishlist-btn-fast active" title="Remove from Wishlist">
+                                    &hearts;
+                                </button>
+                            </form>
+                        </div>
+                        <div class="product-details-fast">
+                            <div class="product-sub-row">
+                                <span class="product-category-tag">{{ product.category }}</span>
+                                <span class="product-rating-badge">&#9733; {{ "%.1f"|format(product.rating or 4.8) }}</span>
+                            </div>
+                            <h3 class="product-name">
+                                <a href="{{ url_for('storefront.product_detail', product_id=product.id) }}">{{ product.name }}</a>
+                            </h3>
+                            <p class="product-specs">{{ product.color }} &bull; Size {{ product.size }}</p>
+                            <div class="product-action-row">
+                                <div class="price-clean">₹{{ "{:,.2f}".format(product.price) }}</div>
+                                {% if product.stock > 0 %}
+                                    <form action="{{ url_for('storefront.wishlist_move_to_cart', product_id=product.id) }}" method="POST">
+                                        <button type="submit" class="btn-cart-fast">Move to Bag</button>
+                                    </form>
+                                {% else %}
+                                    <button class="btn-cart-fast disabled" disabled>Sold Out</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card empty-state" style="text-align: center; padding: 70px 20px; background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
+                <div style="font-size: 3rem; margin-bottom: 12px; color: #ec4899;">&hearts;</div>
+                <h2 style="font-family: var(--font-display); color: #ffffff; margin-bottom: 8px;">Your Wishlist is Empty</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">Save runway styles by clicking the heart button on product cards.</p>
+                <a href="{{ url_for('storefront.index') }}" class="btn-primary-pill" style="padding: 12px 28px;">Browse Runway Collections</a>
+            </div>
+        {% endif %}
+    </main>
+</body>
+</html>

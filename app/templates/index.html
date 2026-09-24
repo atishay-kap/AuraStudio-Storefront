@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA STUDIO — Haute Couture & Everyday Luxury</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+    <!-- Luxury Runway Ticker -->
+    <div class="marquee-banner">
+        <div class="marquee-track">
+            <span class="marquee-item"><span class="marquee-dot"></span> AUTUMN / WINTER 2026 RUNWAY CAPSULE</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> COMPLIMENTARY PAN-INDIA EXPRESS DELIVERY</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> 100% ETHICALLY SOURCED LUXURY FABRICS</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> HAND-FINISHED ITALIAN TAILORING</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> AUTUMN / WINTER 2026 RUNWAY CAPSULE</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> COMPLIMENTARY PAN-INDIA EXPRESS DELIVERY</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> 100% ETHICALLY SOURCED LUXURY FABRICS</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> HAND-FINISHED ITALIAN TAILORING</span>
+        </div>
+    </div>
+
+    <!-- Clean Haute Couture Navigation -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
+
+            <div class="header-search">
+                <form action="{{ url_for('storefront.index') }}" method="GET">
+                    {% if selected_category %}
+                        <input type="hidden" name="category" value="{{ selected_category }}">
+                    {% endif %}
+                    {% if sort_by and sort_by != 'default' %}
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                    {% endif %}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" name="q" value="{{ search_query or '' }}" placeholder="Search runway collection, jackets, silk shirts...">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+
+            <div class="header-actions">
+                {% if current_user %}
+                    <a href="{{ url_for('storefront.wishlist') }}" class="nav-pill" title="Saved Collection">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                        <span>Wishlist</span>
+                        <span class="cart-badge">{{ wishlist_count }}</span>
+                    </a>
+                {% endif %}
+
+                <a href="{{ url_for('storefront.view_cart') }}" class="nav-pill">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                    <span>Cart</span>
+                    <span class="cart-badge">{{ cart_count }}</span>
+                </a>
+
+                {% if current_user %}
+                    <div class="user-menu-pill">
+                        <span class="user-greeting">Hi, <strong>{{ current_user.name.split(' ')[0] }}</strong></span>
+                        <a href="{{ url_for('storefront.my_orders') }}" class="nav-link-subtle">Orders</a>
+                        <a href="{{ url_for('storefront.profile') }}" class="nav-link-subtle">Profile</a>
+                        {% if current_user.is_admin %}
+                            <a href="{{ url_for('admin.dashboard') }}" class="admin-badge-btn" title="Admin Atelier Operations">Admin Portal</a>
+                        {% endif %}
+                        <a href="{{ url_for('storefront.logout') }}" class="nav-link-subtle">Logout</a>
+                    </div>
+                {% else %}
+                    <div class="auth-group">
+                        <a href="{{ url_for('storefront.login') }}" class="btn-ghost">Log In</a>
+                        <a href="{{ url_for('storefront.register') }}" class="btn-primary-pill">Join Atelier</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <nav class="category-nav">
+            <div class="nav-container-cat">
+                <a href="{{ url_for('storefront.index', q=search_query if search_query else None, sort=sort_by if sort_by != 'default' else None) }}" class="cat-pill {{ 'active' if not selected_category }}">All Collections</a>
+                {% for cat in categories %}
+                    <a href="{{ url_for('storefront.index', category=cat, q=search_query if search_query else None, sort=sort_by if sort_by != 'default' else None) }}"
+                       class="cat-pill {{ 'active' if selected_category == cat }}">{{ cat }}</a>
+                {% endfor %}
+            </div>
+        </nav>
+    </header>
+
+    <!-- Expansive Editorial Runway Hero -->
+    {% if not search_query and not selected_category %}
+    <section class="hero-cinematic">
+        <div class="hero-ambient-glow"></div>
+        <div class="hero-container-cinematic">
+            <div class="hero-text-col">
+                <div class="hero-kicker">
+                    <span class="kicker-dot"></span>
+                    <span>Autumn / Winter 2026 Archive</span>
+                </div>
+
+                <h1 class="hero-title-cinematic">
+                    THE ARCHIVE <br>
+                    <span class="hero-title-italic">Couture Standard</span>
+                </h1>
+
+                <p class="hero-lead">
+                    Sculpted silhouettes, sustainable Italian fabrics, and relaxed luxury tailoring engineered for unapologetic elegance.
+                </p>
+
+                <div class="hero-cta-group">
+                    <a href="#collections" class="btn-hero-cinematic">
+                        <span>Explore Runway Pieces</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                    <a href="{{ url_for('storefront.index', category='Jackets') }}" class="btn-hero-ghost">
+                        View Outerwear
+                    </a>
+                </div>
+
+                <div class="hero-trust-bar">
+                    <div class="trust-item">
+                        <span class="trust-icon">&#9733;</span>
+                        <span>4.9 / 5 Editorial Rating</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-icon">&#10003;</span>
+                        <span>Complimentary Pan-India Courier</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-icon">&#9851;</span>
+                        <span>100% Certified Luxury Weaves</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual-col">
+                <div class="hero-image-frame">
+                    <img src="{{ url_for('static', filename='images/products/hero_bomber.jpg') }}" alt="AURA Runway Showcase" loading="eager">
+                    <div class="hero-image-overlay">
+                        <div class="overlay-info">
+                            <span class="overlay-tag">Edition 01 / Limited Drop</span>
+                            <h3>Iconic Bomber &amp; Raw Silk</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Main Runway Catalog Section -->
+    <main class="page-container" id="collections">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, msg in messages %}
+                        <li class="flash-{{ category }}">{{ msg }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Clean Minimalist Toolbar -->
+        <div class="catalog-toolbar-clean">
+            <div class="catalog-heading">
+                <h2>{{ selected_category if selected_category else 'All Runway Essentials' }}</h2>
+                <span class="catalog-count">{{ products|length }} curated designs{% if search_query %} for &ldquo;{{ search_query }}&rdquo;{% endif %}</span>
+            </div>
+
+            <div class="catalog-sort-box">
+                <form method="GET" action="{{ url_for('storefront.index') }}" class="sort-form-clean">
+                    {% if selected_category %}
+                        <input type="hidden" name="category" value="{{ selected_category }}">
+                    {% endif %}
+                    {% if search_query %}
+                        <input type="hidden" name="q" value="{{ search_query }}">
+                    {% endif %}
+                    <label for="sort-select">Sort by</label>
+                    <select id="sort-select" name="sort" class="sort-select-sleek" onchange="this.form.submit()">
+                        <option value="default" {{ 'selected' if sort_by == 'default' }}>Recommended / Newest</option>
+                        <option value="price_asc" {{ 'selected' if sort_by == 'price_asc' }}>Price: Low to High</option>
+                        <option value="price_desc" {{ 'selected' if sort_by == 'price_desc' }}>Price: High to Low</option>
+                        <option value="rating" {{ 'selected' if sort_by == 'rating' }}>Highest Rated</option>
+                        <option value="name" {{ 'selected' if sort_by == 'name' }}>Alphabetical</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <!-- High-Performance Product Grid -->
+        <div class="product-grid-fast">
+            {% for product in products %}
+                <div class="product-card-fast">
+                    <div class="product-media-box">
+                        <a href="{{ url_for('storefront.product_detail', product_id=product.id) }}">
+                            <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+                        </a>
+
+                        {% if product.stock <= 0 %}
+                            <span class="stock-pill sold-out">Sold Out</span>
+                        {% elif product.stock <= 5 %}
+                            <span class="stock-pill low-stock">Only {{ product.stock }} Left</span>
+                        {% endif %}
+
+                        {% if current_user %}
+                            <form action="{{ url_for('storefront.toggle_wishlist', product_id=product.id) }}" method="POST" class="wishlist-overlay-form">
+                                <button type="submit" class="wishlist-btn-fast {{ 'active' if product.id in wishlisted_ids }}" title="{{ 'Remove from Wishlist' if product.id in wishlisted_ids else 'Save to Wishlist' }}">
+                                    &hearts;
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                    <div class="product-details-fast">
+                        <div class="product-sub-row">
+                            <span class="product-category-tag">{{ product.category }}</span>
+                            <span class="product-rating-badge">&#9733; {{ "%.1f"|format(product.rating) }}</span>
+                        </div>
+
+                        <h3 class="product-name">
+                            <a href="{{ url_for('storefront.product_detail', product_id=product.id) }}">{{ product.name }}</a>
+                        </h3>
+                        <p class="product-specs">{{ product.color }} &bull; Sizes: {{ product.available_sizes|join(', ') }}</p>
+
+                        <div class="product-action-row">
+                            <div class="price-clean">₹{{ "{:,.2f}".format(product.price) }}</div>
+                            {% if product.stock > 0 %}
+                                <form action="{{ url_for('storefront.add_to_cart', product_id=product.id) }}" method="POST">
+                                    <button type="submit" class="btn-cart-fast">Add to Bag</button>
+                                </form>
+                            {% else %}
+                                <button class="btn-cart-fast disabled" disabled>Sold Out</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-catalog-state">
+                    <h3>No matching runway items found</h3>
+                    <p>Try searching for other categories, outerwear styles, or color palettes.</p>
+                    <a href="{{ url_for('storefront.index') }}" class="btn-primary-pill">View All Runway Collections</a>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- Luxury Editorial Footer -->
+    <footer class="luxury-footer">
+        <div class="footer-container">
+            <div class="footer-col-brand">
+                <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
+                <p class="footer-manifesto">
+                    Haute couture craftsmanship meets modern digital elegance. Engineered with sustainable materials and bespoke Italian silhouettes.
+                </p>
+                <div class="footer-badges">
+                    <span>&bull; Milano Atelier</span>
+                    <span>&bull; Express Worldwide</span>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Collections</h4>
+                <ul>
+                    <li><a href="{{ url_for('storefront.index', category='Jackets') }}">Runway Outerwear</a></li>
+                    <li><a href="{{ url_for('storefront.index', category='Shirts') }}">Silk &amp; Tailored Shirts</a></li>
+                    <li><a href="{{ url_for('storefront.index', category='Pants') }}">Pleated &amp; Cargo Trousers</a></li>
+                    <li><a href="{{ url_for('storefront.index', category='Sweaters') }}">Cashmere &amp; Knits</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Concierge</h4>
+                <ul>
+                    <li><a href="{{ url_for('storefront.order_lookup') }}">Track Any Order</a></li>
+                    <li><a href="{{ url_for('storefront.my_orders') }}">Order History</a></li>
+                    <li><a href="{{ url_for('storefront.profile') }}">Personal Profile</a></li>
+                    <li><a href="{{ url_for('storefront.view_cart') }}">Shopping Bag</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Store Atelier</h4>
+                <ul>
+                    <li><a href="{{ url_for('storefront.index') }}">Complimentary Express Delivery</a></li>
+                    <li><a href="{{ url_for('storefront.index') }}">Sustainable Sourcing</a></li>
+                    <li><a href="{{ url_for('storefront.index') }}">Atelier Craftsmanship</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 AURA STUDIO. All Rights Reserved. Master Haute Couture Digital Experience.</p>
+        </div>
+    </footer>
+</body>
+</html>

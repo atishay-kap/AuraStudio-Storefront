@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Operations &amp; Order Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+    <header class="site-header admin-header">
+        <div class="nav-container">
+            <span class="logo">AURA<span>ADMIN</span></span>
+            <nav class="admin-nav" style="display: flex; gap: 14px; align-items: center;">
+                <a href="{{ url_for('admin.dashboard') }}" class="nav-pill active">Orders</a>
+                <a href="{{ url_for('admin.products') }}" class="nav-pill">Products</a>
+                <a href="{{ url_for('admin.users') }}" class="nav-pill">Customers</a>
+                <a href="{{ url_for('storefront.index') }}" target="_blank" class="admin-quick-link" style="color: #fbbf24; font-weight: 700;">Live Storefront &nearr;</a>
+                <a href="{{ url_for('admin.logout') }}" class="btn-danger btn-small" style="padding: 6px 14px; border-radius: var(--radius-full);">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+            <div>
+                <h1 style="font-family: var(--font-display); font-size: 2rem; color: #ffffff; letter-spacing: -0.01em;">Orders &amp; Fulfillment Overview</h1>
+                <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Live order management, courier tracking assignments, and real-time INR revenue analytics</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('admin.products') }}" class="btn-primary">+ Manage Products</a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, m in messages %}
+                        <li class="flash-{{ category }}">{{ m }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Metrics Dashboard Overview -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Total Orders</h3>
+                <div class="metric-value">{{ metrics.total_orders }}</div>
+            </div>
+            <div class="metric-card">
+                <h3>Processed Revenue (INR)</h3>
+                <div class="metric-value" style="background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">₹{{ "{:,.2f}".format(metrics.total_revenue) }}</div>
+            </div>
+            <div class="metric-card">
+                <h3>Paid &bull; Processing</h3>
+                <div class="metric-value" style="color: #93c5fd;">{{ metrics.paid_count }}</div>
+            </div>
+            <div class="metric-card">
+                <h3>Shipped &bull; In Transit</h3>
+                <div class="metric-value" style="color: #d8b4fe;">{{ metrics.shipped_count }}</div>
+            </div>
+            <div class="metric-card">
+                <h3>Delivered</h3>
+                <div class="metric-value" style="color: #6ee7b7;">{{ metrics.delivered_count }}</div>
+            </div>
+            <div class="metric-card">
+                <h3>Cancelled &bull; Refunded</h3>
+                <div class="metric-value" style="color: #fca5a5;">{{ metrics.cancelled_count }}</div>
+            </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="storefront-toolbar" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="{{ url_for('admin.dashboard') }}" class="nav-pill {{ 'active' if not status_filter }}">All ({{ metrics.total_orders }})</a>
+                <a href="{{ url_for('admin.dashboard', status='paid') }}" class="nav-pill {{ 'active' if status_filter == 'paid' }}">Paid / Processing ({{ metrics.paid_count }})</a>
+                <a href="{{ url_for('admin.dashboard', status='shipped') }}" class="nav-pill {{ 'active' if status_filter == 'shipped' }}">Shipped ({{ metrics.shipped_count }})</a>
+                <a href="{{ url_for('admin.dashboard', status='delivered') }}" class="nav-pill {{ 'active' if status_filter == 'delivered' }}">Delivered ({{ metrics.delivered_count }})</a>
+                <a href="{{ url_for('admin.dashboard', status='cancelled') }}" class="nav-pill {{ 'active' if status_filter == 'cancelled' }}">Cancelled ({{ metrics.cancelled_count }})</a>
+            </div>
+
+            <form action="{{ url_for('admin.dashboard') }}" method="GET" style="display: flex; gap: 8px;">
+                {% if status_filter %}
+                    <input type="hidden" name="status" value="{{ status_filter }}">
+                {% endif %}
+                <input type="text" name="q" value="{{ search_query or '' }}" placeholder="Search customer, tracking #..." style="padding: 8px 14px; width: 220px; background: #101420; border: 1px solid var(--border-subtle); color: #ffffff; border-radius: var(--radius-sm);">
+                <button type="submit" class="btn-secondary" style="padding: 8px 16px;">Search</button>
+            </form>
+        </div>
+
+        <div class="card" style="background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; overflow-x: auto;">
+            <table class="cart-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                        <th style="padding: 10px;">Order #</th>
+                        <th style="padding: 10px;">Customer</th>
+                        <th style="padding: 10px;">Account Type</th>
+                        <th style="padding: 10px;">Items</th>
+                        <th style="padding: 10px;">Total (INR)</th>
+                        <th style="padding: 10px;">Tracking / Courier</th>
+                        <th style="padding: 10px;">Status</th>
+                        <th style="padding: 10px;">Placed Date</th>
+                        <th style="padding: 10px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                        <td style="padding: 14px 10px;"><strong style="color: #ffffff;">#{{ order.id }}</strong></td>
+                        <td style="padding: 14px 10px;">
+                            <strong style="color: #ffffff;">{{ order.customer_name }}</strong>
+                            <div class="meta-tag" style="color: var(--text-muted); font-size: 0.78rem;">{{ order.customer_email }}</div>
+                        </td>
+                        <td style="padding: 14px 10px;">
+                            {% if order.user %}
+                                <span class="badge badge-info">Member #{{ order.user.id }}</span>
+                            {% else %}
+                                <span class="badge badge-customer">Guest</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 14px 10px; color: var(--text-secondary);">{{ order.items|length }} item(s)</td>
+                        <td style="padding: 14px 10px;"><strong style="color: #ffffff;">₹{{ "{:,.2f}".format(order.total_amount) }}</strong></td>
+                        <td style="padding: 14px 10px;">
+                            {% if order.tracking_number %}
+                                <span class="badge badge-info" style="font-size: 0.75rem;">{{ order.courier_name or 'Express' }}: <code>{{ order.tracking_number }}</code></span>
+                            {% else %}
+                                <span style="color: var(--text-muted); font-size: 0.8rem;">—</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 14px 10px;"><span class="badge badge-{{ order.status }}">{{ order.status|capitalize }}</span></td>
+                        <td style="padding: 14px 10px; color: var(--text-muted); font-size: 0.82rem;">{{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                        <td style="padding: 14px 10px;">
+                            <a href="{{ url_for('admin.order_detail', order_id=order.id) }}" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-radius: var(--radius-sm);">Manage &rarr;</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="9" style="text-align: center; padding: 36px; color: var(--text-muted);">No orders found matching this filter.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

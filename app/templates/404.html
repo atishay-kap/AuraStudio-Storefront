@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piece Not Found — AURA STUDIO</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
+            <div class="header-actions">
+                <a href="{{ url_for('storefront.view_cart') }}" class="nav-pill">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                    Cart ({{ cart_count }})
+                </a>
+                <a href="{{ url_for('storefront.index') }}" class="nav-pill accent">Explore Runway</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container" style="text-align: center; padding: 100px 20px;">
+        <div class="empty-state" style="max-width: 580px; margin: 0 auto; padding: 56px 36px; background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
+            <div style="font-family: var(--font-display); font-size: 5rem; font-weight: 800; background: linear-gradient(135deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1;">404</div>
+            <h2 style="margin: 20px 0 10px; font-family: var(--font-display); letter-spacing: -0.02em; color: #ffffff;">Page Not Found</h2>
+            <p style="color: var(--text-muted); margin-bottom: 32px; font-size: 0.95rem; line-height: 1.6;">The editorial piece or archive item you're looking for might have been retired from the seasonal showcase.</p>
+            <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ url_for('storefront.index') }}" class="btn-primary-pill" style="padding: 12px 28px;">Return to Runway</a>
+                <a href="{{ url_for('storefront.view_cart') }}" class="btn-secondary" style="padding: 12px 24px; border-radius: var(--radius-full);">View Bag</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

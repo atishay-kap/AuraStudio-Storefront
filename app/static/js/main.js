@@ -4,8 +4,24 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Ambient Mouse Spotlight Effect on Hero & Interactive Containers
-    const hero = document.querySelector(".hero-container");
+    // 0. Dynamic Luxury Runway Top Hairline Loader Bar
+    if (!document.getElementById("aura-entrance-bar")) {
+        const bar = document.createElement("div");
+        bar.id = "aura-entrance-bar";
+        bar.className = "aura-entrance-bar";
+        document.body.appendChild(bar);
+        setTimeout(() => bar.remove(), 1200);
+    }
+
+    // 1. Staggered Product Cards Cascade Entrance
+    const productCards = document.querySelectorAll(".product-card-fast, .product-card");
+    productCards.forEach((card, index) => {
+        card.style.setProperty("--card-index", index);
+        card.classList.add("stagger-in");
+    });
+
+    // 2. Ambient Mouse Spotlight Effect on Hero & Interactive Containers
+    const hero = document.querySelector(".hero-container-cinematic, .hero-cinematic, .hero-container");
     if (hero) {
         window.addEventListener("mousemove", (e) => {
             const rect = hero.getBoundingClientRect();
@@ -16,18 +32,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 2. Interactive 3D Card Hover Tilt Effect
-    const tiltCards = document.querySelectorAll(".product-card, .tilt-card, .metric-card");
+    // 3. Interactive 3D Card Hover Tilt Effect for High-Fashion Products
+    const tiltCards = document.querySelectorAll(".product-card-fast, .product-card, .tilt-card, .metric-card, .hero-image-frame");
     tiltCards.forEach(card => {
         card.addEventListener("mousemove", (e) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
             
-            const rotateX = (-y / rect.height) * 8;
-            const rotateY = (x / rect.width) * 8;
+            const rotateX = (-y / rect.height) * 6;
+            const rotateY = (x / rect.width) * 6;
             
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
         });
 
         card.addEventListener("mouseleave", () => {
@@ -35,8 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 3. Smooth Intersection Observer for Scroll Reveals
-    const revealElements = document.querySelectorAll(".reveal-on-scroll, .product-card, .metric-card, .invoice-card");
+    // 4. Smooth Intersection Observer for Scroll Reveals
+    const revealElements = document.querySelectorAll(".reveal-on-scroll, .metric-card, .invoice-card, .review-card, .card");
     const observerOptions = {
         threshold: 0.1,
         rootMargin: "0px 0px -40px 0px"

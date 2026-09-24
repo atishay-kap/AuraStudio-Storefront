@@ -610,6 +610,10 @@ def order_lookup():
 
         order = db.session.get(Order, order_id)
         if order and order.customer_email.lower() == email:
+            placed = session.get("placed_orders", [])
+            if order.id not in placed:
+                placed.append(order.id)
+                session["placed_orders"] = placed
             return render_template("order_detail.html", order=order)
 
         flash("No matching order found. Please verify your Order ID and Email.", "danger")
@@ -671,6 +675,12 @@ def checkout():
                 size=item.get("size", item["product"].available_sizes[0]),
                 price_at_purchase=item["product"].price,
             ))
+
+        # Store order in session so guest/authenticated creator has access permission
+        placed = session.get("placed_orders", [])
+        if order.id not in placed:
+            placed.append(order.id)
+            session["placed_orders"] = placed
 
         # Create the Razorpay order
         amount_paise = int(total * 100)
@@ -745,6 +755,11 @@ def verify_payment():
     db.session.commit()
     session["cart"] = {}
 
+    placed = session.get("placed_orders", [])
+    if order.id not in placed:
+        placed.append(order.id)
+        session["placed_orders"] = placed
+
     flash("Payment successful! Your order has been placed.", "success")
     return redirect(url_for("storefront.order_confirmation", order_id=order.id))
 
@@ -754,4 +769,16 @@ def order_confirmation(order_id):
     order = db.session.get(Order, order_id)
     if order is None or order.status not in ["paid", "shipped", "delivered"]:
         abort(404)
+
+    user = get_current_user()
+    placed_orders = session.get("placed_orders", [])
+
+    # Access control verification
+    is_user_owner = user and (order.user_id == user.id or user.is_admin)
+    is_session_owner = order.id in placed_orders
+
+    if not is_user_owner and not is_session_owner:
+        flash("For your security and privacy, order receipts are protected. Please sign in or look up your order with email.", "warning")
+        return redirect(url_for("storefront.order_lookup"))
+
     return render_template("confirmation.html", order=order)

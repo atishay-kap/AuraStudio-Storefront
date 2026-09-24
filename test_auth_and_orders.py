@@ -444,5 +444,34 @@ class ComprehensiveStorefrontTestCase(unittest.TestCase):
         self.assertIn(b"Store Administrator", admin_res.data)
         self.assertIn(b"Admin Dashboard", admin_res.data)
 
+    def test_order_confirmation_security_and_idor_protection(self):
+        # Create a paid order for Alice
+        with self.app.app_context():
+            secret_order = Order(
+                user_id=self.customer_id,
+                customer_name="Alice Walker",
+                customer_email="alice@test.com",
+                shipping_address="123 Main St, New York, NY",
+                total_amount=150.00,
+                status="paid"
+            )
+            db.session.add(secret_order)
+            db.session.commit()
+            secret_order_id = secret_order.id
+
+        # 1. An unauthenticated / stranger client trying to view Alice's order confirmation directly
+        stranger_client = self.app.test_client()
+        res = stranger_client.get(f"/order/{secret_order_id}/confirmation", follow_redirects=True)
+        # Should be redirected to /order/lookup and prevented from seeing private details
+        self.assertIn(b"order receipts are protected", res.data)
+        self.assertNotIn(b"123 Main St, New York, NY", res.data)
+
+        # 2. Alice logged in CAN view her own order confirmation
+        self.client.post("/login", data={"email": "alice@test.com", "password": "customerpass123"}, follow_redirects=True)
+        auth_res = self.client.get(f"/order/{secret_order_id}/confirmation", follow_redirects=True)
+        self.assertEqual(auth_res.status_code, 200)
+        self.assertIn(b"Order Confirmed", auth_res.data)
+        self.assertIn(b"123 Main St, New York, NY", auth_res.data)
+
 if __name__ == "__main__":
     unittest.main()

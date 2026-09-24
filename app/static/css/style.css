@@ -3,8 +3,6 @@
    Inspired by Monogrid, Weekend Max Mara, & European Editorial Digital Runways
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
-
 :root {
     /* Color Palette - Deep Obsidian & Liquid Velvet */
     --bg-primary: #07090e;
@@ -115,61 +113,24 @@ input[type="number"] {
     position: fixed;
     top: 0;
     left: 0;
-    height: 2.5px;
+    height: 2px;
     width: 0%;
     background: var(--accent-gradient);
     z-index: 9999;
     pointer-events: none;
-    box-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
-    animation: auraBarLoad 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    will-change: width, opacity;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+    animation: auraBarLoad 0.4s ease-out forwards;
 }
 
 @keyframes auraBarLoad {
     0% { width: 0%; opacity: 1; }
-    60% { width: 80%; opacity: 1; }
+    80% { width: 100%; opacity: 1; }
     100% { width: 100%; opacity: 0; }
-}
-
-@keyframes auraPageEntrance {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
-
-@keyframes auraSlideDown {
-    0% { opacity: 0; transform: translate3d(0, -14px, 0); }
-    100% { opacity: 1; transform: translate3d(0, 0, 0); }
-}
-
-@keyframes auraSlideUp {
-    0% { opacity: 0; transform: translate3d(0, 20px, 0); }
-    100% { opacity: 1; transform: translate3d(0, 0, 0); }
-}
-
-@keyframes auraScaleReveal {
-    0% { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.96); }
-    100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-}
-
-@keyframes auraCardCascade {
-    0% { opacity: 0; transform: translate3d(0, 22px, 0); }
-    100% { opacity: 1; transform: translate3d(0, 0, 0); }
-}
-
-@keyframes ambientGlowPulse {
-    0% { opacity: 0.35; transform: scale(0.98); }
-    50% { opacity: 0.6; transform: scale(1.04); }
-    100% { opacity: 0.35; transform: scale(0.98); }
 }
 
 @keyframes buttonShine {
     0% { transform: translateX(-150%) skewX(-20deg); }
     100% { transform: translateX(250%) skewX(-20deg); }
-}
-
-@keyframes editorialBadgeFloat {
-    0%, 100% { transform: translate3d(0, 0, 0); }
-    50% { transform: translate3d(0, -5px, 0); }
 }
 
 /* ==========================================================================
@@ -184,13 +145,12 @@ input[type="number"] {
     position: relative;
     z-index: 60;
     padding: 8px 0;
-    animation: auraSlideDown 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .marquee-track {
     display: inline-flex;
     gap: 48px;
-    animation: marqueeScroll 30s linear infinite;
+    animation: marqueeScroll 35s linear infinite;
     will-change: transform;
 }
 
@@ -230,8 +190,6 @@ input[type="number"] {
     position: sticky;
     top: 0;
     z-index: 50;
-    animation: auraSlideDown 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-    will-change: transform, opacity;
 }
 
 .nav-container {
@@ -530,7 +488,6 @@ input[type="number"] {
     letter-spacing: 0.2em;
     color: #c7d2fe;
     margin-bottom: 18px;
-    animation: auraSlideDown 0.7s cubic-bezier(0.16, 1, 0.3, 1) both 0.12s;
 }
 
 .kicker-dot {
@@ -550,7 +507,6 @@ input[type="number"] {
     text-transform: uppercase;
     color: #ffffff;
     margin-bottom: 20px;
-    animation: auraSlideUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) both 0.2s;
 }
 
 .hero-title-italic {
@@ -569,7 +525,6 @@ input[type="number"] {
     color: var(--text-secondary);
     line-height: 1.7;
     margin-bottom: 36px;
-    animation: auraSlideUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) both 0.32s;
 }
 
 .hero-cta-group {
@@ -578,7 +533,6 @@ input[type="number"] {
     gap: 16px;
     margin-bottom: 40px;
     flex-wrap: wrap;
-    animation: auraSlideUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) both 0.45s;
 }
 
 .btn-hero-cinematic {
@@ -592,7 +546,7 @@ input[type="number"] {
     font-weight: 700;
     border-radius: var(--radius-full);
     box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
-    transition: transform 0.25s, box-shadow 0.25s;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     position: relative;
     overflow: hidden;
 }
@@ -613,7 +567,7 @@ input[type="number"] {
 }
 
 .btn-hero-cinematic:hover {
-    transform: translateY(-2px) scale(1.02);
+    transform: translateY(-2px);
     box-shadow: 0 0 35px rgba(236, 72, 153, 0.6);
 }
 
@@ -625,11 +579,12 @@ input[type="number"] {
     font-size: 0.9rem;
     font-weight: 600;
     border-radius: var(--radius-full);
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .btn-hero-ghost:hover {
     background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
 }
 
 .hero-trust-bar {
@@ -640,7 +595,6 @@ input[type="number"] {
     font-size: 0.8rem;
     color: var(--text-muted);
     font-weight: 600;
-    animation: auraSlideUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) both 0.58s;
 }
 
 .trust-item {
@@ -656,7 +610,6 @@ input[type="number"] {
 /* Hero Showcase Visual */
 .hero-visual-col {
     position: relative;
-    animation: auraScaleReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) both 0.25s;
 }
 
 .hero-image-frame {
@@ -801,20 +754,15 @@ input[type="number"] {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     position: relative;
-    contain: content;
-}
-
-.product-card-fast.stagger-in {
-    animation: auraCardCascade 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: calc(var(--card-index, 0) * 0.06s + 0.15s);
+    contain: layout style paint;
 }
 
 .product-card-fast:hover {
     border-color: rgba(168, 85, 247, 0.45);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.85), 0 0 24px rgba(99, 102, 241, 0.2);
-    transform: translateY(-5px);
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.85), 0 0 20px rgba(99, 102, 241, 0.18);
+    transform: translateY(-4px);
 }
 
 .product-media-box {

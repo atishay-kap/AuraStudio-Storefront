@@ -4,98 +4,14 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 0. Dynamic Luxury Runway Top Hairline Loader Bar
+    // 0. Quick Luxury Runway Top Hairline Loader Bar
     if (!document.getElementById("aura-entrance-bar")) {
         const bar = document.createElement("div");
         bar.id = "aura-entrance-bar";
         bar.className = "aura-entrance-bar";
         document.body.appendChild(bar);
-        setTimeout(() => bar.remove(), 1200);
+        setTimeout(() => bar.remove(), 600);
     }
-
-    // 1. Staggered Product Cards Cascade Entrance
-    const productCards = document.querySelectorAll(".product-card-fast, .product-card");
-    productCards.forEach((card, index) => {
-        card.style.setProperty("--card-index", index);
-        card.classList.add("stagger-in");
-    });
-
-    // 2. High-Performance RAF-Throttled Mouse Spotlight on Hero
-    const hero = document.querySelector(".hero-container-cinematic");
-    if (hero && window.matchMedia("(pointer: fine)").matches) {
-        let rafPending = false;
-        let lastX = 0, lastY = 0;
-
-        hero.addEventListener("mousemove", (e) => {
-            const rect = hero.getBoundingClientRect();
-            lastX = e.clientX - rect.left;
-            lastY = e.clientY - rect.top;
-
-            if (!rafPending) {
-                rafPending = true;
-                requestAnimationFrame(() => {
-                    hero.style.setProperty("--mouse-x", `${lastX}px`);
-                    hero.style.setProperty("--mouse-y", `${lastY}px`);
-                    rafPending = false;
-                });
-            }
-        }, { passive: true });
-    }
-
-    // 3. Lightweight Hardware-Accelerated 3D Tilt for Desktop
-    if (window.matchMedia("(pointer: fine)").matches) {
-        const tiltCards = document.querySelectorAll(".product-card-fast, .hero-image-frame");
-        tiltCards.forEach(card => {
-            let tiltRaf = false;
-            let cardRect = null;
-
-            card.addEventListener("mouseenter", () => {
-                cardRect = card.getBoundingClientRect();
-            }, { passive: true });
-
-            card.addEventListener("mousemove", (e) => {
-                if (!cardRect) cardRect = card.getBoundingClientRect();
-                const x = e.clientX - cardRect.left - cardRect.width / 2;
-                const y = e.clientY - cardRect.top - cardRect.height / 2;
-
-                if (!tiltRaf) {
-                    tiltRaf = true;
-                    requestAnimationFrame(() => {
-                        const rotateX = (-y / cardRect.height) * 4;
-                        const rotateY = (x / cardRect.width) * 4;
-                        card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translate3d(0, -4px, 0)`;
-                        tiltRaf = false;
-                    });
-                }
-            }, { passive: true });
-
-            card.addEventListener("mouseleave", () => {
-                cardRect = null;
-                card.style.transform = "";
-            }, { passive: true });
-        });
-    }
-
-    // 4. Smooth Intersection Observer for Scroll Reveals
-    const revealElements = document.querySelectorAll(".reveal-on-scroll, .metric-card, .invoice-card, .review-card, .card");
-    const observerOptions = {
-        threshold: 0.08,
-        rootMargin: "0px 0px -20px 0px"
-    };
-
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("revealed");
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    revealElements.forEach(el => {
-        el.classList.add("reveal-init");
-        revealObserver.observe(el);
-    });
 
     // 4. File Upload Drag-and-Drop & Instant Live Image Preview
     const fileInputs = document.querySelectorAll('input[type="file"][data-preview-target]');

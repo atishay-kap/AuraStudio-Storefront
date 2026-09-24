@@ -54,6 +54,11 @@
     padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+}
+
 html, body {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
@@ -82,7 +87,7 @@ body {
 a {
     color: inherit;
     text-decoration: none;
-    transition: color 0.2s ease, opacity 0.2s ease;
+    transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 img {
@@ -106,7 +111,7 @@ input[type="number"] {
 }
 
 /* ==========================================================================
-   Luxury Motion System & Runway Elements
+   Luxury Motion System & High-Performance Micro-Interactions
    ========================================================================== */
 
 @keyframes buttonShine {
@@ -115,7 +120,7 @@ input[type="number"] {
 }
 
 /* ==========================================================================
-   Marquee Runway Ticker (Relaxed & Seamless Infinite Luxury Scroll)
+   Luxury Runway Marquee Ticker (Seamless Infinite Runway Motion)
    ========================================================================== */
 
 .marquee-banner {
@@ -132,7 +137,7 @@ input[type="number"] {
 .marquee-track {
     display: flex;
     width: max-content;
-    animation: marqueeScroll 60s linear infinite;
+    animation: marqueeScroll 45s linear infinite;
     will-change: transform;
     transform: translate3d(0, 0, 0);
 }
@@ -174,13 +179,11 @@ input[type="number"] {
 }
 
 /* ==========================================================================
-   Header & Clean Haute Navigation
+   Header & Clean Haute Navigation (Solid Obsidian Zero-Jank)
    ========================================================================== */
 
 .site-header {
-    background: rgba(7, 9, 14, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: #090c14;
     border-bottom: 1px solid var(--border-subtle);
     position: sticky;
     top: 0;
@@ -228,7 +231,7 @@ input[type="number"] {
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-full);
     padding: 4px 6px 4px 16px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     gap: 8px;
 }
 
@@ -265,7 +268,7 @@ input[type="number"] {
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .header-search button:hover {
@@ -291,7 +294,7 @@ input[type="number"] {
     font-size: 0.86rem;
     font-weight: 600;
     color: var(--text-primary);
-    transition: all 0.2s ease;
+    transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nav-pill:hover {
@@ -382,13 +385,14 @@ input[type="number"] {
     font-size: 0.84rem;
     font-weight: 700;
     border-radius: var(--radius-full);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    will-change: transform;
 }
 
 .btn-primary-pill:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 0 24px rgba(168, 85, 247, 0.55);
 }
 
 /* Category Navigation Pills */
@@ -415,7 +419,7 @@ input[type="number"] {
     color: var(--text-secondary);
     border-radius: var(--radius-full);
     border: 1px solid transparent;
-    transition: all 0.2s ease;
+    transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     white-space: nowrap;
 }
 
@@ -503,10 +507,10 @@ input[type="number"] {
 }
 
 .hero-title-italic {
-    font-family: var(--font-serif);
+    font-family: var(--font-display);
     font-style: italic;
-    font-weight: 400;
-    text-transform: none;
+    font-weight: 800;
+    text-transform: uppercase;
     background: var(--accent-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -539,9 +543,10 @@ input[type="number"] {
     font-weight: 700;
     border-radius: var(--radius-full);
     box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
+    will-change: transform;
 }
 
 .btn-hero-cinematic::after {
@@ -572,7 +577,8 @@ input[type="number"] {
     font-size: 0.9rem;
     font-weight: 600;
     border-radius: var(--radius-full);
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
 }
 
 .btn-hero-ghost:hover {
@@ -613,13 +619,16 @@ input[type="number"] {
     background: #0f1422;
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.9);
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .hero-image-frame img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
 }
 
 .hero-image-frame:hover img {
@@ -721,7 +730,7 @@ input[type="number"] {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
-    transition: border-color 0.2s, background-color 0.2s;
+    transition: border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sort-select-sleek:hover,
@@ -747,9 +756,14 @@ input[type="number"] {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     contain: layout style paint;
+    content-visibility: auto;
+    contain-intrinsic-size: 280px 420px;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
 }
 
 .product-card-fast:hover {
@@ -769,7 +783,8 @@ input[type="number"] {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
 }
 
 .product-card-fast:hover .product-media-box img {
@@ -822,8 +837,9 @@ input[type="number"] {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     outline: none;
+    will-change: transform;
 }
 
 .wishlist-btn-fast:hover {
@@ -921,12 +937,13 @@ input[type="number"] {
     font-weight: 700;
     letter-spacing: 0.02em;
     cursor: pointer;
-    transition: transform 0.2s, opacity 0.2s;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-cart-fast:hover {
     transform: scale(1.03);
     opacity: 0.95;
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.4);
 }
 
 .btn-cart-fast.disabled {
@@ -1117,7 +1134,7 @@ input[type="number"] {
     font-size: 0.76rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-subtle-admin:hover {
@@ -1134,7 +1151,7 @@ input[type="number"] {
     font-size: 0.76rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-subtle-danger:hover {
@@ -1260,13 +1277,14 @@ input[type="number"] {
     font-size: 0.9rem;
     outline: none;
     font-family: var(--font-sans);
-    transition: border-color 0.2s;
+    transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
     border-color: var(--accent-indigo);
+    box-shadow: 0 0 16px rgba(99, 102, 241, 0.2);
 }
 
 .btn-primary {
@@ -1281,12 +1299,13 @@ input[type="number"] {
     border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 0.9rem;
-    transition: transform 0.2s, opacity 0.2s;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-primary:hover {
     transform: translateY(-1px);
     opacity: 0.95;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
 }
 
 .btn-secondary {
@@ -1472,8 +1491,9 @@ input[type="number"] {
     font-size: 0.88rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     outline: none;
+    will-change: transform;
 }
 
 .size-chip-btn:hover {
@@ -1511,7 +1531,7 @@ input[type="number"] {
     border-radius: var(--radius-sm);
     padding: 0 4px;
     user-select: none;
-    transition: border-color 0.25s ease;
+    transition: border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     flex-shrink: 0;
 }
 
@@ -1532,7 +1552,7 @@ input[type="number"] {
     font-weight: 600;
     cursor: pointer;
     border-radius: 6px;
-    transition: all 0.2s ease;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     line-height: 1;
 }
 
@@ -1728,9 +1748,10 @@ input[type="number"] {
     font-size: 2rem;
     color: #334155;
     cursor: pointer;
-    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.45s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     user-select: none;
     line-height: 1;
+    will-change: transform;
 }
 
 .star-choice:hover,
@@ -1759,7 +1780,7 @@ input[type="number"] {
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: var(--radius-md);
     padding: 22px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .review-item:hover {
@@ -1896,7 +1917,7 @@ input[type="number"] {
     text-align: center;
     background: #101420;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dropzone-box:hover, .dropzone-box.dragover {
@@ -1978,7 +1999,7 @@ input[type="number"] {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.3s ease;
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.7);
     contain: content;
 }
@@ -2000,7 +2021,7 @@ input[type="number"] {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .runway-hero-card:hover .runway-card-visual img {
@@ -2011,7 +2032,7 @@ input[type="number"] {
     position: absolute;
     inset: 0;
     background: linear-gradient(to top, rgba(9, 12, 21, 0.9) 0%, rgba(9, 12, 21, 0.1) 40%, transparent 100%);
-    transition: opacity 0.3s ease;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .runway-card-floating-pill {
@@ -2110,7 +2131,7 @@ input[type="number"] {
 
 .runway-card-title a {
     color: #ffffff;
-    transition: color 0.2s ease;
+    transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .runway-card-title a:hover {
@@ -2150,7 +2171,7 @@ input[type="number"] {
     font-size: 0.72rem;
     font-weight: 700;
     color: #ffffff;
-    transition: all 0.2s ease;
+    transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     white-space: nowrap;
 }
 
@@ -2771,7 +2792,7 @@ html, body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(212, 175, 55, 0.05);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    transition: all 0.3s ease;
+    transition: border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .demo-credentials-box:hover {
@@ -2780,7 +2801,8 @@ html, body {
 }
 
 .demo-pill-btn {
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: transform;
 }
 
 .demo-pill-btn:hover {
@@ -2792,4 +2814,19 @@ html, body {
 
 .demo-pill-btn:active {
     transform: translateY(0);
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    #aura-page-loader {
+        display: none !important;
+    }
 }

@@ -1,10 +1,10 @@
 /**
- * Storefront Luxury Experience & Interactive Motion Engine
- * High-Fashion Editorial UI Animations, Ambient Glow, 3D Tilt, & File Upload Previews
+ * AURA STUDIO — Luxury Haute Couture Performance Engine & Motion System
+ * Feather-light, GPU-accelerated 120fps interactions, fast previews, & atelier controls.
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 4. File Upload Drag-and-Drop & Instant Live Image Preview
+    // 1. File Upload Drag-and-Drop & Instant Live Image Preview
     const fileInputs = document.querySelectorAll('input[type="file"][data-preview-target]');
     fileInputs.forEach(input => {
         const targetId = input.getAttribute("data-preview-target");
@@ -57,16 +57,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 5. Wishlist Interactive Heart Bounce
-    const wishlistButtons = document.querySelectorAll(".btn-wishlist-float, .btn-wishlist-toggle");
+    // 3. Wishlist Interactive Heart Pulse
+    const wishlistButtons = document.querySelectorAll(".btn-wishlist-float, .btn-wishlist-toggle, .wishlist-btn-fast");
     wishlistButtons.forEach(btn => {
         btn.addEventListener("click", () => {
             btn.classList.add("heart-pulse");
-            setTimeout(() => btn.classList.remove("heart-pulse"), 600);
-        });
+            setTimeout(() => btn.classList.remove("heart-pulse"), 450);
+        }, { passive: true });
     });
 
-    // 6. Star Rating Interactive Hover in Review Forms
+    // 4. Star Rating Interactive Hover in Review Forms
     const ratingSelect = document.getElementById("rating-select");
     const starContainer = document.getElementById("interactive-star-rating");
     const ratingLabel = document.getElementById("star-rating-text");
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
             star.addEventListener("mouseenter", () => {
                 const val = parseInt(star.getAttribute("data-value"), 10);
                 highlightStars(val);
-            });
+            }, { passive: true });
             star.addEventListener("click", () => {
                 const val = parseInt(star.getAttribute("data-value"), 10);
                 ratingSelect.value = val;
@@ -118,24 +118,24 @@ document.addEventListener("DOMContentLoaded", () => {
         starContainer.addEventListener("mouseleave", () => {
             const currentVal = parseInt(ratingSelect.value, 10) || 5;
             setActiveStars(currentVal);
-        });
+        }, { passive: true });
 
-        // Initialize with default 5-star state
         const initialVal = parseInt(ratingSelect.value, 10) || 5;
         setActiveStars(initialVal);
     }
 
-    // 7. Auto-Dismiss Flash Messages with smooth fade
+    // 5. Auto-Dismiss Flash Messages with smooth fade
     const flashMessages = document.querySelectorAll(".flashes li");
     flashMessages.forEach((msg, idx) => {
         setTimeout(() => {
+            msg.style.transition = "opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
             msg.style.opacity = "0";
-            msg.style.transform = "translateY(-10px)";
-            setTimeout(() => msg.remove(), 400);
-        }, 5000 + idx * 800);
+            msg.style.transform = "translate3d(0, -10px, 0)";
+            setTimeout(() => msg.remove(), 520);
+        }, 4000 + idx * 600);
     });
 
-    // 8. Global Luxury Quantity Stepper Handler
+    // 6. Global Luxury Quantity Stepper Handler
     window.stepDetailQty = function(delta) {
         const input = document.getElementById("qty");
         if (!input) return;
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         input.value = current;
     };
 
-    // 9. Interactive Atelier Size Selector Handler
+    // 7. Interactive Atelier Size Selector Handler
     window.selectProductSize = function(size, btnElement) {
         const hiddenInput = document.getElementById("selected-size-input");
         if (hiddenInput) {
@@ -163,4 +163,3 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 });
-

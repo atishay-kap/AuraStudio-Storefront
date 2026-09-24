@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -143,7 +143,7 @@
 
             <div class="hero-visual-col">
                 <div class="hero-image-frame">
-                    <img src="{{ url_for('static', filename='images/products/hero_bomber.jpg') }}" alt="AURA Runway Showcase" loading="eager">
+                    <img src="{{ url_for('static', filename='images/products/hero_bomber.jpg') }}" alt="AURA Runway Showcase" loading="eager" decoding="async">
                     <div class="hero-image-overlay">
                         <div class="overlay-info">
                             <span class="overlay-tag">Edition 01 / Limited Drop</span>
@@ -201,7 +201,7 @@
                 <div class="product-card-fast">
                     <div class="product-media-box">
                         <a href="{{ url_for('storefront.product_detail', product_id=product.id) }}">
-                            <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+                            <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy" decoding="async">
                         </a>
 
                         {% if product.stock <= 0 %}

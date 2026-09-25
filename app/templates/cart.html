@@ -8,28 +8,44 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.4">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}?v=3.4"></script>
 </head>
 <body>
     <header class="site-header">
         <div class="nav-container">
-            <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
-            <div class="header-actions">
-                <a href="{{ url_for('storefront.index') }}" class="nav-pill">&larr; Continue Shopping</a>
+            <div class="nav-col-left">
+                <a href="{{ url_for('storefront.index') }}" class="nav-link-editorial">&larr; Continue Shopping</a>
+            </div>
+            <div class="nav-col-center">
+                <a href="{{ url_for('storefront.index') }}" class="logo-minimal">
+                    <span class="logo-brand">AURA STUDIO</span>
+                    <span class="logo-sub">IBIZA &bull; MILANO</span>
+                </a>
+            </div>
+            <div class="nav-col-right">
                 {% if current_user %}
-                    <a href="{{ url_for('storefront.wishlist') }}" class="nav-pill">
-                        &hearts; Wishlist <span class="cart-badge">{{ wishlist_count }}</span>
+                    <a href="{{ url_for('storefront.wishlist') }}" class="nav-utility-item">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                        <span class="utility-label">Saved</span>
+                        <span class="utility-count">{{ wishlist_count }}</span>
                     </a>
-                    <div class="user-menu-pill">
-                        <span class="user-greeting">Hi, <strong>{{ current_user.name.split(' ')[0] }}</strong></span>
-                        <a href="{{ url_for('storefront.my_orders') }}" class="nav-link-subtle">Orders</a>
-                        <a href="{{ url_for('storefront.logout') }}" class="nav-link-subtle">Logout</a>
+                    <div class="nav-user-dropdown">
+                        <button class="nav-user-trigger" type="button">
+                            <span>{{ current_user.name.split(' ')[0] }}</span>
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="user-dropdown-menu">
+                            <a href="{{ url_for('storefront.my_orders') }}" class="dropdown-link">Orders Archive</a>
+                            <a href="{{ url_for('storefront.profile') }}" class="dropdown-link">Atelier Profile</a>
+                            <a href="{{ url_for('storefront.logout') }}" class="dropdown-link logout-link">Sign Out</a>
+                        </div>
                     </div>
                 {% else %}
-                    <div class="auth-group">
-                        <a href="{{ url_for('storefront.login') }}" class="btn-ghost">Log In</a>
-                        <a href="{{ url_for('storefront.register') }}" class="btn-primary-pill">Join Atelier</a>
+                    <div class="nav-auth-minimal">
+                        <a href="{{ url_for('storefront.login') }}" class="nav-auth-link">Sign In</a>
+                        <span class="nav-auth-divider">/</span>
+                        <a href="{{ url_for('storefront.register') }}" class="nav-auth-link">Join</a>
                     </div>
                 {% endif %}
             </div>
@@ -85,9 +101,9 @@
                                     </td>
                                     <td style="padding: 16px 14px; color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">₹{{ "{:,.2f}".format(item.product.price) }}</td>
                                     <td style="padding: 16px 14px;">
-                                        <form action="{{ url_for('storefront.update_cart', item_key=item.cart_key) }}" method="POST" style="display: flex; align-items: center; gap: 6px;">
-                                            <input type="number" name="quantity" value="{{ item.qty }}" min="0" max="{{ item.product.stock }}" style="width: 55px; padding: 6px; text-align: center; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: var(--radius-sm); font-weight: 700;">
-                                            <button type="submit" class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">Update</button>
+                                        <form action="{{ url_for('storefront.update_cart', item_key=item.cart_key) }}" method="POST" class="cart-qty-form">
+                                            <input type="number" name="quantity" value="{{ item.qty }}" min="0" max="{{ item.product.stock }}" class="cart-qty-input">
+                                            <button type="submit" class="cart-qty-btn">Update</button>
                                         </form>
                                     </td>
                                     <td style="padding: 16px 14px; color: var(--text-primary); font-weight: 700; font-size: 1.05rem;">₹{{ "{:,.2f}".format(item.subtotal) }}</td>
@@ -133,8 +149,10 @@
                             </div>
                         {% endif %}
 
-                        <a href="{{ url_for('storefront.checkout') }}" class="btn-primary btn-block" style="display: block; width: 100%; text-align: center; margin-top: 20px; padding: 14px; font-size: 1rem; border-radius: var(--radius-sm);">Proceed to Secure Checkout &rarr;</a>
-                        <a href="{{ url_for('storefront.index') }}" class="btn-secondary btn-block" style="display: block; width: 100%; text-align: center; margin-top: 10px; padding: 10px; font-size: 0.88rem; border-radius: var(--radius-sm);">Continue Browsing Collections</a>
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 24px;">
+                            <a href="{{ url_for('storefront.checkout') }}" class="btn-primary btn-block">Proceed to Secure Checkout &rarr;</a>
+                            <a href="{{ url_for('storefront.index') }}" class="btn-secondary btn-block">Continue Browsing Collections</a>
+                        </div>
                     </div>
                 </div>
             </div>

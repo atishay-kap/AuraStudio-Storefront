@@ -3,35 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product #{{ product.id }} — AURA STUDIO Admin</title>
+    <title>Edit Piece #{{ product.id }} — AURA STUDIO Admin</title>
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.1">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}?v=3.1"></script>
 </head>
-<body>
-    <header class="site-header admin-header">
-        <div class="nav-container">
-            <span class="logo">AURA<span>ADMIN</span></span>
-            <nav class="admin-nav" style="display: flex; gap: 14px; align-items: center;">
-                <a href="{{ url_for('admin.dashboard') }}" class="nav-pill">Orders</a>
-                <a href="{{ url_for('admin.products') }}" class="nav-pill active">Products</a>
-                <a href="{{ url_for('admin.users') }}" class="nav-pill">Customers</a>
-                <a href="{{ url_for('storefront.index') }}" target="_blank" class="admin-quick-link" style="color: #fbbf24; font-weight: 700;">Live Storefront &nearr;</a>
-                <a href="{{ url_for('admin.logout') }}" class="btn-danger btn-small" style="padding: 6px 14px; border-radius: var(--radius-full);">Logout</a>
+<body class="admin-body">
+    <!-- Top Editorial Admin Header -->
+    <header class="admin-top-nav">
+        <div class="admin-nav-inner">
+            <div class="admin-brand-cluster">
+                <a href="{{ url_for('admin.dashboard') }}" class="logo-minimal">
+                    <span class="logo-brand">AURA STUDIO</span>
+                    <span class="logo-sub">IBIZA &bull; MILANO</span>
+                </a>
+                <span class="admin-tag-pill">Atelier Portal</span>
+            </div>
+
+            <nav class="admin-menu-links">
+                <a href="{{ url_for('admin.dashboard') }}" class="admin-nav-item">Orders</a>
+                <a href="{{ url_for('admin.products') }}" class="admin-nav-item active">Catalog &amp; Stock</a>
+                <a href="{{ url_for('admin.users') }}" class="admin-nav-item">Clientele</a>
+                <a href="{{ url_for('storefront.index') }}" target="_blank" class="admin-nav-item storefront-link">Live Storefront &nearr;</a>
+                <a href="{{ url_for('admin.logout') }}" class="admin-nav-item logout-link">Sign Out</a>
             </nav>
         </div>
     </header>
 
-    <main class="page-container" style="max-width: 860px;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+    <main class="admin-page-wrap" style="max-width: 900px;">
+        <!-- Page Title & Back Button -->
+        <div class="admin-head-title-row">
             <div>
-                <h1 style="font-family: var(--font-display); font-size: 2rem; color: var(--text-primary); letter-spacing: -0.01em;">Edit Product #{{ product.id }}</h1>
-                <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">{{ product.name }} &bull; {{ product.category }}</p>
+                <div class="admin-breadcrumbs">
+                    <a href="{{ url_for('admin.products') }}">Inventory</a> / <span class="active">Edit Piece #{{ product.id }}</span>
+                </div>
+                <h1 class="admin-main-title">Edit Fashion Piece #{{ product.id }}</h1>
+                <p class="admin-subtitle">{{ product.name }} &bull; Category: {{ product.category }} &bull; Rating: &#9733; {{ "%.1f"|format(product.rating) }}</p>
             </div>
-            <a href="{{ url_for('admin.products') }}" class="nav-pill">&larr; Back to Products</a>
+            <div class="admin-action-cluster">
+                <a href="{{ url_for('admin.products') }}" class="btn-secondary btn-small">&larr; Back to Catalog</a>
+            </div>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -44,16 +58,16 @@
             {% endif %}
         {% endwith %}
 
-        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm);">
-            <form action="{{ url_for('admin.edit_product', product_id=product.id) }}" method="POST" enctype="multipart/form-data" class="grid-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="form-group span-2" style="grid-column: span 2;">
-                    <label>Product Title *</label>
-                    <input type="text" name="name" value="{{ product.name }}" required>
+        <div class="admin-form-card">
+            <form action="{{ url_for('admin.edit_product', product_id=product.id) }}" method="POST" enctype="multipart/form-data" class="admin-grid-form">
+                <div class="form-group span-2">
+                    <label for="edit-name">Piece Title *</label>
+                    <input type="text" id="edit-name" name="name" value="{{ product.name }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Category *</label>
-                    <input type="text" name="category" list="category-options" value="{{ product.category }}" required>
+                    <label for="edit-category">Category *</label>
+                    <input type="text" id="edit-category" name="category" list="category-options" value="{{ product.category }}" required>
                     <datalist id="category-options">
                         {% for cat in categories %}
                             <option value="{{ cat }}">
@@ -62,77 +76,96 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Retail Price (INR / ₹) *</label>
-                    <input type="number" step="0.01" name="price" value="{{ product.price }}" required>
+                    <label for="edit-price">Retail Price (INR / ₹) *</label>
+                    <input type="number" step="0.01" id="edit-price" name="price" value="{{ product.price }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Available Sizes (Comma-separated, e.g. XS, S, M, L, XL) *</label>
-                    <input type="text" name="size" value="{{ product.size }}" required placeholder="XS, S, M, L, XL">
+                    <label for="edit-size">Available Sizes (Comma-separated) *</label>
+                    <input type="text" id="edit-size" name="size" value="{{ product.size }}" required placeholder="XS, S, M, L, XL">
                 </div>
 
                 <div class="form-group">
-                    <label>Color / Shade</label>
-                    <input type="text" name="color" value="{{ product.color }}">
+                    <label for="edit-color">Colorway / Shade</label>
+                    <input type="text" id="edit-color" name="color" value="{{ product.color }}">
                 </div>
 
                 <div class="form-group">
-                    <label>Inventory Stock Available</label>
-                    <input type="number" name="stock" value="{{ product.stock }}" min="0">
+                    <label for="edit-stock">Available Stock Units</label>
+                    <input type="number" id="edit-stock" name="stock" value="{{ product.stock }}" min="0">
                 </div>
 
                 <div class="form-group">
-                    <label>Publication Status</label>
+                    <label>Storefront Visibility</label>
                     <div style="margin-top: 10px;">
-                        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; color: var(--text-primary);">
-                            <input type="checkbox" name="is_active" value="1" {{ 'checked' if product.is_active }} style="width: auto;">
-                            <span>Active &amp; Visible on Storefront</span>
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; color: var(--lux-noir);">
+                            <input type="checkbox" name="is_active" value="1" {{ 'checked' if product.is_active }} style="width: 18px; height: 18px; accent-color: var(--lux-bronze);">
+                            <span>Active &amp; Published in Collection</span>
                         </label>
                     </div>
                 </div>
 
                 <!-- Current Visual & Photo Replacement Dropzone -->
-                <div class="form-group span-2" style="grid-column: span 2;">
-                    <label>Product Photography (Upload New Image or Replace)</label>
+                <div class="form-group span-2">
+                    <label>Photography &amp; Visual Assets</label>
                     <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap;">
                         {% if product.image_url %}
                             <div>
-                                <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Current Photo:</span>
-                                <img id="edit-preview-img" src="{{ product.image_url }}" alt="Current Photo" class="preview-thumb" style="width: 100px; height: 125px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+                                <span style="font-size: 0.76rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Current Photo:</span>
+                                <img id="edit-preview-img" src="{{ product.image_url }}" alt="Current Photo" style="width: 100px; height: 130px; object-fit: cover; border: 1px solid var(--lux-border); border-radius: var(--radius-sm);">
                             </div>
                         {% endif %}
                         <div style="flex: 1; min-width: 260px;">
-                            <div class="dropzone-box">
+                            <div class="dropzone-box" onclick="document.getElementById('edit-image-file').click();">
                                 <div class="dropzone-icon">&#128247;</div>
-                                <strong style="color: var(--text-primary); display: block; margin-bottom: 4px;">Drop New Image or Click to Browse</strong>
-                                <p style="color: var(--text-muted); font-size: 0.82rem;">Replaces current photo with new uploaded file</p>
-                                <input type="file" name="image_file" accept="image/*" data-preview-target="edit-preview-img">
+                                <strong style="color: var(--lux-noir); font-size: 0.92rem; display: block; margin-bottom: 4px;">Click to Upload Replacement Image</strong>
+                                <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0;">Replaces existing image with uploaded file</p>
+                                <input type="file" id="edit-image-file" name="image_file" accept="image/*" style="display: none;" onchange="previewUpload(this, 'edit-preview-img')">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group span-2" style="grid-column: span 2;">
-                    <label>Image URL / Static Path (Alternative)</label>
-                    <input type="text" name="image_url" value="{{ product.image_url }}">
+                <div class="form-group span-2">
+                    <label for="edit-image-url">Image URL or Static Path (Alternative)</label>
+                    <input type="text" id="edit-image-url" name="image_url" value="{{ product.image_url }}">
                 </div>
 
-                <div class="form-group span-2" style="grid-column: span 2;">
-                    <label>Editorial Description</label>
-                    <textarea name="description" rows="3">{{ product.description or '' }}</textarea>
+                <div class="form-group span-2">
+                    <label for="edit-description">Editorial Description &amp; Specifications</label>
+                    <textarea id="edit-description" name="description" rows="3">{{ product.description or '' }}</textarea>
                 </div>
 
-                <div class="form-actions span-2" style="grid-column: span 2; display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--border-subtle);">
-                    <button type="submit" class="btn-primary btn-large">Save All Changes &rarr;</button>
+                <div class="form-group span-2" style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 20px; border-top: 1px solid var(--lux-border);">
+                    <button type="submit" class="btn-primary btn-large">
+                        <span>Save Changes &rarr;</span>
+                    </button>
                 </div>
             </form>
 
-            <div style="margin-top: 28px; padding-top: 20px; border-top: 1px dashed var(--border-subtle); display: flex; justify-content: flex-end;">
-                <form action="{{ url_for('admin.delete_product', product_id=product.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently remove this fashion piece?');">
-                    <button type="submit" class="btn-danger">Permanently Delete Product</button>
+            <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--lux-border); display: flex; justify-content: flex-end;">
+                <form action="{{ url_for('admin.delete_product', product_id=product.id) }}" method="POST" onsubmit="return confirm('Are you certain you wish to permanently delete this piece from the atelier archive?');">
+                    <button type="submit" class="btn-secondary" style="color: #9B2C2C; border-color: #F8D7DA; background: #FDF2F2; font-size: 0.8rem;">
+                        Permanently Delete Piece
+                    </button>
                 </form>
             </div>
         </div>
     </main>
+
+    <script>
+        function previewUpload(input, targetImgId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(targetImgId);
+                    if (img) {
+                        img.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 </body>
 </html>

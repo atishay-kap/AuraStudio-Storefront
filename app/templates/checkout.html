@@ -8,21 +8,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.4">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}?v=3.4"></script>
 </head>
 <body>
     <header class="site-header">
         <div class="nav-container">
-            <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
-            <div class="header-actions">
-                <a href="{{ url_for('storefront.view_cart') }}" class="nav-pill">&larr; Back to Shopping Bag</a>
+            <div class="nav-col-left">
+                <a href="{{ url_for('storefront.view_cart') }}" class="nav-link-editorial">&larr; Return to Bag</a>
+            </div>
+            <div class="nav-col-center">
+                <a href="{{ url_for('storefront.index') }}" class="logo-minimal">
+                    <span class="logo-brand">AURA STUDIO</span>
+                    <span class="logo-sub">IBIZA &bull; MILANO</span>
+                </a>
+            </div>
+            <div class="nav-col-right">
                 {% if current_user %}
-                    <span class="user-greeting">Logged in as <strong>{{ current_user.name }}</strong></span>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.05em;">Member: <strong style="color: var(--lux-noir);">{{ current_user.name.split(' ')[0] }}</strong></span>
                 {% else %}
-                    <div class="auth-group">
-                        <a href="{{ url_for('storefront.login', next=url_for('storefront.checkout')) }}" class="btn-ghost">Log In</a>
-                        <a href="{{ url_for('storefront.register', next=url_for('storefront.checkout')) }}" class="btn-primary-pill">Join Atelier</a>
+                    <div class="nav-auth-minimal">
+                        <a href="{{ url_for('storefront.login', next=url_for('storefront.checkout')) }}" class="nav-auth-link">Sign In</a>
+                        <span class="nav-auth-divider">/</span>
+                        <a href="{{ url_for('storefront.register', next=url_for('storefront.checkout')) }}" class="nav-auth-link">Join</a>
                     </div>
                 {% endif %}
             </div>
@@ -77,7 +85,7 @@
                             <textarea id="shipping_address" name="shipping_address" rows="3" required placeholder="Flat / House No., Apartment, Street / Area, City, State, PIN Code">{{ prefill.address }}</textarea>
                         </div>
 
-                        <button type="submit" class="btn-primary btn-block" style="display: block; width: 100%; text-align: center; padding: 16px; font-size: 1.05rem; font-weight: 700; margin-top: 14px; border-radius: var(--radius-sm);">
+                        <button type="submit" class="btn-primary btn-block" style="margin-top: 20px; padding: 16px; font-size: 0.9rem;">
                             Continue to Encrypted INR Payment &rarr;
                         </button>
                     </form>

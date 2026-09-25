@@ -3,33 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Login — AURA STUDIO Haute Couture</title>
+    <title>Sign In or Register — AURA STUDIO</title>
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.5">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}?v=3.5"></script>
 </head>
-<body>
-    <header class="site-header">
+<body class="auth-page-body">
+    <!-- Top Minimalist Header -->
+    <header class="site-header auth-site-header">
         <div class="nav-container">
-            <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
-            <div class="header-actions">
-                <a href="{{ url_for('storefront.index') }}" class="nav-pill">&larr; Storefront</a>
-                <a href="{{ url_for('storefront.register') }}" class="btn-primary-pill">Join Atelier</a>
+            <div class="nav-col-left">
+                <a href="{{ url_for('storefront.index') }}" class="nav-link-editorial">&larr; Return to Storefront</a>
+            </div>
+            <div class="nav-col-center">
+                <a href="{{ url_for('storefront.index') }}" class="logo-minimal">
+                    <span class="logo-brand">AURA STUDIO</span>
+                    <span class="logo-sub">IBIZA &bull; MILANO</span>
+                </a>
+            </div>
+            <div class="nav-col-right">
+                <a href="{{ url_for('storefront.order_lookup') }}" class="nav-link-editorial" style="font-size: 0.76rem;">Guest Order Lookup &rarr;</a>
             </div>
         </div>
     </header>
 
-    <main class="auth-container">
-        <div class="auth-card" style="box-shadow: var(--shadow-md);">
-            <h2 style="font-family: var(--font-display); color: var(--text-primary); letter-spacing: -0.01em;">Welcome Back</h2>
-            <p class="auth-subtitle">Sign in to your member account to access past orders, saved wishlist, and one-click checkout.</p>
+    <main class="unified-auth-wrapper">
+        <div class="unified-auth-card" style="margin: auto;">
+            <div class="auth-card-head">
+                <h1 class="auth-title" id="auth-main-title">{{ 'Create Account' if tab == 'signup' else 'Sign In' }}</h1>
+            </div>
+
+            <!-- Unified Dual Tabs -->
+            <div class="auth-tab-switch" role="tablist">
+                <button type="button" class="auth-tab-btn {{ 'active' if tab != 'signup' else '' }}" id="tab-btn-login" onclick="switchAuthTab('login')">
+                    Sign In
+                </button>
+                <button type="button" class="auth-tab-btn {{ 'active' if tab == 'signup' else '' }}" id="tab-btn-signup" onclick="switchAuthTab('signup')">
+                    Create Account
+                </button>
+            </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    <ul class="flashes">
+                    <ul class="flashes" style="margin: 10px 0; font-size: 0.8rem; padding: 8px 14px;">
                         {% for category, msg in messages %}
                             <li class="flash-{{ category }}">{{ msg }}</li>
                         {% endfor %}
@@ -37,62 +56,93 @@
                 {% endif %}
             {% endwith %}
 
-            <form id="customer-login-form" method="POST" action="{{ url_for('storefront.login', next=request.args.get('next')) }}" class="auth-form">
-                <!-- Demo Quick Access Panel -->
-                <div class="demo-credentials-box" style="margin-bottom: 22px; padding: 16px 18px; background: rgba(197, 160, 89, 0.08); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 0.95rem;">⚡</span>
-                            <span style="font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold);">Demo Accounts</span>
+            <!-- ==========================================
+                 PANEL 1: SIGN IN (Clients & Admins)
+                 ========================================== -->
+            <div class="auth-tab-pane {{ 'active' if tab != 'signup' else '' }}" id="pane-login">
+                <form id="unified-login-form" method="POST" action="{{ url_for('storefront.login', next=request.args.get('next')) }}" class="auth-form-body">
+                    <input type="hidden" name="auth_action" value="login">
+
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="text" id="login-email" name="email" required placeholder="Enter your email" autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" required placeholder="••••••••" autocomplete="current-password">
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-block btn-auth-submit">
+                        <span>Sign In &rarr;</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- ==========================================
+                 PANEL 2: SIGN UP / REGISTER
+                 ========================================== -->
+            <div class="auth-tab-pane {{ 'active' if tab == 'signup' else '' }}" id="pane-signup">
+                <form id="unified-signup-form" method="POST" action="{{ url_for('storefront.login', next=request.args.get('next')) }}" class="auth-form-body">
+                    <input type="hidden" name="auth_action" value="signup">
+
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" name="name" value="{{ name or '' }}" required placeholder="Your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" name="email" value="{{ email or '' }}" required placeholder="Your email address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-address">Shipping Address <span style="font-weight: 400; color: var(--text-muted);">(Optional)</span></label>
+                        <textarea id="signup-address" name="shipping_address" rows="1" placeholder="Street, City, State, PIN Code">{{ address or '' }}</textarea>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label for="signup-password">Password</label>
+                            <input type="password" id="signup-password" name="password" required placeholder="Min. 6 chars" minlength="6">
                         </div>
-                        <span style="font-size: 0.72rem; color: var(--text-muted);">1-Click Instant Login</span>
+                        <div class="form-group">
+                            <label for="signup-confirm">Confirm Password</label>
+                            <input type="password" id="signup-confirm" name="confirm_password" required placeholder="Repeat password" minlength="6">
+                        </div>
                     </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <button type="button" onclick="fillDemo('customer@example.com', 'customer123')" class="demo-pill-btn" style="background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 10px 12px; border-radius: var(--radius-sm); text-align: left; cursor: pointer; transition: all 0.2s ease;">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <strong style="color: var(--text-primary); font-size: 0.82rem; font-weight: 600;">Alex Morgan</strong>
-                                <span style="font-size: 0.65rem; background: rgba(197,160,89,0.15); color: var(--gold); padding: 2px 6px; border-radius: 4px; font-weight: 600;">Customer</span>
-                            </div>
-                            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; font-family: monospace;">customer@example.com</div>
-                            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px;">Pass: <code style="color: var(--text-primary);">customer123</code></div>
-                        </button>
 
-                        <button type="button" onclick="fillDemo('demo@example.com', 'demo123')" class="demo-pill-btn" style="background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 10px 12px; border-radius: var(--radius-sm); text-align: left; cursor: pointer; transition: all 0.2s ease;">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <strong style="color: var(--text-primary); font-size: 0.82rem; font-weight: 600;">Elena Vance</strong>
-                                <span style="font-size: 0.65rem; background: rgba(197,160,89,0.15); color: var(--gold); padding: 2px 6px; border-radius: 4px; font-weight: 600;">Customer</span>
-                            </div>
-                            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; font-family: monospace;">demo@example.com</div>
-                            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px;">Pass: <code style="color: var(--text-primary);">demo123</code></div>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email" required placeholder="alex@example.com">
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password *</label>
-                    <input type="password" id="password" name="password" required placeholder="••••••••">
-                </div>
-
-                <button type="submit" class="btn-primary btn-block" style="padding: 14px; margin-top: 10px; border-radius: var(--radius-sm);">Sign In to Account &rarr;</button>
-            </form>
-
-            <div class="auth-footer">
-                <p>Don't have an account? <a href="{{ url_for('storefront.register', next=request.args.get('next')) }}">Join the Atelier now</a></p>
+                    <button type="submit" class="btn-primary btn-block btn-auth-submit">
+                        <span>Create Account &rarr;</span>
+                    </button>
+                </form>
             </div>
         </div>
     </main>
 
     <script>
-        function fillDemo(email, password) {
-            document.getElementById('email').value = email;
-            document.getElementById('password').value = password;
-            document.getElementById('customer-login-form').submit();
+        function switchAuthTab(targetTab) {
+            const loginBtn = document.getElementById('tab-btn-login');
+            const signupBtn = document.getElementById('tab-btn-signup');
+            const loginPane = document.getElementById('pane-login');
+            const signupPane = document.getElementById('pane-signup');
+            const mainTitle = document.getElementById('auth-main-title');
+
+            if (targetTab === 'signup') {
+                loginBtn.classList.remove('active');
+                signupBtn.classList.add('active');
+                loginPane.classList.remove('active');
+                signupPane.classList.add('active');
+                if (mainTitle) mainTitle.textContent = 'Create Account';
+                history.replaceState(null, '', window.location.pathname + '?tab=signup' + (window.location.search.includes('next=') ? '&' + window.location.search.split('?')[1].split('&').filter(p => p.startsWith('next=')).join('&') : ''));
+            } else {
+                signupBtn.classList.remove('active');
+                loginBtn.classList.add('active');
+                signupPane.classList.remove('active');
+                loginPane.classList.add('active');
+                if (mainTitle) mainTitle.textContent = 'Sign In';
+                history.replaceState(null, '', window.location.pathname + (window.location.search.includes('next=') ? '?' + window.location.search.split('?')[1].split('&').filter(p => p.startsWith('next=')).join('&') : ''));
+            }
         }
     </script>
 </body>

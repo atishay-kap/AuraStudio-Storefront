@@ -4,71 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} — AURA STUDIO Haute Couture</title>
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}?v=3.4">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.4">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}?v=3.4"></script>
 </head>
 <body>
-    <!-- Luxury Runway Marquee Ticker (Seamless Infinite Scroll) -->
-    <div class="marquee-banner">
-        <div class="marquee-track">
-            <div class="marquee-group">
-                <span class="marquee-item"><span class="marquee-dot"></span> AUTUMN / WINTER 2026 RUNWAY CAPSULE</span>
-                <span class="marquee-item"><span class="marquee-dot"></span> COMPLIMENTARY PAN-INDIA EXPRESS DELIVERY</span>
-                <span class="marquee-item"><span class="marquee-dot"></span> 100% ETHICALLY SOURCED LUXURY FABRICS</span>
-                <span class="marquee-item"><span class="marquee-dot"></span> HAND-FINISHED ARTISAN TAILORING</span>
-            </div>
-            <div class="marquee-group" aria-hidden="true">
-                <span class="marquee-item"><span class="marquee-dot"></span> AUTUMN / WINTER 2026 RUNWAY CAPSULE</span>
-                <span class="marquee-item"><span class="marquee-dot"></span> COMPLIMENTARY PAN-INDIA EXPRESS DELIVERY</span>
-                <span class="marquee-item"><span class="marquee-dot"></span> 100% ETHICALLY SOURCED LUXURY FABRICS</span>
-                <span class="marquee-item"><span class="marquee-dot"></span> HAND-FINISHED ARTISAN TAILORING</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Haute Couture Navigation -->
+    <!-- Haute Couture Minimalist Header -->
     <header class="site-header">
         <div class="nav-container">
-            <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
-
-            <div class="header-search">
-                <form action="{{ url_for('storefront.index') }}" method="GET">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" name="q" placeholder="Search runway collection, jackets, shirts...">
-                    <button type="submit">Search</button>
-                </form>
+            <div class="nav-col-left">
+                <div class="nav-archive-popdown">
+                    <button type="button" class="nav-link-editorial archive-trigger">
+                        <span>Archive</span>
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="archive-popdown-menu">
+                        <div class="popdown-header">Curated Collections</div>
+                        <a href="{{ url_for('storefront.index') }}" class="popdown-link">
+                            <span>All Runway Pieces</span>
+                            <span class="popdown-badge">All</span>
+                        </a>
+                        <a href="{{ url_for('storefront.index', category='Hoodies') }}" class="popdown-link">
+                            <span>Hoodies</span>
+                        </a>
+                        <a href="{{ url_for('storefront.index', category='Jackets') }}" class="popdown-link {{ 'active' if product.category == 'Jackets' }}">
+                            <span>Jackets</span>
+                        </a>
+                        <a href="{{ url_for('storefront.index', category='Pants') }}" class="popdown-link {{ 'active' if product.category == 'Pants' }}">
+                            <span>Pants</span>
+                        </a>
+                        <a href="{{ url_for('storefront.index', category='Shirts') }}" class="popdown-link {{ 'active' if product.category == 'Shirts' }}">
+                            <span>Shirts</span>
+                        </a>
+                        <a href="{{ url_for('storefront.index', category='Sweaters') }}" class="popdown-link {{ 'active' if product.category == 'Sweaters' }}">
+                            <span>Sweaters</span>
+                        </a>
+                        <a href="{{ url_for('storefront.index', category='T-Shirts') }}" class="popdown-link {{ 'active' if product.category == 'T-Shirts' }}">
+                            <span>T-Shirts</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="{{ url_for('storefront.index') }}#collections" class="nav-link-editorial">Lookbook</a>
+                <a href="{{ url_for('storefront.order_lookup') }}" class="nav-link-editorial">Track Order</a>
             </div>
 
-            <div class="header-actions">
+            <div class="nav-col-center">
+                <a href="{{ url_for('storefront.index') }}" class="logo-minimal">
+                    <span class="logo-brand">AURA STUDIO</span>
+                    <span class="logo-sub">IBIZA &bull; MILANO</span>
+                </a>
+            </div>
+
+            <div class="nav-col-right">
+                <div class="nav-search-minimal">
+                    <form action="{{ url_for('storefront.index') }}" method="GET" class="search-form-minimal">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" name="q" placeholder="Search archive...">
+                    </form>
+                </div>
+
                 {% if current_user %}
-                    <a href="{{ url_for('storefront.wishlist') }}" class="nav-pill" title="Saved Collection">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-                        <span>Wishlist</span>
-                        <span class="cart-badge">{{ wishlist_count }}</span>
+                    <a href="{{ url_for('storefront.wishlist') }}" class="nav-utility-item" title="Saved Wishlist">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                        <span class="utility-label">Saved</span>
+                        <span class="utility-count">{{ wishlist_count }}</span>
                     </a>
                 {% endif %}
 
-                <a href="{{ url_for('storefront.view_cart') }}" class="nav-pill">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-                    <span>Cart</span>
-                    <span class="cart-badge">{{ cart_count }}</span>
+                <a href="{{ url_for('storefront.view_cart') }}" class="nav-utility-item" title="Shopping Bag">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                    <span class="utility-label">Bag</span>
+                    <span class="utility-count">{{ cart_count }}</span>
                 </a>
 
                 {% if current_user %}
-                    <div class="user-menu-pill">
-                        <span class="user-greeting">Hi, <strong>{{ current_user.name.split(' ')[0] }}</strong></span>
-                        <a href="{{ url_for('storefront.my_orders') }}" class="nav-link-subtle">Orders</a>
-                        <a href="{{ url_for('storefront.profile') }}" class="nav-link-subtle">Profile</a>
-                        <a href="{{ url_for('storefront.logout') }}" class="nav-link-subtle">Logout</a>
+                    <div class="nav-user-dropdown">
+                        <button class="nav-user-trigger" type="button">
+                            <span>{{ current_user.name.split(' ')[0] }}</span>
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="user-dropdown-menu">
+                            <div class="dropdown-user-header">
+                                <strong>{{ current_user.name }}</strong>
+                                <span>{{ current_user.email }}</span>
+                            </div>
+                            <a href="{{ url_for('storefront.my_orders') }}" class="dropdown-link">Orders Archive</a>
+                            <a href="{{ url_for('storefront.profile') }}" class="dropdown-link">Atelier Profile</a>
+                            {% if current_user.is_admin %}
+                                <a href="{{ url_for('admin.dashboard') }}" class="dropdown-link admin-link">Atelier Portal</a>
+                            {% endif %}
+                            <a href="{{ url_for('storefront.logout') }}" class="dropdown-link logout-link">Sign Out</a>
+                        </div>
                     </div>
                 {% else %}
-                    <div class="auth-group">
-                        <a href="{{ url_for('storefront.login') }}" class="btn-ghost">Log In</a>
-                        <a href="{{ url_for('storefront.register') }}" class="btn-primary-pill">Join Atelier</a>
+                    <div class="nav-auth-minimal">
+                        <a href="{{ url_for('storefront.login') }}" class="nav-auth-link">Sign In</a>
+                        <span class="nav-auth-divider">/</span>
+                        <a href="{{ url_for('storefront.register') }}" class="nav-auth-link">Join</a>
                     </div>
                 {% endif %}
             </div>
@@ -412,5 +447,91 @@
             </div>
         </div>
     </main>
+
+    <!-- Brand Highlights & Guarantees Strip (Bottom of Page) -->
+    <section class="brand-commitments-strip reveal-on-scroll">
+        <div class="commitments-container">
+            <div class="commitment-item">
+                <span class="commitment-icon">✦</span>
+                <div class="commitment-text">
+                    <strong>COMPLIMENTARY PAN-INDIA COURIER</strong>
+                    <span>Insured express delivery directly from atelier</span>
+                </div>
+            </div>
+            <div class="commitment-item">
+                <span class="commitment-icon">✦</span>
+                <div class="commitment-text">
+                    <strong>100% ETHICALLY CERTIFIED WEAVES</strong>
+                    <span>Organic European silks and long-staple Indian cottons</span>
+                </div>
+            </div>
+            <div class="commitment-item">
+                <span class="commitment-icon">✦</span>
+                <div class="commitment-text">
+                    <strong>HANDCRAFTED ITALIAN TAILORING</strong>
+                    <span>Bespoke silhouettes engineered in Milano &amp; Ibiza</span>
+                </div>
+            </div>
+            <div class="commitment-item">
+                <span class="commitment-icon">✦</span>
+                <div class="commitment-text">
+                    <strong>AUTUMN / WINTER 2026 ARCHIVE</strong>
+                    <span>Limited edition seasonal capsule garments</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Luxury Editorial Footer -->
+    <footer class="luxury-footer reveal-on-scroll">
+        <div class="footer-container">
+            <div class="footer-col-brand">
+                <a href="{{ url_for('storefront.index') }}" class="logo-minimal">
+                    <span class="logo-brand">AURA STUDIO</span>
+                    <span class="logo-sub">IBIZA &bull; MILANO</span>
+                </a>
+                <p class="footer-manifesto">
+                    Haute-couture craftsmanship engineered for contemporary life. Built with ethically sourced Italian silks, pure wools, and timeless tailoring.
+                </p>
+                <div class="footer-badges">
+                    <span>&bull; Milano Atelier</span>
+                    <span>&bull; Express Worldwide</span>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Collections</h4>
+                <ul>
+                    <li><a href="{{ url_for('storefront.index', category='Jackets') }}">Runway Outerwear</a></li>
+                    <li><a href="{{ url_for('storefront.index', category='Shirts') }}">Silk &amp; Tailored Shirts</a></li>
+                    <li><a href="{{ url_for('storefront.index', category='Pants') }}">Pleated Trousers</a></li>
+                    <li><a href="{{ url_for('storefront.index', category='Sweaters') }}">Cashmere Knits</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Concierge</h4>
+                <ul>
+                    <li><a href="{{ url_for('storefront.order_lookup') }}">Track Any Order</a></li>
+                    <li><a href="{{ url_for('storefront.my_orders') }}">Order History</a></li>
+                    <li><a href="{{ url_for('storefront.profile') }}">Personal Profile</a></li>
+                    <li><a href="{{ url_for('storefront.view_cart') }}">Shopping Bag</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Store Atelier</h4>
+                <ul>
+                    <li><a href="{{ url_for('storefront.index') }}">Complimentary Express Delivery</a></li>
+                    <li><a href="{{ url_for('storefront.index') }}">Sustainable Sourcing</a></li>
+                    <li><a href="{{ url_for('storefront.index') }}">Atelier Craftsmanship</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 AURA STUDIO. All Rights Reserved. Haute Couture Digital Experience.</p>
+        </div>
+    </footer>
 </body>
 </html>

@@ -3,55 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure INR Payment — AURA STUDIO Haute Couture</title>
+    <title>Complete Payment — AURA STUDIO</title>
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.4">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}?v=3.4"></script>
 </head>
-<body class="pay-page-body">
-    <div class="auth-container">
-        <div class="auth-card" style="text-align: center; border: 1px solid var(--border-subtle); max-width: 480px; box-shadow: var(--shadow-md); background: var(--bg-card);">
-            <div style="font-size: 2.2rem; margin-bottom: 12px; color: var(--gold);">&#128274;</div>
-            <h2 style="font-family: var(--font-display); color: var(--text-primary); font-size: 1.6rem; letter-spacing: -0.01em;">Encrypted Indian Rupee Gateway</h2>
-            <p class="auth-subtitle" style="margin-bottom: 20px;">
-                Order #{{ order.id }} &bull; Total Payable: <strong style="color: var(--text-primary); font-size: 1.25rem;">₹{{ "{:,.2f}".format(order.total_amount) }}</strong>
-            </p>
+<body class="auth-page-body">
+    <!-- Top Minimalist Header -->
+    <header class="site-header auth-site-header">
+        <div class="nav-container">
+            <div class="nav-col-left">
+                <a href="{{ url_for('storefront.view_cart') }}" class="nav-link-editorial">&larr; Return to Bag</a>
+            </div>
+            <div class="nav-col-center">
+                <a href="{{ url_for('storefront.index') }}" class="logo-minimal">
+                    <span class="logo-brand">AURA STUDIO</span>
+                    <span class="logo-sub">IBIZA &bull; MILANO</span>
+                </a>
+            </div>
+            <div class="nav-col-right">
+                <span style="font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary);">Encrypted Checkout</span>
+            </div>
+        </div>
+    </header>
 
-            <!-- Indian Payment Methods Badges -->
-            <div class="indian-payments-strip" style="margin: 0 0 24px 0;">
-                <span class="pay-badge-pill"><span class="pay-badge-icon">&#9889;</span> UPI / QR</span>
-                <span class="pay-badge-pill"><span class="pay-badge-icon">&#128179;</span> Cards / RuPay</span>
-                <span class="pay-badge-pill"><span class="pay-badge-icon">&#127974;</span> NetBanking</span>
+    <main class="unified-auth-wrapper">
+        <div class="unified-auth-card" style="max-width: 440px;">
+            <div class="auth-card-head" style="margin-bottom: 20px;">
+                <h1 class="auth-title">Complete Payment</h1>
             </div>
 
-            <div style="margin: 20px 0;">
-                <button id="pay-btn" class="btn-primary" style="width: 100%; padding: 15px; font-size: 1.05rem; font-weight: 700; border-radius: var(--radius-sm); letter-spacing: 0.02em;">
-                    Proceed to Pay ₹{{ "{:,.2f}".format(order.total_amount) }}
+            <div style="background: var(--lux-surface-soft); border: 1px solid var(--lux-border); border-radius: var(--radius-sm); padding: 18px 20px; margin-bottom: 22px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                    <span>Order Reference</span>
+                    <strong style="color: var(--lux-noir); font-family: var(--font-sans);">#{{ order.id }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                    <span>Recipient</span>
+                    <span style="color: var(--lux-noir); font-weight: 500;">{{ order.customer_name }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: baseline; padding-top: 10px; border-top: 1px solid var(--lux-border);">
+                    <span style="font-size: 0.9rem; font-weight: 600; color: var(--lux-noir);">Total Amount Due</span>
+                    <span style="font-size: 1.4rem; font-weight: 700; color: var(--lux-noir); font-family: var(--font-sans);">₹{{ "{:,.2f}".format(order.total_amount) }}</span>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button id="pay-btn" class="btn-primary btn-block" style="padding: 14px 20px; font-size: 0.82rem;">
+                    Pay ₹{{ "{:,.2f}".format(order.total_amount) }} Now &rarr;
                 </button>
-            </div>
 
-            {% if razorpay_order_id.startswith('mock_order_') %}
-                <div style="margin-top: 24px; padding: 18px; background: rgba(197, 160, 89, 0.08); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
-                    <p style="margin: 0 0 12px 0; color: var(--text-primary); font-size: 0.85rem;"><strong>⚡ Razorpay Sandbox:</strong> Simulated Indian Payment Gateway</p>
-                    <form method="POST" action="{{ url_for('storefront.verify_payment') }}">
+                {% if razorpay_order_id.startswith('mock_order_') %}
+                    <form method="POST" action="{{ url_for('storefront.verify_payment') }}" style="margin-top: 4px;">
                         <input type="hidden" name="razorpay_order_id" value="{{ razorpay_order_id }}">
                         <input type="hidden" name="razorpay_payment_id" value="mock_pay_{{ order.id }}">
                         <input type="hidden" name="razorpay_signature" value="mock_sig">
-                        <button type="submit" class="btn-secondary" style="width: 100%; background: var(--bg-surface); color: var(--text-primary); border-color: var(--border-subtle); font-size: 0.88rem; font-weight: 600;">
-                            Simulate Instant ₹ Payment Success &rarr;
+                        <button type="submit" class="btn-secondary btn-block" style="padding: 12px 18px; font-size: 0.78rem;">
+                            Simulate Instant Payment Success &rarr;
                         </button>
                     </form>
-                </div>
-            {% endif %}
+                {% endif %}
+            </div>
 
-            <div class="auth-footer" style="margin-top: 24px;">
-                <p><a href="{{ url_for('storefront.view_cart') }}">&larr; Return to Shopping Bag</a></p>
+            <div class="auth-footer-links" style="margin-top: 18px;">
+                <a href="{{ url_for('storefront.view_cart') }}" style="color: var(--text-secondary);">&larr; Return to Shopping Bag</a>
             </div>
         </div>
-    </div>
+    </main>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
@@ -90,7 +111,7 @@
                     email: "{{ order.customer_email }}"
                 },
                 theme: {
-                    color: "#090a0f"
+                    color: "#121110"
                 }
             };
 

@@ -385,82 +385,115 @@ def wishlist_move_to_cart(product_id):
 
 @storefront_bp.route("/register", methods=["GET", "POST"])
 def register():
-    if get_current_user():
-        return redirect(url_for("storefront.index"))
-
     if request.method == "POST":
-        name = request.form.get("name", "").strip()
-        email = request.form.get("email", "").strip().lower()
-        password = request.form.get("password", "")
-        confirm_password = request.form.get("confirm_password", "")
-        shipping_address = request.form.get("shipping_address", "").strip()
-
-        if not name or not email or not password:
-            flash("Please fill in all required fields.", "danger")
-            return render_template("register.html", name=name, email=email, address=shipping_address)
-
-        if not re.match(r"^[^@]+@[^@]+\.[^@]+$", email):
-            flash("Please enter a valid email address.", "danger")
-            return render_template("register.html", name=name, email=email, address=shipping_address)
-
-        if password != confirm_password:
-            flash("Passwords do not match.", "danger")
-            return render_template("register.html", name=name, email=email, address=shipping_address)
-
-        if len(password) < 6:
-            flash("Password must be at least 6 characters.", "danger")
-            return render_template("register.html", name=name, email=email, address=shipping_address)
-
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            flash("An account with this email already exists. Please log in.", "warning")
-            return redirect(url_for("storefront.login"))
-
-        new_user = User(
-            name=name,
-            email=email,
-            shipping_address=shipping_address or None,
-            is_admin=False
-        )
-        new_user.set_password(password)
-        db.session.add(new_user)
-        db.session.commit()
-
-        login_user(new_user)
-        flash(f"Welcome to Fashion Storefront, {new_user.name}! Your account is ready.", "success")
-
-        next_page = request.args.get("next")
-        if next_page and next_page.startswith("/") and not next_page.startswith("//") and not next_page.startswith("/\\"):
-            return redirect(next_page)
-        return redirect(url_for("storefront.index"))
-
-    return render_template("register.html")
+        return login()
+    return redirect(url_for("storefront.login", tab="signup", next=request.args.get("next")))
 
 
 @storefront_bp.route("/login", methods=["GET", "POST"])
 def login():
-    if get_current_user():
+    next_page = request.args.get("next")
+    tab = request.args.get("tab", "login")
+
+    current_u = get_current_user()
+    if current_u:
+        if current_u.is_admin and next_page and "/admin" in next_page:
+            return redirect(url_for("admin.dashboard"))
         return redirect(url_for("storefront.index"))
 
     if request.method == "POST":
-        email = request.form.get("email", "").strip().lower()
-        password = request.form.get("password", "")
+        action = request.form.get("auth_action")
+        if not action:
+            if "confirm_password" in request.form or "name" in request.form:
+                action = "signup"
+            else:
+                action = "login"
 
-        user = User.query.filter_by(email=email).first()
-        if user and user.check_password(password):
-            login_user(user)
-            flash(f"Welcome back, {user.name}!", "success")
+        if action == "signup":
+            name = request.form.get("name", "").strip()
+            email = request.form.get("email", "").strip().lower()
+            password = request.form.get("password", "")
+            confirm_password = request.form.get("confirm_password", "")
+            shipping_address = request.form.get("shipping_address", "").strip()
 
-            next_page = request.args.get("next")
+            if not name or not email or not password:
+                flash("All required fields must be completed.", "danger")
+                return render_template("login.html", tab="signup", name=name, email=email, address=shipping_address, next=next_page)
+
+            if not re.match(r"^[^@]+@[^@]+\.[^@]+$", email):
+                flash("Please enter a valid email address.", "danger")
+                return render_template("login.html", tab="signup", name=name, email=email, address=shipping_address, next=next_page)
+
+            if password != confirm_password:
+                flash("Passwords do not match.", "danger")
+                return render_template("login.html", tab="signup", name=name, email=email, address=shipping_address, next=next_page)
+
+            if len(password) < 6:
+                flash("Password must be at least 6 characters.", "danger")
+                return render_template("login.html", tab="signup", name=name, email=email, address=shipping_address, next=next_page)
+
+            existing_user = User.query.filter_by(email=email).first()
+            if existing_user:
+                flash("An account with this email already exists. Please sign in.", "warning")
+                return redirect(url_for("storefront.login", tab="login", next=next_page))
+
+            new_user = User(
+                name=name,
+                email=email,
+                shipping_address=shipping_address or None,
+                is_admin=False
+            )
+            new_user.set_password(password)
+            db.session.add(new_user)
+            db.session.commit()
+
+            login_user(new_user)
+            flash(f"Welcome to AURA STUDIO Circle, {new_user.name}!", "success")
+
             if next_page and next_page.startswith("/") and not next_page.startswith("//") and not next_page.startswith("/\\"):
                 return redirect(next_page)
-            if user.is_admin:
-                return redirect(url_for("admin.dashboard"))
             return redirect(url_for("storefront.index"))
 
-        flash("Invalid email or password.", "danger")
+        else: # action == "login"
+            identifier = (request.form.get("email") or request.form.get("username") or "").strip()
+            password = request.form.get("password", "")
 
-    return render_template("login.html")
+            # Check User model by email or name
+            user = User.query.filter(
+                (User.email == identifier.lower()) | (User.name == identifier)
+            ).first()
+
+            if user and user.check_password(password):
+                login_user(user)
+                if user.is_admin:
+                    session["is_admin"] = True
+                    session["admin_username"] = user.name
+                    flash(f"Welcome to Atelier Portal, {user.name}!", "success")
+                    if next_page and next_page.startswith("/") and not next_page.startswith("//") and not next_page.startswith("/\\"):
+                        return redirect(next_page)
+                    return redirect(url_for("admin.dashboard"))
+                else:
+                    session["is_admin"] = False
+                    flash(f"Welcome back, {user.name}!", "success")
+                    if next_page and next_page.startswith("/") and not next_page.startswith("//") and not next_page.startswith("/\\"):
+                        return redirect(next_page)
+                    return redirect(url_for("storefront.index"))
+
+            # Check legacy AdminUser table if exists
+            from app.models import AdminUser
+            from werkzeug.security import check_password_hash
+            admin_legacy = AdminUser.query.filter_by(username=identifier).first()
+            if admin_legacy and check_password_hash(admin_legacy.password_hash, password):
+                session["is_admin"] = True
+                session["admin_username"] = admin_legacy.username
+                flash(f"Welcome to Atelier Portal, {admin_legacy.username}!", "success")
+                if next_page and next_page.startswith("/") and not next_page.startswith("//") and not next_page.startswith("/\\"):
+                    return redirect(next_page)
+                return redirect(url_for("admin.dashboard"))
+
+            flash("Invalid email or password. Please verify your credentials.", "danger")
+
+    return render_template("login.html", tab=tab, next=next_page)
 
 
 @storefront_bp.route("/logout")

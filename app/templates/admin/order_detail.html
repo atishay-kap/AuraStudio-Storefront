@@ -3,35 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin — Order #{{ order.id }} Fulfillment</title>
+    <title>Order #{{ order.id }} Fulfillment — AURA STUDIO Admin</title>
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.1">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}?v=3.1"></script>
 </head>
-<body>
-    <header class="site-header admin-header">
-        <div class="nav-container">
-            <span class="logo">AURA<span>ADMIN</span></span>
-            <nav class="admin-nav" style="display: flex; gap: 14px; align-items: center;">
-                <a href="{{ url_for('admin.dashboard') }}" class="nav-pill active">Orders</a>
-                <a href="{{ url_for('admin.products') }}" class="nav-pill">Products</a>
-                <a href="{{ url_for('admin.users') }}" class="nav-pill">Customers</a>
-                <a href="{{ url_for('storefront.index') }}" target="_blank" class="admin-quick-link" style="color: #fbbf24; font-weight: 700;">Live Storefront &nearr;</a>
-                <a href="{{ url_for('admin.logout') }}" class="btn-danger btn-small" style="padding: 6px 14px; border-radius: var(--radius-full);">Logout</a>
+<body class="admin-body">
+    <!-- Top Editorial Admin Header -->
+    <header class="admin-top-nav">
+        <div class="admin-nav-inner">
+            <div class="admin-brand-cluster">
+                <a href="{{ url_for('admin.dashboard') }}" class="logo-minimal">
+                    <span class="logo-brand">AURA STUDIO</span>
+                    <span class="logo-sub">IBIZA &bull; MILANO</span>
+                </a>
+                <span class="admin-tag-pill">Atelier Portal</span>
+            </div>
+
+            <nav class="admin-menu-links">
+                <a href="{{ url_for('admin.dashboard') }}" class="admin-nav-item active">Orders</a>
+                <a href="{{ url_for('admin.products') }}" class="admin-nav-item">Catalog &amp; Stock</a>
+                <a href="{{ url_for('admin.users') }}" class="admin-nav-item">Clientele</a>
+                <a href="{{ url_for('storefront.index') }}" target="_blank" class="admin-nav-item storefront-link">Live Storefront &nearr;</a>
+                <a href="{{ url_for('admin.logout') }}" class="admin-nav-item logout-link">Sign Out</a>
             </nav>
         </div>
     </header>
 
-    <main class="page-container">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+    <main class="admin-page-wrap">
+        <!-- Page Title & Back Button -->
+        <div class="admin-head-title-row">
             <div>
-                <h1 style="font-family: var(--font-display); font-size: 2rem; color: var(--text-primary); letter-spacing: -0.01em;">Order #{{ order.id }} Fulfillment</h1>
-                <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Placed on {{ order.created_at.strftime("%B %d, %Y at %I:%M %p") }}</p>
+                <div class="admin-breadcrumbs">
+                    <a href="{{ url_for('admin.dashboard') }}">Orders</a> / <span class="active">Fulfillment #{{ order.id }}</span>
+                </div>
+                <h1 class="admin-main-title">Order #{{ order.id }} Fulfillment</h1>
+                <p class="admin-subtitle">Placed on {{ order.created_at.strftime("%B %d, %Y at %I:%M %p") }} &bull; Total Value: ₹{{ "{:,.2f}".format(order.total_amount) }}</p>
             </div>
-            <a href="{{ url_for('admin.dashboard') }}" class="nav-pill">&larr; Back to Dashboard</a>
+            <div class="admin-action-cluster">
+                <a href="{{ url_for('admin.dashboard') }}" class="btn-secondary btn-small">&larr; Back to Orders</a>
+            </div>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -45,136 +59,182 @@
         {% endwith %}
 
         {% if order.status == 'cancelled' %}
-            <div class="card" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px;">
-                <h4 style="color: #dc2626; margin-bottom: 6px;">Order Cancelled &amp; Refunded</h4>
-                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
-                    Refund Status: <span class="badge badge-{{ 'success' if order.refund_status == 'processed' else 'warning' }}">{{ order.refund_status|capitalize }}</span>
+            <div class="admin-banner-alert cancelled">
+                <div class="alert-icon">&#9888;</div>
+                <div>
+                    <strong>Order Cancelled &amp; Inventory Restocked</strong>
+                    <p>Refund Status: <span class="status-tag status-{{ order.refund_status }}">{{ order.refund_status|capitalize }}</span>
                     {% if order.refund_id %}
-                        &bull; Gateway Refund Reference: <code>{{ order.refund_id }}</code>
+                        &bull; Gateway Reference: <code>{{ order.refund_id }}</code>
                     {% endif %}
-                </p>
+                    </p>
+                </div>
             </div>
         {% endif %}
 
-        <div class="admin-order-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
-            <!-- Status & Fulfillment Actions -->
-            <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);">
-                <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 16px;">1. Order Status &amp; Transitions</h3>
+        <!-- Two Column Overview Grid -->
+        <div class="admin-two-col-grid">
+            <!-- Column 1: Status & Tracking Assignment -->
+            <div class="admin-panel-card">
+                <h2 class="panel-card-title">1. Lifecycle Status &amp; Transitions</h2>
                 
-                <div style="margin-bottom: 24px;">
-                    <p style="font-size: 0.95rem; margin-bottom: 12px; color: var(--text-secondary);">
-                        Current Status: <span class="badge badge-{{ order.status }}" style="padding: 4px 10px; font-weight: 700;">{{ order.status|capitalize }}</span>
-                    </p>
-
-                    <form action="{{ url_for('admin.update_order_status', order_id=order.id) }}" method="POST" class="auth-form">
-                        <div class="form-group">
-                            <label for="status">Transition Status:</label>
-                            <select name="status" id="status" style="padding: 10px; background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); width: 100%;">
-                                <option value="paid" {{ 'selected' if order.status == 'paid' }}>Paid / Processing</option>
-                                <option value="shipped" {{ 'selected' if order.status == 'shipped' }}>Shipped / In Transit</option>
-                                <option value="delivered" {{ 'selected' if order.status == 'delivered' }}>Delivered</option>
-                                <option value="cancelled" {{ 'selected' if order.status == 'cancelled' }}>Cancelled (Triggers Auto-Refund &amp; Restocks)</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn-primary btn-small" style="padding: 8px 16px; margin-top: 8px;">Update Status</button>
-                    </form>
+                <div class="status-indicator-box">
+                    <span class="status-indicator-label">Current State:</span>
+                    <span class="status-tag status-{{ order.status }} large">{{ order.status|capitalize }}</span>
                 </div>
 
-                <hr style="border: none; border-top: 1px solid var(--border-subtle); margin: 20px 0;">
+                <form action="{{ url_for('admin.update_order_status', order_id=order.id) }}" method="POST" class="status-update-form">
+                    <div class="form-group">
+                        <label for="order-status-select">Transition State</label>
+                        <select name="status" id="order-status-select">
+                            <option value="paid" {{ 'selected' if order.status == 'paid' }}>Paid / Atelier Processing</option>
+                            <option value="shipped" {{ 'selected' if order.status == 'shipped' }}>Shipped / Courier In Transit</option>
+                            <option value="delivered" {{ 'selected' if order.status == 'delivered' }}>Delivered to Client</option>
+                            <option value="cancelled" {{ 'selected' if order.status == 'cancelled' }}>Cancelled (Auto-Restocks &amp; Issues Refund)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary btn-small">Update Lifecycle Status</button>
+                </form>
 
-                <!-- Courier Tracking Assignment Form -->
-                <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 16px;">2. Courier &amp; Logistics Tracking</h3>
-                <form action="{{ url_for('admin.update_order_tracking', order_id=order.id) }}" method="POST" class="auth-form">
+                <div class="panel-divider"></div>
+
+                <h2 class="panel-card-title">2. Logistics &amp; Courier Tracking</h2>
+                <form action="{{ url_for('admin.update_order_tracking', order_id=order.id) }}" method="POST" class="admin-grid-form">
                     <div class="form-group">
                         <label for="courier_name">Indian Courier Partner</label>
-                        <input type="text" id="courier_name" name="courier_name" value="{{ order.courier_name or '' }}" placeholder="e.g. BlueDart, Delhivery, DTDC, FedEx">
+                        <input type="text" id="courier_name" name="courier_name" value="{{ order.courier_name or '' }}" placeholder="e.g. BlueDart Express, Delhivery, DTDC, FedEx">
                     </div>
 
                     <div class="form-group">
-                        <label for="tracking_number">Tracking ID / AWB Number</label>
-                        <input type="text" id="tracking_number" name="tracking_number" value="{{ order.tracking_number or '' }}" placeholder="e.g. BLU-982184912">
+                        <label for="tracking_number">Air Waybill (AWB) / Tracking ID</label>
+                        <input type="text" id="tracking_number" name="tracking_number" value="{{ order.tracking_number or '' }}" placeholder="e.g. BD-IND-992014">
                     </div>
 
                     <div class="form-group">
-                        <label for="estimated_delivery">Estimated Delivery Date</label>
-                        <input type="text" id="estimated_delivery" name="estimated_delivery" value="{{ order.estimated_delivery or '' }}" placeholder="e.g. Oct 2, 2026">
+                        <label for="estimated_delivery">Estimated Delivery Window</label>
+                        <input type="text" id="estimated_delivery" name="estimated_delivery" value="{{ order.estimated_delivery or '' }}" placeholder="e.g. Oct 4 - Oct 6, 2026">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group span-2">
                         <label for="admin_notes">Private Atelier Notes</label>
-                        <textarea id="admin_notes" name="admin_notes" rows="2" placeholder="Internal dispatch notes...">{{ order.admin_notes or '' }}</textarea>
+                        <textarea id="admin_notes" name="admin_notes" rows="2" placeholder="Packaging verified, gift box included...">{{ order.admin_notes or '' }}</textarea>
                     </div>
 
-                    <button type="submit" class="btn-secondary btn-small" style="padding: 8px 16px;">Save Logistics Information</button>
+                    <div class="form-group span-2">
+                        <button type="submit" class="btn-secondary btn-small">Save Logistics Information</button>
+                    </div>
                 </form>
             </div>
 
-            <!-- Customer & Shipping Information -->
-            <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);">
-                <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 16px;">Customer &amp; Payment Metadata</h3>
-                <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.92rem;">
-                    <p><strong style="color: var(--text-primary);">Customer:</strong> {{ order.customer_name }}</p>
-                    <p><strong style="color: var(--text-primary);">Email:</strong> {{ order.customer_email }}</p>
-                    <p><strong style="color: var(--text-primary);">Delivery Address:</strong><br><span style="color: var(--text-secondary);">{{ order.shipping_address }}</span></p>
-                    <p>
-                        <strong style="color: var(--text-primary);">Account Type:</strong>
-                        {% if order.user %}
-                            <span class="badge badge-info">Member #{{ order.user.id }}</span>
-                        {% else %}
-                            <span class="badge badge-customer">Guest Checkout</span>
-                        {% endif %}
-                    </p>
-
-                    {% if order.razorpay_payment_id %}
-                        <p><strong style="color: var(--text-primary);">Payment Ref:</strong> <code>{{ order.razorpay_payment_id }}</code></p>
-                    {% endif %}
-
-                    {% if order.razorpay_order_id %}
-                        <p><strong style="color: var(--text-primary);">Gateway Order:</strong> <code>{{ order.razorpay_order_id }}</code></p>
-                    {% endif %}
-
+            <!-- Column 2: Client & Payment Details -->
+            <div class="admin-panel-card">
+                <h2 class="panel-card-title">Client &amp; Payment Coordinates</h2>
+                
+                <div class="metadata-detail-list">
+                    <div class="meta-row">
+                        <span class="meta-key">Client Name</span>
+                        <strong class="meta-val">{{ order.customer_name }}</strong>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-key">Email Address</span>
+                        <span class="meta-val">{{ order.customer_email }}</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-key">Account Type</span>
+                        <span class="meta-val">
+                            {% if order.user %}
+                                <span class="badge badge-member">Registered Member #{{ order.user.id }}</span>
+                            {% else %}
+                                <span class="badge badge-guest">Guest Checkout</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-key">Shipping Destination</span>
+                        <div class="meta-val address-block">{{ order.shipping_address }}</div>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-key">Payment Gateway Ref</span>
+                        <code class="meta-val code-val">{{ order.razorpay_payment_id or '—' }}</code>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-key">Gateway Order ID</span>
+                        <code class="meta-val code-val">{{ order.razorpay_order_id or '—' }}</code>
+                    </div>
                     {% if order.refund_id %}
-                        <p><strong style="color: var(--text-primary);">Refund Ref:</strong> <code>{{ order.refund_id }}</code> (<span class="badge badge-success">{{ order.refund_status|capitalize }}</span>)</p>
+                    <div class="meta-row">
+                        <span class="meta-key">Refund ID</span>
+                        <code class="meta-val code-val">{{ order.refund_id }} ({{ order.refund_status|capitalize }})</code>
+                    </div>
                     {% endif %}
                 </div>
             </div>
         </div>
 
-        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); margin-top: 28px; overflow-x: auto; padding: 24px; box-shadow: var(--shadow-sm);">
-            <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 16px;">Ordered Items ({{ order.items|length }})</h3>
-            <table class="cart-table" style="width: 100%; border-collapse: collapse;">
+        <!-- Ordered Items Table Card -->
+        <div class="admin-table-card" style="margin-top: 32px;">
+            <div class="table-card-header">
+                <h2 class="table-card-title">Itemized Order Manifest ({{ order.items|length }} items)</h2>
+            </div>
+            <table class="admin-editorial-table">
                 <thead>
-                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-subtle);">
-                        <th style="padding: 10px;">Product</th>
-                        <th style="padding: 10px;">Category</th>
-                        <th style="padding: 10px;">Size / Color</th>
-                        <th style="padding: 10px;">Unit Price (INR)</th>
-                        <th style="padding: 10px;">Quantity</th>
-                        <th style="padding: 10px;">Subtotal (INR)</th>
+                    <tr>
+                        <th style="width: 70px;">Piece</th>
+                        <th>Silhouette &amp; Specifications</th>
+                        <th>Category</th>
+                        <th>Size Variant</th>
+                        <th>Quantity</th>
+                        <th>Unit Price (INR)</th>
+                        <th style="text-align: right;">Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in order.items %}
-                        <tr style="border-bottom: 1px solid var(--border-subtle);">
-                            <td style="padding: 12px 10px;"><strong style="color: var(--text-primary);">{{ item.product.name }}</strong></td>
-                            <td style="padding: 12px 10px;"><span class="runway-tag-pill accent">{{ item.product.category }}</span></td>
-                            <td style="padding: 12px 10px;">
-                                <span class="badge-size">Size {{ item.size or item.product.size }}</span>
-                                <span style="color: var(--text-secondary); margin-left: 6px;">&bull; {{ item.product.color }}</span>
-                            </td>
-                            <td style="padding: 12px 10px; color: var(--text-primary);">₹{{ "{:,.2f}".format(item.price_at_purchase) }}</td>
-                            <td style="padding: 12px 10px; color: var(--text-secondary);">{{ item.quantity }}</td>
-                            <td style="padding: 12px 10px; color: var(--text-primary); font-weight: 700;">₹{{ "{:,.2f}".format(item.price_at_purchase * item.quantity) }}</td>
-                        </tr>
+                    <tr>
+                        <td>
+                            <div class="table-img-wrap">
+                                <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="product-item-title">{{ item.product.name }}</div>
+                            <div class="product-item-meta">Color: {{ item.product.color }} &bull; SKU #{{ item.product.id }}</div>
+                        </td>
+                        <td>
+                            <span class="category-chip">{{ item.product.category }}</span>
+                        </td>
+                        <td>
+                            <span class="badge-size">{{ item.size }}</span>
+                        </td>
+                        <td>
+                            <strong style="color: var(--lux-noir);">{{ item.quantity }}</strong>
+                        </td>
+                        <td>
+                            ₹{{ "{:,.2f}".format(item.price_at_purchase) }}
+                        </td>
+                        <td style="text-align: right;">
+                            <strong class="amount-text">₹{{ "{:,.2f}".format(item.price_at_purchase * item.quantity) }}</strong>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" style="text-align: right; font-weight: 600; text-transform: uppercase; font-size: 0.76rem; letter-spacing: 0.1em; color: var(--text-muted);">
+                            Complimentary Pan-India Shipping:
+                        </td>
+                        <td style="text-align: right; color: var(--lux-bronze); font-weight: 600;">₹0.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: right; font-weight: 700; font-size: 0.95rem; color: var(--lux-noir);">
+                            Grand Total (INR):
+                        </td>
+                        <td style="text-align: right;">
+                            <strong class="amount-text large">₹{{ "{:,.2f}".format(order.total_amount) }}</strong>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
-            <div style="display: flex; justify-content: flex-end; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
-                <div style="font-size: 1.3rem; font-weight: 800; color: var(--text-primary); display: flex; gap: 16px; align-items: baseline;">
-                    <span>Order Total:</span>
-                    <span style="font-size: 1.6rem; color: var(--text-primary); font-weight: 800;">₹{{ "{:,.2f}".format(order.total_amount) }}</span>
-                </div>
-            </div>
         </div>
     </main>
 </body>

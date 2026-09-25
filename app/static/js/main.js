@@ -1,10 +1,92 @@
 /**
- * AURA STUDIO — Luxury Haute Couture Performance Engine & Motion System
- * Feather-light, GPU-accelerated 120fps interactions, fast previews, & atelier controls.
+ * AURA STUDIO — Haute Couture Frontend Engine (Faith Ibiza Inspired)
+ * Fullscreen Cover Parallax, Silky 120fps Scroll Reveal Engine, Dynamic Header & Micro-Animations.
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. File Upload Drag-and-Drop & Instant Live Image Preview
+    // -------------------------------------------------------------
+    // 1. Fullscreen Hero Parallax & Scroll Progress
+    // -------------------------------------------------------------
+    const progressBar = document.getElementById("scroll-progress-bar");
+    const categoryNav = document.getElementById("category-nav");
+    const heroBg = document.getElementById("hero-parallax-bg");
+
+    let ticking = false;
+
+    function handleScrollUpdates() {
+        const currentScrollY = window.scrollY;
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+        // Progress bar calculation
+        if (progressBar && totalHeight > 0) {
+            const progress = (currentScrollY / totalHeight) * 100;
+            progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+        }
+
+        // Sticky category nav shadow intensification
+        if (categoryNav) {
+            if (currentScrollY > 40) {
+                categoryNav.classList.add("is-stuck");
+            } else {
+                categoryNav.classList.remove("is-stuck");
+            }
+        }
+
+        // Parallax background drift on full-screen cover hero
+        if (heroBg) {
+            const parallaxOffset = currentScrollY * 0.28;
+            heroBg.style.transform = `scale(1.05) translate3d(0, ${parallaxOffset}px, 0)`;
+        }
+
+        ticking = false;
+    }
+
+    window.addEventListener("scroll", () => {
+        if (!ticking) {
+            window.requestAnimationFrame(handleScrollUpdates);
+            ticking = true;
+        }
+    }, { passive: true });
+
+    // Initial check on load
+    handleScrollUpdates();
+
+    // -------------------------------------------------------------
+    // 3. Faith Ibiza Style Intersection Observer Scroll Reveals
+    // -------------------------------------------------------------
+    const revealElements = document.querySelectorAll(".reveal-on-scroll, [data-reveal]");
+    
+    if ("IntersectionObserver" in window && revealElements.length > 0) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-revealed");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.06,
+            rootMargin: "0px 0px -30px 0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    } else {
+        revealElements.forEach(el => el.classList.add("is-revealed"));
+    }
+
+    // Auto-stagger delay for grid items
+    const staggerGroups = document.querySelectorAll(".reveal-stagger-group");
+    staggerGroups.forEach(group => {
+        const children = group.querySelectorAll(".reveal-stagger-item, .product-card-fast");
+        children.forEach((child, index) => {
+            child.style.setProperty("--stagger-index", index % 8);
+        });
+    });
+
+    // -------------------------------------------------------------
+    // 4. File Upload Drag-and-Drop & Instant Live Image Preview
+    // -------------------------------------------------------------
     const fileInputs = document.querySelectorAll('input[type="file"][data-preview-target]');
     fileInputs.forEach(input => {
         const targetId = input.getAttribute("data-preview-target");
@@ -57,8 +139,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 3. Wishlist Interactive Heart Pulse
-    const wishlistButtons = document.querySelectorAll(".btn-wishlist-float, .btn-wishlist-toggle, .wishlist-btn-fast");
+    // -------------------------------------------------------------
+    // 5. Wishlist Interactive Heart Pulse Micro-Animation
+    // -------------------------------------------------------------
+    const wishlistButtons = document.querySelectorAll(".btn-wishlist-float, .btn-wishlist-toggle, .wishlist-btn-fast, .wishlist-btn-detail");
     wishlistButtons.forEach(btn => {
         btn.addEventListener("click", () => {
             btn.classList.add("heart-pulse");
@@ -66,7 +150,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }, { passive: true });
     });
 
-    // 4. Star Rating Interactive Hover in Review Forms
+    // -------------------------------------------------------------
+    // 6. Interactive Star Rating in Reviews
+    // -------------------------------------------------------------
     const ratingSelect = document.getElementById("rating-select");
     const starContainer = document.getElementById("interactive-star-rating");
     const ratingLabel = document.getElementById("star-rating-text");
@@ -124,18 +210,22 @@ document.addEventListener("DOMContentLoaded", () => {
         setActiveStars(initialVal);
     }
 
-    // 5. Auto-Dismiss Flash Messages with smooth fade
+    // -------------------------------------------------------------
+    // 7. Auto-Dismiss Flash Messages
+    // -------------------------------------------------------------
     const flashMessages = document.querySelectorAll(".flashes li");
     flashMessages.forEach((msg, idx) => {
         setTimeout(() => {
-            msg.style.transition = "opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+            msg.style.transition = "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
             msg.style.opacity = "0";
-            msg.style.transform = "translate3d(0, -10px, 0)";
-            setTimeout(() => msg.remove(), 520);
-        }, 4000 + idx * 600);
+            msg.style.transform = "translate3d(0, -12px, 0)";
+            setTimeout(() => msg.remove(), 620);
+        }, 4500 + idx * 600);
     });
 
-    // 6. Global Luxury Quantity Stepper Handler
+    // -------------------------------------------------------------
+    // 8. Global Luxury Quantity Stepper Handler
+    // -------------------------------------------------------------
     window.stepDetailQty = function(delta) {
         const input = document.getElementById("qty");
         if (!input) return;
@@ -148,7 +238,9 @@ document.addEventListener("DOMContentLoaded", () => {
         input.value = current;
     };
 
-    // 7. Interactive Atelier Size Selector Handler
+    // -------------------------------------------------------------
+    // 9. Interactive Atelier Size Selector Handler
+    // -------------------------------------------------------------
     window.selectProductSize = function(size, btnElement) {
         const hiddenInput = document.getElementById("selected-size-input");
         if (hiddenInput) {

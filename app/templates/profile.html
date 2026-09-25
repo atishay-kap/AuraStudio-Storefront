@@ -8,22 +8,42 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.0">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}?v=3.0"></script>
 </head>
 <body>
     <header class="site-header">
         <div class="nav-container">
-            <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
-            <div class="header-actions">
-                <a href="{{ url_for('storefront.wishlist') }}" class="nav-pill">
-                    &hearts; Wishlist <span class="cart-badge">{{ wishlist_count }}</span>
+            <div class="nav-col-left">
+                <a href="{{ url_for('storefront.index') }}" class="nav-link-editorial">&larr; Back to Archive</a>
+            </div>
+            <div class="nav-col-center">
+                <a href="{{ url_for('storefront.index') }}" class="logo-minimal">
+                    <span class="logo-brand">AURA STUDIO</span>
+                    <span class="logo-sub">IBIZA &bull; MILANO</span>
                 </a>
-                <a href="{{ url_for('storefront.view_cart') }}" class="nav-pill">
-                    Cart <span class="cart-badge">{{ cart_count }}</span>
+            </div>
+            <div class="nav-col-right">
+                <a href="{{ url_for('storefront.wishlist') }}" class="nav-utility-item" title="Saved Wishlist">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                    <span class="utility-label">Saved</span>
+                    <span class="utility-count">{{ wishlist_count }}</span>
                 </a>
-                <a href="{{ url_for('storefront.my_orders') }}" class="nav-pill">My Orders</a>
-                <a href="{{ url_for('storefront.logout') }}" class="nav-pill">Logout</a>
+                <a href="{{ url_for('storefront.view_cart') }}" class="nav-utility-item" title="Shopping Bag">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                    <span class="utility-label">Bag</span>
+                    <span class="utility-count">{{ cart_count }}</span>
+                </a>
+                <div class="nav-user-dropdown">
+                    <button class="nav-user-trigger" type="button">
+                        <span>{{ user.name.split(' ')[0] }}</span>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="user-dropdown-menu">
+                        <a href="{{ url_for('storefront.my_orders') }}" class="dropdown-link">Orders Archive</a>
+                        <a href="{{ url_for('storefront.logout') }}" class="dropdown-link logout-link">Sign Out</a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -34,7 +54,7 @@
                 <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--text-primary); letter-spacing: -0.02em;">Account Settings</h1>
                 <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Manage your personal profile, default Indian delivery address, and security credentials</p>
             </div>
-            <a href="{{ url_for('storefront.my_orders') }}" class="nav-pill">View Order History &rarr;</a>
+            <a href="{{ url_for('storefront.my_orders') }}" class="nav-link-editorial">View Order History &rarr;</a>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}

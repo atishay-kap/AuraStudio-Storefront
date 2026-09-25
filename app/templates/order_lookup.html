@@ -3,33 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Order — AURA STUDIO Haute Couture</title>
+    <title>Track Runway Order — AURA STUDIO</title>
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.5">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}?v=3.5"></script>
 </head>
-<body>
-    <header class="site-header">
+<body class="auth-page-body">
+    <!-- Top Minimalist Header -->
+    <header class="site-header auth-site-header">
         <div class="nav-container">
-            <a href="{{ url_for('storefront.index') }}" class="logo">AURA<span>STUDIO</span></a>
-            <div class="header-actions">
-                <a href="{{ url_for('storefront.index') }}" class="nav-pill">&larr; Shop Collections</a>
-                <a href="{{ url_for('storefront.login') }}" class="btn-primary-pill">Customer Login</a>
+            <div class="nav-col-left">
+                <a href="{{ url_for('storefront.index') }}" class="nav-link-editorial">&larr; Return to Storefront</a>
+            </div>
+            <div class="nav-col-center">
+                <a href="{{ url_for('storefront.index') }}" class="logo-minimal">
+                    <span class="logo-brand">AURA STUDIO</span>
+                    <span class="logo-sub">IBIZA &bull; MILANO</span>
+                </a>
+            </div>
+            <div class="nav-col-right">
+                <div class="nav-auth-minimal">
+                    <a href="{{ url_for('storefront.login') }}" class="nav-auth-link">Sign In</a>
+                    <span class="nav-auth-divider">/</span>
+                    <a href="{{ url_for('storefront.register') }}" class="nav-auth-link">Join</a>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="auth-container">
-        <div class="auth-card" style="box-shadow: var(--shadow-md);">
-            <h2 style="font-family: var(--font-display); color: var(--text-primary); letter-spacing: -0.01em;">Track Your Runway Order</h2>
-            <p class="auth-subtitle">Enter your Order Reference ID and Email to inspect live Indian courier tracking and invoice receipt.</p>
+    <main class="unified-auth-wrapper">
+        <div class="unified-auth-card" style="margin: auto;">
+            <div class="auth-card-head">
+                <h1 class="auth-title">Track Order</h1>
+            </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    <ul class="flashes">
+                    <ul class="flashes" style="margin: 10px 0; font-size: 0.8rem; padding: 8px 14px;">
                         {% for category, msg in messages %}
                             <li class="flash-{{ category }}">{{ msg }}</li>
                         {% endfor %}
@@ -37,22 +50,24 @@
                 {% endif %}
             {% endwith %}
 
-            <form method="POST" action="{{ url_for('storefront.order_lookup') }}" class="auth-form">
+            <form method="POST" action="{{ url_for('storefront.order_lookup') }}" class="auth-form-body">
                 <div class="form-group">
-                    <label for="order_id">Order Reference # *</label>
-                    <input type="number" id="order_id" name="order_id" required placeholder="e.g. 1042">
+                    <label for="order_id">Order Reference Number</label>
+                    <input type="number" id="order_id" name="order_id" required placeholder="e.g. 1042" min="1">
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Customer Email Address *</label>
-                    <input type="email" id="email" name="email" required placeholder="name@example.com">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email" autocomplete="email">
                 </div>
 
-                <button type="submit" class="btn-primary btn-block" style="padding: 14px; margin-top: 8px; border-radius: var(--radius-sm);">Find &amp; Track Package &rarr;</button>
+                <button type="submit" class="btn-primary btn-block btn-auth-submit">
+                    <span>Track Order &rarr;</span>
+                </button>
             </form>
 
-            <div class="auth-footer">
-                <p>Have an account? <a href="{{ url_for('storefront.login') }}">Sign In</a> to view your full wardrobe history.</p>
+            <div class="auth-footer-links" style="margin-top: 18px; text-align: center; font-size: 0.8rem; color: var(--text-secondary);">
+                <p>Have an account? <a href="{{ url_for('storefront.login') }}" style="color: var(--lux-bronze); font-weight: 600;">Sign In</a></p>
             </div>
         </div>
     </main>

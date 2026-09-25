@@ -4,6 +4,9 @@ from app import db
 from app.models import Product, AdminUser, User, WishlistItem, Review, Order, OrderItem
 
 PRODUCTS = [
+    {"name": "Double-Breasted Cashmere-Wool Overcoat", "category": "Jackets", "price": 14999.00, "size": "S, M, L, XL", "color": "Camel Sand", "stock": 8,
+     "image_url": "/static/images/products/overcoat_camel.jpg",
+     "description": "Hand-stitched double-breasted tailored long overcoat crafted from a luxurious blend of virgin wool and Mongolian cashmere with horn buttons.", "rating": 5.0, "reviews_count": 19},
     {"name": "Silk-Lined Minimalist Flight Bomber", "category": "Jackets", "price": 9499.00, "size": "S, M, L, XL", "color": "Obsidian Noir", "stock": 10,
      "image_url": "/static/images/products/jacket_bomber.jpg",
      "description": "Tailored satin-silk lined flight jacket with ribbed trims, dual-entry pockets, and burnished gold zipper hardware.", "rating": 4.9, "reviews_count": 28},
@@ -16,21 +19,33 @@ PRODUCTS = [
     {"name": "Normandy Pure Linen Resort Shirt", "category": "Shirts", "price": 3999.00, "size": "S, M, L, XL", "color": "Sand Beige", "stock": 15,
      "image_url": "/static/images/products/shirt_linen.jpg",
      "description": "100% Normandy flax pure linen long-sleeve shirt with natural Australian mother-of-pearl buttons.", "rating": 4.8, "reviews_count": 14},
+    {"name": "Atelier Pure Linen Overshirt", "category": "Shirts", "price": 4299.00, "size": "S, M, L, XL", "color": "Ecru Natural", "stock": 18,
+     "image_url": "/static/images/products/shirt_linen.jpg",
+     "description": "Relaxed-fit luxury flax linen overshirt featuring dual chest utility pockets and natural horn button closures.", "rating": 4.8, "reviews_count": 21},
     {"name": "Mercerized Silk-Cotton Knit Polo", "category": "Shirts", "price": 3299.00, "size": "S, M, L, XL", "color": "Midnight Navy", "stock": 26,
      "image_url": "/static/images/products/shirt_polo.jpg",
      "description": "18-gauge fine knit polo crafted from long-staple mercerized cotton and mulberry silk blend.", "rating": 4.7, "reviews_count": 20},
     {"name": "Chunky Ribbed Cashmere-Merino Sweater", "category": "Sweaters", "price": 5999.00, "size": "S, M, L, XL", "color": "Warm Cream", "stock": 16,
      "image_url": "/static/images/products/sweater_knit.jpg",
      "description": "7-gauge chunky fisherman ribbed sweater woven from Italian merino wool and cashmere.", "rating": 4.9, "reviews_count": 38},
+    {"name": "Fisherman Ribbed Wool Turtleneck", "category": "Sweaters", "price": 6499.00, "size": "S, M, L, XL", "color": "Oatmeal Cream", "stock": 12,
+     "image_url": "/static/images/products/sweater_knit.jpg",
+     "description": "Sculpted fisherman ribbed rollneck sweater spun from 100% fine Italian merino wool with seamless knit construction.", "rating": 4.9, "reviews_count": 25},
     {"name": "Pleated Italian Stretch Chinos", "category": "Pants", "price": 3999.00, "size": "30, 32, 34, 36", "color": "Sand Khaki", "stock": 25,
      "image_url": "/static/images/products/pants_chinos_khaki.jpg",
      "description": "Tailored double-pleated Italian stretch cotton trousers with crisp center press crease and tapered silhouette.", "rating": 4.8, "reviews_count": 27},
+    {"name": "Bespoke Pleated Relaxed Trousers", "category": "Pants", "price": 4499.00, "size": "30, 32, 34, 36", "color": "Raw Khaki", "stock": 22,
+     "image_url": "/static/images/products/pants_chinos_khaki.jpg",
+     "description": "Relaxed-tapered double pleated trousers crafted from heavy organic twill with side adjusters and welted rear pockets.", "rating": 4.9, "reviews_count": 33},
     {"name": "French Terry Drop-Shoulder Hoodie", "category": "Hoodies", "price": 4499.00, "size": "S, M, L, XL, XXL", "color": "Washed Charcoal", "stock": 20,
      "image_url": "/static/images/products/hoodie_charcoal.jpg",
      "description": "Heavyweight 450gsm loopback French terry hoodie featuring relaxed dropped shoulders and double-layered hood.", "rating": 5.0, "reviews_count": 31},
     {"name": "French Terry Drop-Shoulder Hoodie", "category": "Hoodies", "price": 4499.00, "size": "S, M, L, XL, XXL", "color": "Earth Olive", "stock": 18,
      "image_url": "/static/images/products/hoodie_olive.jpg",
      "description": "Heavyweight 450gsm loopback French terry hoodie in bespoke earth olive pigment dye.", "rating": 4.7, "reviews_count": 15},
+    {"name": "Heavyweight French Terry Zip Hoodie", "category": "Hoodies", "price": 4899.00, "size": "S, M, L, XL", "color": "Washed Slate", "stock": 15,
+     "image_url": "/static/images/products/hoodie_charcoal.jpg",
+     "description": "480gsm custom milled Japanese loopback cotton zip hoodie featuring two-way matte riri zipper and structured double hood.", "rating": 4.9, "reviews_count": 27},
     {"name": "Organic Heavyweight Crew Tee", "category": "T-Shirts", "price": 1899.00, "size": "XS, S, M, L, XL", "color": "Pure White", "stock": 40,
      "image_url": "/static/images/products/tee_white.jpg",
      "description": "280gsm organic combed cotton crewneck tee with reinforced ribbed binding. A foundational everyday luxury staple.", "rating": 4.9, "reviews_count": 24},
@@ -105,12 +120,18 @@ def auto_initialize_db(app):
         except Exception:
             pass
 
-        # Seed products if empty
-        if not Product.query.first():
+        # Seed products if empty or add missing products
+        existing_products = Product.query.all()
+        if not existing_products:
             for p in PRODUCTS:
                 db.session.add(Product(**p))
             db.session.commit()
         else:
+            existing_names_colors = {(p.name, p.color) for p in existing_products}
+            for p in PRODUCTS:
+                if (p["name"], p["color"]) not in existing_names_colors:
+                    db.session.add(Product(**p))
+            
             # Upgrade existing products: INR pricing & migrate remote Unsplash URLs to local static assets
             for product in Product.query.all():
                 if product.price < 150.0:

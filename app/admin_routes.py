@@ -37,33 +37,33 @@ def save_uploaded_image(file_storage):
 
 @admin_bp.route("/login", methods=["GET", "POST"])
 def login():
+    if session.get("is_admin"):
+        return redirect(url_for("admin.dashboard"))
+
     if request.method == "POST":
-        login_identifier = request.form.get("username", "").strip()
+        identifier = request.form.get("username") or request.form.get("email", "").strip()
         password = request.form.get("password", "")
+        if identifier and password:
+            user = User.query.filter(
+                (User.email == identifier.lower()) | (User.name == identifier)
+            ).first()
+            if user and user.is_admin and user.check_password(password):
+                login_user(user)
+                session["is_admin"] = True
+                session["admin_username"] = user.name
+                flash(f"Welcome to Atelier Portal, {user.name}!", "success")
+                return redirect(url_for("admin.dashboard"))
 
-        # Check User model (email or name with is_admin=True)
-        user = User.query.filter(
-            (User.email == login_identifier.lower()) | (User.name == login_identifier)
-        ).first()
+            admin_legacy = AdminUser.query.filter_by(username=identifier).first()
+            if admin_legacy and check_password_hash(admin_legacy.password_hash, password):
+                session["is_admin"] = True
+                session["admin_username"] = admin_legacy.username
+                flash(f"Welcome to Atelier Portal, {admin_legacy.username}!", "success")
+                return redirect(url_for("admin.dashboard"))
 
-        if user and user.is_admin and user.check_password(password):
-            login_user(user)
-            session["is_admin"] = True
-            session["admin_username"] = user.name
-            flash(f"Welcome to the Admin Dashboard, {user.name}!", "success")
-            return redirect(url_for("admin.dashboard"))
+        flash("Invalid email or password. Please verify your credentials.", "danger")
 
-        # Check legacy AdminUser table
-        admin = AdminUser.query.filter_by(username=login_identifier).first()
-        if admin and check_password_hash(admin.password_hash, password):
-            session["is_admin"] = True
-            session["admin_username"] = admin.username
-            flash(f"Welcome to the Admin Dashboard, {admin.username}!", "success")
-            return redirect(url_for("admin.dashboard"))
-
-        flash("Invalid admin credentials.", "danger")
-
-    return render_template("admin/login.html")
+    return redirect(url_for("storefront.login", next=url_for("admin.dashboard")))
 
 
 @admin_bp.route("/logout")

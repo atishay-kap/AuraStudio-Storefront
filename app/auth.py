@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import session, redirect, url_for, flash, g
+from flask import session, redirect, url_for, flash, g, request
 from app.models import User
 
 
@@ -56,7 +56,9 @@ def login_required(view_func):
     def wrapper(*args, **kwargs):
         user = get_current_user()
         if not user:
-            flash("Please log in to continue.")
-            return redirect(url_for("storefront.login", next=url_for(view_func.__name__, **kwargs) if not kwargs else None))
+            flash("Please log in to continue.", "info")
+            next_url = request.full_path if request.query_string else request.path
+            return redirect(url_for("storefront.login", next=next_url))
         return view_func(*args, **kwargs)
     return wrapper
+

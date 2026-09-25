@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -23,8 +23,8 @@
     </header>
 
     <main class="auth-container">
-        <div class="auth-card" style="box-shadow: 0 20px 40px -15px rgba(0,0,0,0.85);">
-            <h2 style="font-family: var(--font-display); color: #ffffff; letter-spacing: -0.01em;">Track Your Runway Order</h2>
+        <div class="auth-card" style="box-shadow: var(--shadow-md);">
+            <h2 style="font-family: var(--font-display); color: var(--text-primary); letter-spacing: -0.01em;">Track Your Runway Order</h2>
             <p class="auth-subtitle">Enter your Order Reference ID and Email to inspect live Indian courier tracking and invoice receipt.</p>
 
             {% with messages = get_flashed_messages(with_categories=true) %}

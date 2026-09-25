@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -31,7 +31,7 @@
     <main class="page-container" style="max-width: 900px;">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
             <div>
-                <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: #ffffff; letter-spacing: -0.02em;">Account Settings</h1>
+                <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--text-primary); letter-spacing: -0.02em;">Account Settings</h1>
                 <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Manage your personal profile, default Indian delivery address, and security credentials</p>
             </div>
             <a href="{{ url_for('storefront.my_orders') }}" class="nav-pill">View Order History &rarr;</a>
@@ -49,8 +49,8 @@
 
         <div class="grid-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px;">
             <!-- Profile Info Form -->
-            <div class="card" style="background: #0d111a; border: 1px solid rgba(99, 102, 241, 0.25); border-radius: var(--radius-lg); padding: 28px;">
-                <h3 style="font-family: var(--font-display); font-size: 1.3rem; color: #ffffff; margin-bottom: 18px;">Personal Information</h3>
+            <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-family: var(--font-display); font-size: 1.3rem; color: var(--text-primary); margin-bottom: 18px;">Personal Information</h3>
                 <form action="{{ url_for('storefront.profile') }}" method="POST" class="auth-form">
                     <div class="form-group">
                         <label for="name">Full Name *</label>
@@ -72,8 +72,8 @@
             </div>
 
             <!-- Password Change Form -->
-            <div class="card" style="background: #0d111a; border: 1px solid rgba(236, 72, 153, 0.25); border-radius: var(--radius-lg); padding: 28px;">
-                <h3 style="font-family: var(--font-display); font-size: 1.3rem; color: #ffffff; margin-bottom: 18px;">Security &amp; Password</h3>
+            <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-family: var(--font-display); font-size: 1.3rem; color: var(--text-primary); margin-bottom: 18px;">Security &amp; Password</h3>
                 <form action="{{ url_for('storefront.change_password') }}" method="POST" class="auth-form">
                     <div class="form-group">
                         <label for="current_password">Current Password *</label>

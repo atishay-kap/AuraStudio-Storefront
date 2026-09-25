@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -32,7 +32,7 @@
     <main class="page-container">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
             <div>
-                <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: #ffffff; letter-spacing: -0.02em;">My Saved Wishlist</h1>
+                <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--text-primary); letter-spacing: -0.02em;">My Saved Wishlist</h1>
                 <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">{{ wishlist_entries|length }} curated styles saved for your wardrobe</p>
             </div>
             <a href="{{ url_for('storefront.index') }}" class="nav-pill">&larr; Continue Browsing</a>
@@ -92,9 +92,9 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="card empty-state" style="text-align: center; padding: 70px 20px; background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
-                <div style="font-size: 3rem; margin-bottom: 12px; color: #ec4899;">&hearts;</div>
-                <h2 style="font-family: var(--font-display); color: #ffffff; margin-bottom: 8px;">Your Wishlist is Empty</h2>
+            <div class="card empty-state" style="text-align: center; padding: 70px 20px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+                <div style="font-size: 3rem; margin-bottom: 12px; color: var(--accent-coral);">&hearts;</div>
+                <h2 style="font-family: var(--font-display); color: var(--text-primary); margin-bottom: 8px;">Your Wishlist is Empty</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 24px;">Save runway styles by clicking the heart button on product cards.</p>
                 <a href="{{ url_for('storefront.index') }}" class="btn-primary-pill" style="padding: 12px 28px;">Browse Runway Collections</a>
             </div>

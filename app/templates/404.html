@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -26,10 +26,10 @@
     </header>
 
     <main class="page-container" style="text-align: center; padding: 100px 20px;">
-        <div class="empty-state" style="max-width: 580px; margin: 0 auto; padding: 56px 36px; background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
-            <div style="font-family: var(--font-display); font-size: 5rem; font-weight: 800; background: linear-gradient(135deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1;">404</div>
-            <h2 style="margin: 20px 0 10px; font-family: var(--font-display); letter-spacing: -0.02em; color: #ffffff;">Page Not Found</h2>
-            <p style="color: var(--text-muted); margin-bottom: 32px; font-size: 0.95rem; line-height: 1.6;">The editorial piece or archive item you're looking for might have been retired from the seasonal showcase.</p>
+        <div class="empty-state" style="max-width: 580px; margin: 0 auto; padding: 56px 36px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">
+            <div style="font-family: var(--font-display); font-size: 5rem; font-weight: 800; color: var(--gold); line-height: 1;">404</div>
+            <h2 style="margin: 20px 0 10px; font-family: var(--font-display); letter-spacing: -0.02em; color: var(--text-primary);">Page Not Found</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 32px; font-size: 0.95rem; line-height: 1.6;">The editorial piece or archive item you're looking for might have been retired from the seasonal showcase.</p>
             <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
                 <a href="{{ url_for('storefront.index') }}" class="btn-primary-pill" style="padding: 12px 28px;">Return to Runway</a>
                 <a href="{{ url_for('storefront.view_cart') }}" class="btn-secondary" style="padding: 12px 24px; border-radius: var(--radius-full);">View Bag</a>

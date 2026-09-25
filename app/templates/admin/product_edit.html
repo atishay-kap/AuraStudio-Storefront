@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -28,7 +28,7 @@
     <main class="page-container" style="max-width: 860px;">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
             <div>
-                <h1 style="font-family: var(--font-display); font-size: 2rem; color: #ffffff; letter-spacing: -0.01em;">Edit Product #{{ product.id }}</h1>
+                <h1 style="font-family: var(--font-display); font-size: 2rem; color: var(--text-primary); letter-spacing: -0.01em;">Edit Product #{{ product.id }}</h1>
                 <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">{{ product.name }} &bull; {{ product.category }}</p>
             </div>
             <a href="{{ url_for('admin.products') }}" class="nav-pill">&larr; Back to Products</a>
@@ -44,7 +44,7 @@
             {% endif %}
         {% endwith %}
 
-        <div class="card" style="background: #0d111a; border: 1px solid rgba(99, 102, 241, 0.25); border-radius: var(--radius-lg); padding: 32px;">
+        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm);">
             <form action="{{ url_for('admin.edit_product', product_id=product.id) }}" method="POST" enctype="multipart/form-data" class="grid-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="form-group span-2" style="grid-column: span 2;">
                     <label>Product Title *</label>
@@ -84,7 +84,7 @@
                 <div class="form-group">
                     <label>Publication Status</label>
                     <div style="margin-top: 10px;">
-                        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; color: #ffffff;">
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; color: var(--text-primary);">
                             <input type="checkbox" name="is_active" value="1" {{ 'checked' if product.is_active }} style="width: auto;">
                             <span>Active &amp; Visible on Storefront</span>
                         </label>
@@ -98,13 +98,13 @@
                         {% if product.image_url %}
                             <div>
                                 <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Current Photo:</span>
-                                <img id="edit-preview-img" src="{{ product.image_url }}" alt="Current Photo" class="preview-thumb" style="width: 100px; height: 125px;">
+                                <img id="edit-preview-img" src="{{ product.image_url }}" alt="Current Photo" class="preview-thumb" style="width: 100px; height: 125px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
                             </div>
                         {% endif %}
                         <div style="flex: 1; min-width: 260px;">
                             <div class="dropzone-box">
                                 <div class="dropzone-icon">&#128247;</div>
-                                <strong style="color: #ffffff; display: block; margin-bottom: 4px;">Drop New Image or Click to Browse</strong>
+                                <strong style="color: var(--text-primary); display: block; margin-bottom: 4px;">Drop New Image or Click to Browse</strong>
                                 <p style="color: var(--text-muted); font-size: 0.82rem;">Replaces current photo with new uploaded file</p>
                                 <input type="file" name="image_file" accept="image/*" data-preview-target="edit-preview-img">
                             </div>

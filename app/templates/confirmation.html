@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -30,22 +30,22 @@
     </header>
 
     <main class="page-container" style="max-width: 760px;">
-        <div class="card" style="background: #0d111a; text-align: center; padding: 48px 36px; border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-lg); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.85);">
-            <div style="width: 70px; height: 70px; background: rgba(16, 185, 129, 0.15); color: #6ee7b7; font-size: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);">&#10004;</div>
-            <h1 style="font-family: var(--font-display); font-size: 2.4rem; color: #ffffff; margin-bottom: 8px; letter-spacing: -0.02em;">Order Confirmed!</h1>
+        <div class="card" style="background: var(--bg-card); text-align: center; padding: 48px 36px; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">
+            <div style="width: 70px; height: 70px; background: rgba(16, 185, 129, 0.1); color: #059669; font-size: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">&#10004;</div>
+            <h1 style="font-family: var(--font-display); font-size: 2.4rem; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -0.02em;">Order Confirmed!</h1>
             <p class="subtitle" style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 28px;">
-                Thank you for your patronage, <strong>{{ order.customer_name }}</strong>. We have dispatched your itemized receipt to <strong style="color: #ffffff;">{{ order.customer_email }}</strong>.
+                Thank you for your patronage, <strong>{{ order.customer_name }}</strong>. We have dispatched your itemized receipt to <strong style="color: var(--text-primary);">{{ order.customer_email }}</strong>.
             </p>
 
-            <div style="background: #101420; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px; text-align: left; margin-bottom: 32px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
-                    <span style="color: var(--text-secondary);">Order Reference: <strong style="color: #ffffff;">#{{ order.id }}</strong></span>
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px; text-align: left; margin-bottom: 32px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--border-subtle);">
+                    <span style="color: var(--text-secondary);">Order Reference: <strong style="color: var(--text-primary);">#{{ order.id }}</strong></span>
                     <span class="badge badge-success" style="padding: 4px 10px;">Paid &bull; In Fulfillment</span>
                 </div>
 
                 <table class="cart-table mini-table" style="width: 100%; border-collapse: collapse; margin-top: 16px;">
                     <thead>
-                        <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+                        <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-subtle);">
                             <th style="padding: 8px 10px;">Item</th>
                             <th style="padding: 8px 10px;">Qty</th>
                             <th style="padding: 8px 10px;">Unit</th>
@@ -54,29 +54,29 @@
                     </thead>
                     <tbody>
                         {% for item in order.items %}
-                            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                            <tr style="border-bottom: 1px solid var(--border-subtle);">
                                 <td style="padding: 12px 10px;">
-                                    <strong style="color: #ffffff; font-size: 0.9rem;">{{ item.product.name }}</strong>
+                                    <strong style="color: var(--text-primary); font-size: 0.9rem;">{{ item.product.name }}</strong>
                                     <div class="meta-tag" style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
                                         <span class="badge-size" style="font-size: 0.65rem; padding: 1px 6px;">Size {{ item.size or item.product.size }}</span>
                                         <span style="color: var(--text-muted); font-size: 0.78rem;">&bull; {{ item.product.color }}</span>
                                     </div>
                                 </td>
                                 <td style="padding: 12px 10px; color: var(--text-secondary);">{{ item.quantity }}</td>
-                                <td style="padding: 12px 10px; color: #ffffff;">₹{{ "{:,.2f}".format(item.price_at_purchase) }}</td>
-                                <td style="padding: 12px 10px; color: var(--accent-cyan); font-weight: 700;">₹{{ "{:,.2f}".format(item.price_at_purchase * item.quantity) }}</td>
+                                <td style="padding: 12px 10px; color: var(--text-primary);">₹{{ "{:,.2f}".format(item.price_at_purchase) }}</td>
+                                <td style="padding: 12px 10px; color: var(--text-primary); font-weight: 700;">₹{{ "{:,.2f}".format(item.price_at_purchase * item.quantity) }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
 
-                <div class="summary-line total-line" style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 1.15rem; font-weight: 800; color: #ffffff;">
+                <div class="summary-line total-line" style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle); font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">
                     <span>Total Paid (INR):</span>
-                    <span style="font-size: 1.5rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">₹{{ "{:,.2f}".format(order.total_amount) }}</span>
+                    <span style="font-size: 1.5rem; color: var(--text-primary); font-weight: 800;">₹{{ "{:,.2f}".format(order.total_amount) }}</span>
                 </div>
 
-                <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.88rem; color: var(--text-secondary);">
-                    <strong style="color: #ffffff;">Pan-India Delivery Address:</strong> {{ order.shipping_address }}
+                <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-subtle); font-size: 0.88rem; color: var(--text-secondary);">
+                    <strong style="color: var(--text-primary);">Pan-India Delivery Address:</strong> {{ order.shipping_address }}
                 </div>
             </div>
 

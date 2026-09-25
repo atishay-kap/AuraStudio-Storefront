@@ -7,14 +7,14 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body class="admin-login-body">
     <div class="auth-container">
-        <div class="auth-card admin-auth-card" style="box-shadow: 0 20px 40px -15px rgba(0,0,0,0.85);">
+        <div class="auth-card admin-auth-card" style="box-shadow: var(--shadow-md); background: var(--bg-card); border: 1px solid var(--border-subtle);">
             <div class="admin-badge-icon">&starf; ADMIN PORTAL</div>
-            <h2 style="font-family: var(--font-display); color: #ffffff; letter-spacing: -0.01em;">Store Management</h2>
+            <h2 style="font-family: var(--font-display); color: var(--text-primary); letter-spacing: -0.01em;">Store Management</h2>
             <p class="auth-subtitle">Sign in to manage orders, inventory, dispatch fulfillment, and live analytics.</p>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -28,22 +28,22 @@
             {% endwith %}
 
             <!-- Admin Demo Quick Access Panel -->
-            <div class="demo-credentials-box" style="margin-bottom: 22px; padding: 16px 18px; background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.22); border-radius: var(--radius-md);">
+            <div class="demo-credentials-box" style="margin-bottom: 22px; padding: 16px 18px; background: rgba(197, 160, 89, 0.08); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span style="font-size: 0.95rem;">⚡</span>
-                        <span style="font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-primary);">Demo Admin Credentials</span>
+                        <span style="font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold);">Demo Admin Credentials</span>
                     </div>
                     <span style="font-size: 0.72rem; color: var(--text-muted);">1-Click Instant Login</span>
                 </div>
                 
-                <button type="button" onclick="fillAdminDemo('admin@store.com', 'admin123')" class="demo-pill-btn" style="width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); padding: 12px 14px; border-radius: var(--radius-sm); text-align: left; cursor: pointer; transition: all 0.2s ease;">
+                <button type="button" onclick="fillAdminDemo('admin@store.com', 'admin123')" class="demo-pill-btn" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 12px 14px; border-radius: var(--radius-sm); text-align: left; cursor: pointer; transition: all 0.2s ease;">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <strong style="color: #ffffff; font-size: 0.85rem; font-weight: 600;">Store Administrator</strong>
-                        <span style="font-size: 0.68rem; background: rgba(239,68,68,0.15); color: #f87171; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Master Admin</span>
+                        <strong style="color: var(--text-primary); font-size: 0.85rem; font-weight: 600;">Store Administrator</strong>
+                        <span style="font-size: 0.68rem; background: rgba(239,68,68,0.1); color: #dc2626; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Master Admin</span>
                     </div>
                     <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-family: monospace;">admin@store.com (or username: admin)</div>
-                    <div style="font-size: 0.72rem; color: #a1a1aa; margin-top: 2px;">Password: <code style="color: #fef08a;">admin123</code> &bull; <span style="color: var(--gold-primary); text-decoration: underline;">Click to fill &amp; enter</span></div>
+                    <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px;">Password: <code style="color: var(--text-primary);">admin123</code> &bull; <span style="color: var(--gold); text-decoration: underline;">Click to fill &amp; enter</span></div>
                 </button>
             </div>
 

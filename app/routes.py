@@ -168,11 +168,11 @@ def product_detail(product_id):
         count = rating_counts[star]
         rating_percentages[star] = round((count / total_reviews * 100) if total_reviews > 0 else 0)
 
+    # Curate complementary capsule styling pieces
     similar_products = Product.query.filter(
-        Product.category == product.category,
         Product.id != product.id,
         Product.is_active == True
-    ).limit(4).all()
+    ).order_by(Product.rating.desc(), Product.id.asc()).limit(3).all()
 
     return render_template(
         "product_detail.html",

@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -31,7 +31,7 @@
 
     <main class="page-container" style="max-width: 1120px;">
         <div style="margin-bottom: 28px;">
-            <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: #ffffff; letter-spacing: -0.02em;">Secure Checkout</h1>
+            <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--text-primary); letter-spacing: -0.02em;">Secure Checkout</h1>
             <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Enter delivery coordinates to proceed with encrypted runway order fulfillment</p>
         </div>
 
@@ -48,16 +48,16 @@
         <div class="checkout-layout" style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items: start;">
             <!-- Shipping Form Column -->
             <div class="checkout-form-column">
-                <div class="card" style="background: #0d111a; border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-lg); padding: 32px; box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.85);">
-                    <h3 style="font-family: var(--font-display); font-size: 1.3rem; color: #ffffff; margin-bottom: 16px;">1. Shipping &amp; Recipient Details</h3>
+                <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-md);">
+                    <h3 style="font-family: var(--font-display); font-size: 1.3rem; color: var(--text-primary); margin-bottom: 16px;">1. Shipping &amp; Recipient Details</h3>
 
                     {% if current_user %}
-                        <div class="auth-callout-box" style="margin-bottom: 20px; padding: 12px 16px; background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; border-radius: var(--radius-sm);">
-                            <p style="color: #6ee7b7; font-size: 0.85rem; margin: 0;">✓ Pre-filled default delivery address from your registered member profile.</p>
+                        <div class="auth-callout-box" style="margin-bottom: 20px; padding: 12px 16px; background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--success); border-radius: var(--radius-sm);">
+                            <p style="color: #059669; font-size: 0.85rem; margin: 0; font-weight: 500;">✓ Pre-filled default delivery address from your registered member profile.</p>
                         </div>
                     {% else %}
-                        <div class="auth-callout-box" style="margin-bottom: 20px; padding: 12px 16px; background: rgba(99, 102, 241, 0.1); border-left: 3px solid var(--accent-indigo); border-radius: var(--radius-sm);">
-                            <p style="font-size: 0.84rem; color: #c7d2fe; margin: 0;">Checking out as guest. Want to save this order to an account? <a href="{{ url_for('storefront.login', next=url_for('storefront.checkout')) }}" style="text-decoration: underline; font-weight: 700; color: #ffffff;">Log in</a> or <a href="{{ url_for('storefront.register', next=url_for('storefront.checkout')) }}" style="text-decoration: underline; font-weight: 700; color: #ffffff;">Join Atelier</a>.</p>
+                        <div class="auth-callout-box" style="margin-bottom: 20px; padding: 12px 16px; background: rgba(197, 160, 89, 0.08); border-left: 3px solid var(--gold); border-radius: var(--radius-sm);">
+                            <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0;">Checking out as guest. Want to save this order to an account? <a href="{{ url_for('storefront.login', next=url_for('storefront.checkout')) }}" style="text-decoration: underline; font-weight: 700; color: var(--text-primary);">Log in</a> or <a href="{{ url_for('storefront.register', next=url_for('storefront.checkout')) }}" style="text-decoration: underline; font-weight: 700; color: var(--text-primary);">Join Atelier</a>.</p>
                         </div>
                     {% endif %}
 
@@ -86,30 +86,30 @@
 
             <!-- Order Summary Column -->
             <div class="checkout-summary-column">
-                <div class="card summary-card" style="background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px;">
-                    <h3 style="font-family: var(--font-display); font-size: 1.2rem; color: #ffffff; margin-bottom: 18px;">Order Items ({{ items|length }})</h3>
+                <div class="card summary-card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);">
+                    <h3 style="font-family: var(--font-display); font-size: 1.2rem; color: var(--text-primary); margin-bottom: 18px;">Order Items ({{ items|length }})</h3>
                     
                     <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px;">
                         {% for item in items %}
-                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle);">
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" style="width: 44px; height: 55px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-subtle);">
                                     <div>
-                                        <strong style="color: #ffffff; font-size: 0.9rem; display: block;">{{ item.product.name }}</strong>
+                                        <strong style="color: var(--text-primary); font-size: 0.9rem; display: block;">{{ item.product.name }}</strong>
                                         <div style="display: flex; align-items: center; gap: 6px; margin-top: 3px;">
                                             <span class="badge-size" style="font-size: 0.65rem; padding: 1px 6px;">Size {{ item.size }}</span>
                                             <span class="meta-tag" style="color: var(--text-muted); font-size: 0.78rem;">{{ item.product.color }} &times; {{ item.qty }}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">₹{{ "{:,.2f}".format(item.subtotal) }}</div>
+                                <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">₹{{ "{:,.2f}".format(item.subtotal) }}</div>
                             </div>
                         {% endfor %}
                     </div>
 
                     <div class="summary-line" style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary);">
                         <span>Subtotal:</span>
-                        <span style="color: #ffffff; font-weight: 600;">₹{{ "{:,.2f}".format(total) }}</span>
+                        <span style="color: var(--text-primary); font-weight: 600;">₹{{ "{:,.2f}".format(total) }}</span>
                     </div>
                     <div class="summary-line" style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary);">
                         <span>Pan-India Courier:</span>
@@ -117,18 +117,18 @@
                     </div>
                     <div class="summary-line" style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary);">
                         <span>GST / Taxes:</span>
-                        <span style="color: var(--accent-cyan);">Inclusive</span>
+                        <span style="color: var(--gold); font-weight: 600;">Inclusive</span>
                     </div>
                     
-                    <hr style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 16px 0;">
+                    <hr style="border: none; border-top: 1px solid var(--border-subtle); margin: 16px 0;">
                     
-                    <div class="summary-line total-line" style="display: flex; justify-content: space-between; align-items: baseline; font-size: 1.25rem; font-weight: 800; color: #ffffff;">
+                    <div class="summary-line total-line" style="display: flex; justify-content: space-between; align-items: baseline; font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">
                         <span>Total Due:</span>
-                        <span style="font-size: 1.6rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">₹{{ "{:,.2f}".format(total) }}</span>
+                        <span style="font-size: 1.6rem; color: var(--text-primary); font-family: var(--font-sans); font-weight: 800;">₹{{ "{:,.2f}".format(total) }}</span>
                     </div>
 
                     <!-- Trust Strip -->
-                    <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.78rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 8px;">
+                    <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle); font-size: 0.78rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 8px;">
                         <div>🔒 256-Bit SSL Encrypted Razorpay Gateway</div>
                         <div>⚡ Instant Automated Order Confirmation &amp; Tracking</div>
                     </div>

@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -28,7 +28,7 @@
     <main class="page-container">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
             <div>
-                <h1 style="font-family: var(--font-display); font-size: 2rem; color: #ffffff; letter-spacing: -0.01em;">Orders &amp; Fulfillment Overview</h1>
+                <h1 style="font-family: var(--font-display); font-size: 2rem; color: var(--text-primary); letter-spacing: -0.01em;">Orders &amp; Fulfillment Overview</h1>
                 <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Live order management, courier tracking assignments, and real-time INR revenue analytics</p>
             </div>
             <div style="display: flex; gap: 10px;">
@@ -54,23 +54,23 @@
             </div>
             <div class="metric-card">
                 <h3>Processed Revenue (INR)</h3>
-                <div class="metric-value" style="background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">₹{{ "{:,.2f}".format(metrics.total_revenue) }}</div>
+                <div class="metric-value" style="color: var(--text-primary); font-weight: 800;">₹{{ "{:,.2f}".format(metrics.total_revenue) }}</div>
             </div>
             <div class="metric-card">
                 <h3>Paid &bull; Processing</h3>
-                <div class="metric-value" style="color: #93c5fd;">{{ metrics.paid_count }}</div>
+                <div class="metric-value" style="color: #2563eb;">{{ metrics.paid_count }}</div>
             </div>
             <div class="metric-card">
                 <h3>Shipped &bull; In Transit</h3>
-                <div class="metric-value" style="color: #d8b4fe;">{{ metrics.shipped_count }}</div>
+                <div class="metric-value" style="color: var(--gold);">{{ metrics.shipped_count }}</div>
             </div>
             <div class="metric-card">
                 <h3>Delivered</h3>
-                <div class="metric-value" style="color: #6ee7b7;">{{ metrics.delivered_count }}</div>
+                <div class="metric-value" style="color: #059669;">{{ metrics.delivered_count }}</div>
             </div>
             <div class="metric-card">
                 <h3>Cancelled &bull; Refunded</h3>
-                <div class="metric-value" style="color: #fca5a5;">{{ metrics.cancelled_count }}</div>
+                <div class="metric-value" style="color: #dc2626;">{{ metrics.cancelled_count }}</div>
             </div>
         </div>
 
@@ -88,15 +88,15 @@
                 {% if status_filter %}
                     <input type="hidden" name="status" value="{{ status_filter }}">
                 {% endif %}
-                <input type="text" name="q" value="{{ search_query or '' }}" placeholder="Search customer, tracking #..." style="padding: 8px 14px; width: 220px; background: #101420; border: 1px solid var(--border-subtle); color: #ffffff; border-radius: var(--radius-sm);">
+                <input type="text" name="q" value="{{ search_query or '' }}" placeholder="Search customer, tracking #..." style="padding: 8px 14px; width: 220px; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: var(--radius-sm);">
                 <button type="submit" class="btn-secondary" style="padding: 8px 16px;">Search</button>
             </form>
         </div>
 
-        <div class="card" style="background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; overflow-x: auto;">
+        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; overflow-x: auto; box-shadow: var(--shadow-sm);">
             <table class="cart-table" style="width: 100%; border-collapse: collapse;">
                 <thead>
-                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-subtle);">
                         <th style="padding: 10px;">Order #</th>
                         <th style="padding: 10px;">Customer</th>
                         <th style="padding: 10px;">Account Type</th>
@@ -110,10 +110,10 @@
                 </thead>
                 <tbody>
                     {% for order in orders %}
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
-                        <td style="padding: 14px 10px;"><strong style="color: #ffffff;">#{{ order.id }}</strong></td>
+                    <tr style="border-bottom: 1px solid var(--border-subtle);">
+                        <td style="padding: 14px 10px;"><strong style="color: var(--text-primary);">#{{ order.id }}</strong></td>
                         <td style="padding: 14px 10px;">
-                            <strong style="color: #ffffff;">{{ order.customer_name }}</strong>
+                            <strong style="color: var(--text-primary);">{{ order.customer_name }}</strong>
                             <div class="meta-tag" style="color: var(--text-muted); font-size: 0.78rem;">{{ order.customer_email }}</div>
                         </td>
                         <td style="padding: 14px 10px;">
@@ -124,7 +124,7 @@
                             {% endif %}
                         </td>
                         <td style="padding: 14px 10px; color: var(--text-secondary);">{{ order.items|length }} item(s)</td>
-                        <td style="padding: 14px 10px;"><strong style="color: #ffffff;">₹{{ "{:,.2f}".format(order.total_amount) }}</strong></td>
+                        <td style="padding: 14px 10px;"><strong style="color: var(--text-primary);">₹{{ "{:,.2f}".format(order.total_amount) }}</strong></td>
                         <td style="padding: 14px 10px;">
                             {% if order.tracking_number %}
                                 <span class="badge badge-info" style="font-size: 0.75rem;">{{ order.courier_name or 'Express' }}: <code>{{ order.tracking_number }}</code></span>

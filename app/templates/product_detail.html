@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -79,7 +79,7 @@
         <div class="breadcrumb">
             <a href="{{ url_for('storefront.index') }}">Atelier Home</a> &rsaquo;
             <a href="{{ url_for('storefront.index', category=product.category) }}">{{ product.category }}</a> &rsaquo;
-            <span style="color: #ffffff;">{{ product.name }}</span>
+            <span style="color: var(--text-primary);">{{ product.name }}</span>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -103,7 +103,7 @@
                     {% if current_user %}
                         <form action="{{ url_for('storefront.toggle_wishlist', product_id=product.id) }}" method="POST">
                             <button type="submit" class="btn-secondary btn-small" style="display: inline-flex; align-items: center; gap: 6px; border-radius: var(--radius-full);">
-                                <span style="color: {{ '#ec4899' if is_wishlisted else 'var(--text-muted)' }}; font-size: 1.1rem;">&hearts;</span>
+                                <span style="color: {{ 'var(--accent-coral)' if is_wishlisted else 'var(--text-muted)' }}; font-size: 1.1rem;">&hearts;</span>
                                 {{ 'Saved in Wishlist' if is_wishlisted else 'Save to Wishlist' }}
                             </button>
                         </form>
@@ -124,11 +124,11 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <strong style="color: #ffffff; font-size: 1.05rem;">{{ "%.1f"|format(product.rating) }}</strong>
+                    <strong style="color: var(--text-primary); font-size: 1.05rem;">{{ "%.1f"|format(product.rating) }}</strong>
                     <a href="#reviews-section" style="color: var(--text-muted); font-size: 0.88rem; text-decoration: underline;">({{ product.reviews_count }} verified buyer reviews)</a>
                 </div>
 
-                <div class="product-detail-price" style="color: #ffffff; font-size: 2.2rem; font-weight: 800; margin-bottom: 20px;">
+                <div class="product-detail-price" style="color: var(--text-primary); font-size: 2.2rem; font-weight: 800; margin-bottom: 20px;">
                     ₹{{ "{:,.2f}".format(product.price) }}
                     <span style="font-size: 0.82rem; font-weight: 500; color: var(--text-muted); margin-left: 8px; text-transform: uppercase; letter-spacing: 0.06em;">Inclusive of all Indian taxes</span>
                 </div>
@@ -193,58 +193,57 @@
                         </button>
                     </form>
                 {% else %}
-                    <div class="card" style="margin-bottom: 24px; text-align: center; border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.06); padding: 18px; border-radius: var(--radius-sm);">
-                        <p style="color: #fca5a5;">This runway piece is currently sold out. Check back soon for the next capsule restock.</p>
+                    <div class="card" style="margin-bottom: 24px; text-align: center; border-color: rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.05); padding: 18px; border-radius: var(--radius-sm);">
+                        <p style="color: #dc2626;">This runway piece is currently sold out. Check back soon for the next capsule restock.</p>
                     </div>
                 {% endif %}
 
                 <div class="delivery-perks">
-                    <div class="perk-item" style="color: #cbd5e1; font-weight: 500;">&#10003; <strong>Pan-India Express Courier</strong> &bull; Dispatched within 24 Hours with Live Tracking</div>
-                    <div class="perk-item" style="color: #cbd5e1; font-weight: 500;">&#10003; <strong>7-Day Easy Atelier Exchange &amp; Returns</strong> &bull; Instant Automated UPI/Card Refunds</div>
-                    <div class="perk-item" style="color: #cbd5e1; font-weight: 500;">&#10003; <strong>100% Certified Luxury Quality</strong> &bull; Insured Secure Transit Across India</div>
+                    <div class="perk-item" style="color: var(--text-secondary); font-weight: 500;">&#10003; <strong>Pan-India Express Courier</strong> &bull; Dispatched within 24 Hours with Live Tracking</div>
+                    <div class="perk-item" style="color: var(--text-secondary); font-weight: 500;">&#10003; <strong>7-Day Easy Atelier Exchange &amp; Returns</strong> &bull; Instant Automated UPI/Card Refunds</div>
+                    <div class="perk-item" style="color: var(--text-secondary); font-weight: 500;">&#10003; <strong>100% Certified Luxury Quality</strong> &bull; Insured Secure Transit Across India</div>
                 </div>
             </div>
         </div>
 
         <!-- =================================================================
-             Complete The Runway Look — Hero-Based Animated Lookbook Section
+             Complete The Look — Curated Capsule Pairings
              ================================================================= -->
         {% if similar_products %}
-            <section class="runway-lookbook-section">
-                <div class="runway-lookbook-header">
-                    <div class="runway-lookbook-title-wrap">
-                        <span class="runway-lookbook-badge">Capsule Styling &bull; Autumn/Winter 2026</span>
-                        <h2 style="margin-top: 6px;">Complete The Runway Look</h2>
-                        <p>Curated designer pairings from the {{ product.category }} couture silhouette</p>
+            <section class="complete-look-section">
+                <div class="complete-look-header">
+                    <div class="complete-look-title-wrap">
+                        <span class="complete-look-badge">Capsule Styling &bull; Autumn / Winter 2026</span>
+                        <h2>Complete The Look</h2>
+                        <p>Curated complementary pairings from the Autumn / Winter Atelier collection</p>
                     </div>
                 </div>
 
-                <div class="runway-lookbook-grid">
+                <div class="complete-look-grid">
                     {% for sim in similar_products %}
-                        <div class="runway-hero-card">
-                            <div class="runway-card-visual">
+                        <div class="complete-look-card">
+                            <div class="complete-look-media">
                                 <a href="{{ url_for('storefront.product_detail', product_id=sim.id) }}">
-                                    <img src="{{ sim.image_url }}" alt="{{ sim.name }}" loading="lazy">
+                                    <img src="{{ sim.image_url }}" alt="{{ sim.name }}" loading="lazy" decoding="async">
                                 </a>
-                                <div class="runway-card-ambient-glow"></div>
+                                {% if sim.stock <= 5 and sim.stock > 0 %}
+                                    <span class="stock-pill low-stock">Only {{ sim.stock }} Left</span>
+                                {% endif %}
                             </div>
 
-                            <div class="runway-card-content">
-                                <div>
-                                    <div class="runway-card-tags">
-                                        <span class="runway-tag-pill accent">{{ sim.category }}</span>
-                                        <span class="runway-tag-pill">{{ sim.color }}</span>
-                                    </div>
-                                    <h3 class="runway-card-title">
-                                        <a href="{{ url_for('storefront.product_detail', product_id=sim.id) }}">{{ sim.name }}</a>
-                                    </h3>
+                            <div class="complete-look-details">
+                                <div class="complete-look-sub-row">
+                                    <span class="product-category-tag">{{ sim.category }}</span>
+                                    <span class="product-rating-badge">&#9733; {{ "%.1f"|format(sim.rating) }}</span>
                                 </div>
-
-                                <div class="runway-card-meta">
-                                    <div class="runway-price-tag">₹{{ "{:,.2f}".format(sim.price) }}</div>
-                                    <a href="{{ url_for('storefront.product_detail', product_id=sim.id) }}" class="runway-cta-btn">
-                                        <span>View</span>
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                                <h3 class="complete-look-name">
+                                    <a href="{{ url_for('storefront.product_detail', product_id=sim.id) }}">{{ sim.name }}</a>
+                                </h3>
+                                <p class="complete-look-specs">{{ sim.color }}</p>
+                                <div class="complete-look-action-row">
+                                    <div class="price-clean">₹{{ "{:,.2f}".format(sim.price) }}</div>
+                                    <a href="{{ url_for('storefront.product_detail', product_id=sim.id) }}" class="btn-primary-pill" style="padding: 7px 16px; font-size: 0.72rem;">
+                                        View Piece
                                     </a>
                                 </div>
                             </div>
@@ -280,7 +279,7 @@
                     </div>
 
                     <div>
-                        <h2 style="font-family: var(--font-display); font-size: 1.5rem; color: #ffffff; margin-bottom: 6px;">
+                        <h2 style="font-family: var(--font-display); font-size: 1.5rem; color: var(--text-primary); margin-bottom: 6px;">
                             Customer Ratings &amp; Reviews
                         </h2>
                         <p class="subtitle" style="color: var(--text-secondary); margin-bottom: 16px;">
@@ -291,7 +290,7 @@
                         <div class="breakdown-bars">
                             {% for star in [5, 4, 3, 2, 1] %}
                                 <div class="breakdown-row">
-                                    <span class="breakdown-label">{{ star }} <span style="color: #f59e0b;">&#9733;</span></span>
+                                    <span class="breakdown-label">{{ star }} <span style="color: var(--gold);">&#9733;</span></span>
                                     <div class="breakdown-progress-track">
                                         <div class="breakdown-progress-fill" style="width: {{ rating_percentages.get(star, 0) }}%;"></div>
                                     </div>
@@ -304,15 +303,15 @@
 
                 <!-- Write a Review Box -->
                 <div class="review-form-card">
-                    <h3 style="color: #ffffff; margin-bottom: 16px; font-size: 1.15rem; font-family: var(--font-display); display: flex; align-items: center; gap: 8px;">
+                    <h3 style="color: var(--text-primary); margin-bottom: 16px; font-size: 1.15rem; font-family: var(--font-display); display: flex; align-items: center; gap: 8px;">
                         <span>✦</span> Write a Review for {{ product.name }}
                     </h3>
 
                     <form action="{{ url_for('storefront.add_product_review', product_id=product.id) }}" method="POST">
                         {% if current_user %}
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 10px 14px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: var(--radius-sm);">
-                                <span style="color: #818cf8; font-size: 0.9rem;">Verified Account:</span>
-                                <strong style="color: #ffffff; font-size: 0.95rem;">{{ current_user.name }}</strong>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 10px 14px; background: rgba(197, 160, 89, 0.08); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+                                <span style="color: var(--gold); font-size: 0.9rem; font-weight: 600;">Verified Account:</span>
+                                <strong style="color: var(--text-primary); font-size: 0.95rem;">{{ current_user.name }}</strong>
                                 <span class="badge badge-success" style="font-size: 0.68rem;">Logged In Buyer</span>
                             </div>
                         {% else %}
@@ -323,7 +322,7 @@
                                 </div>
                                 <div style="display: flex; align-items: flex-end; padding-bottom: 2px;">
                                     <span style="color: var(--text-muted); font-size: 0.82rem;">
-                                        Have an account? <a href="{{ url_for('storefront.login') }}" style="color: #818cf8; text-decoration: underline; font-weight: 600;">Sign in here</a>
+                                        Have an account? <a href="{{ url_for('storefront.login') }}" style="color: var(--gold); text-decoration: underline; font-weight: 600;">Sign in here</a>
                                     </span>
                                 </div>
                             </div>
@@ -377,7 +376,7 @@
                                     </div>
                                     <div>
                                         <div style="display: flex; align-items: center; gap: 8px;">
-                                            <strong style="color: #ffffff; font-size: 0.96rem;">{{ rev.author_name }}</strong>
+                                            <strong style="color: var(--text-primary); font-size: 0.96rem;">{{ rev.author_name }}</strong>
                                             <span class="badge badge-success" style="font-size: 0.65rem; padding: 2px 6px;">Verified Buyer</span>
                                         </div>
                                         <div class="stars-display" style="margin-top: 4px;" title="{{ rev.rating }} / 5 stars">
@@ -403,9 +402,9 @@
                             <p class="review-comment-text">{{ rev.comment }}</p>
                         </div>
                     {% else %}
-                        <div style="text-align: center; padding: 36px 16px; background: rgba(255, 255, 255, 0.02); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
+                        <div style="text-align: center; padding: 36px 16px; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
                             <div style="font-size: 2rem; color: var(--gold); margin-bottom: 8px;">&#9733;</div>
-                            <h4 style="color: #ffffff; margin-bottom: 4px;">No Reviews Published Yet</h4>
+                            <h4 style="color: var(--text-primary); margin-bottom: 4px;">No Reviews Published Yet</h4>
                             <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Be the first collector to review this runway piece above!</p>
                         </div>
                     {% endfor %}

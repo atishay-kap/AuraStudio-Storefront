@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -28,7 +28,7 @@
     <main class="page-container">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
             <div>
-                <h1 style="font-family: var(--font-display); font-size: 2rem; color: #ffffff; letter-spacing: -0.01em;">Order #{{ order.id }} Fulfillment</h1>
+                <h1 style="font-family: var(--font-display); font-size: 2rem; color: var(--text-primary); letter-spacing: -0.01em;">Order #{{ order.id }} Fulfillment</h1>
                 <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Placed on {{ order.created_at.strftime("%B %d, %Y at %I:%M %p") }}</p>
             </div>
             <a href="{{ url_for('admin.dashboard') }}" class="nav-pill">&larr; Back to Dashboard</a>
@@ -45,9 +45,9 @@
         {% endwith %}
 
         {% if order.status == 'cancelled' %}
-            <div class="card" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px;">
-                <h4 style="color: #fca5a5; margin-bottom: 6px;">Order Cancelled &amp; Refunded</h4>
-                <p style="color: #cbd5e1; font-size: 0.9rem; margin: 0;">
+            <div class="card" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px;">
+                <h4 style="color: #dc2626; margin-bottom: 6px;">Order Cancelled &amp; Refunded</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
                     Refund Status: <span class="badge badge-{{ 'success' if order.refund_status == 'processed' else 'warning' }}">{{ order.refund_status|capitalize }}</span>
                     {% if order.refund_id %}
                         &bull; Gateway Refund Reference: <code>{{ order.refund_id }}</code>
@@ -58,8 +58,8 @@
 
         <div class="admin-order-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
             <!-- Status & Fulfillment Actions -->
-            <div class="card" style="background: #0d111a; border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-lg); padding: 28px;">
-                <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: #ffffff; margin-bottom: 16px;">1. Order Status &amp; Transitions</h3>
+            <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 16px;">1. Order Status &amp; Transitions</h3>
                 
                 <div style="margin-bottom: 24px;">
                     <p style="font-size: 0.95rem; margin-bottom: 12px; color: var(--text-secondary);">
@@ -69,7 +69,7 @@
                     <form action="{{ url_for('admin.update_order_status', order_id=order.id) }}" method="POST" class="auth-form">
                         <div class="form-group">
                             <label for="status">Transition Status:</label>
-                            <select name="status" id="status" style="padding: 10px; background: #101420; color: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); width: 100%;">
+                            <select name="status" id="status" style="padding: 10px; background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); width: 100%;">
                                 <option value="paid" {{ 'selected' if order.status == 'paid' }}>Paid / Processing</option>
                                 <option value="shipped" {{ 'selected' if order.status == 'shipped' }}>Shipped / In Transit</option>
                                 <option value="delivered" {{ 'selected' if order.status == 'delivered' }}>Delivered</option>
@@ -80,10 +80,10 @@
                     </form>
                 </div>
 
-                <hr style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 20px 0;">
+                <hr style="border: none; border-top: 1px solid var(--border-subtle); margin: 20px 0;">
 
                 <!-- Courier Tracking Assignment Form -->
-                <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: #ffffff; margin-bottom: 16px;">2. Courier &amp; Logistics Tracking</h3>
+                <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 16px;">2. Courier &amp; Logistics Tracking</h3>
                 <form action="{{ url_for('admin.update_order_tracking', order_id=order.id) }}" method="POST" class="auth-form">
                     <div class="form-group">
                         <label for="courier_name">Indian Courier Partner</label>
@@ -110,14 +110,14 @@
             </div>
 
             <!-- Customer & Shipping Information -->
-            <div class="card" style="background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px;">
-                <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: #ffffff; margin-bottom: 16px;">Customer &amp; Payment Metadata</h3>
+            <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 16px;">Customer &amp; Payment Metadata</h3>
                 <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.92rem;">
-                    <p><strong style="color: #ffffff;">Customer:</strong> {{ order.customer_name }}</p>
-                    <p><strong style="color: #ffffff;">Email:</strong> {{ order.customer_email }}</p>
-                    <p><strong style="color: #ffffff;">Delivery Address:</strong><br><span style="color: var(--text-secondary);">{{ order.shipping_address }}</span></p>
+                    <p><strong style="color: var(--text-primary);">Customer:</strong> {{ order.customer_name }}</p>
+                    <p><strong style="color: var(--text-primary);">Email:</strong> {{ order.customer_email }}</p>
+                    <p><strong style="color: var(--text-primary);">Delivery Address:</strong><br><span style="color: var(--text-secondary);">{{ order.shipping_address }}</span></p>
                     <p>
-                        <strong style="color: #ffffff;">Account Type:</strong>
+                        <strong style="color: var(--text-primary);">Account Type:</strong>
                         {% if order.user %}
                             <span class="badge badge-info">Member #{{ order.user.id }}</span>
                         {% else %}
@@ -126,25 +126,25 @@
                     </p>
 
                     {% if order.razorpay_payment_id %}
-                        <p><strong style="color: #ffffff;">Payment Ref:</strong> <code style="color: #a5b4fc;">{{ order.razorpay_payment_id }}</code></p>
+                        <p><strong style="color: var(--text-primary);">Payment Ref:</strong> <code>{{ order.razorpay_payment_id }}</code></p>
                     {% endif %}
 
                     {% if order.razorpay_order_id %}
-                        <p><strong style="color: #ffffff;">Gateway Order:</strong> <code>{{ order.razorpay_order_id }}</code></p>
+                        <p><strong style="color: var(--text-primary);">Gateway Order:</strong> <code>{{ order.razorpay_order_id }}</code></p>
                     {% endif %}
 
                     {% if order.refund_id %}
-                        <p><strong style="color: #ffffff;">Refund Ref:</strong> <code>{{ order.refund_id }}</code> (<span class="badge badge-success">{{ order.refund_status|capitalize }}</span>)</p>
+                        <p><strong style="color: var(--text-primary);">Refund Ref:</strong> <code>{{ order.refund_id }}</code> (<span class="badge badge-success">{{ order.refund_status|capitalize }}</span>)</p>
                     {% endif %}
                 </div>
             </div>
         </div>
 
-        <div class="card" style="background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); margin-top: 28px; overflow-x: auto; padding: 24px;">
-            <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: #ffffff; margin-bottom: 16px;">Ordered Items ({{ order.items|length }})</h3>
+        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); margin-top: 28px; overflow-x: auto; padding: 24px; box-shadow: var(--shadow-sm);">
+            <h3 style="font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 16px;">Ordered Items ({{ order.items|length }})</h3>
             <table class="cart-table" style="width: 100%; border-collapse: collapse;">
                 <thead>
-                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-subtle);">
                         <th style="padding: 10px;">Product</th>
                         <th style="padding: 10px;">Category</th>
                         <th style="padding: 10px;">Size / Color</th>
@@ -155,24 +155,24 @@
                 </thead>
                 <tbody>
                     {% for item in order.items %}
-                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
-                            <td style="padding: 12px 10px;"><strong style="color: #ffffff;">{{ item.product.name }}</strong></td>
+                        <tr style="border-bottom: 1px solid var(--border-subtle);">
+                            <td style="padding: 12px 10px;"><strong style="color: var(--text-primary);">{{ item.product.name }}</strong></td>
                             <td style="padding: 12px 10px;"><span class="runway-tag-pill accent">{{ item.product.category }}</span></td>
                             <td style="padding: 12px 10px;">
                                 <span class="badge-size">Size {{ item.size or item.product.size }}</span>
                                 <span style="color: var(--text-secondary); margin-left: 6px;">&bull; {{ item.product.color }}</span>
                             </td>
-                            <td style="padding: 12px 10px; color: #ffffff;">₹{{ "{:,.2f}".format(item.price_at_purchase) }}</td>
+                            <td style="padding: 12px 10px; color: var(--text-primary);">₹{{ "{:,.2f}".format(item.price_at_purchase) }}</td>
                             <td style="padding: 12px 10px; color: var(--text-secondary);">{{ item.quantity }}</td>
-                            <td style="padding: 12px 10px; color: var(--accent-cyan); font-weight: 700;">₹{{ "{:,.2f}".format(item.price_at_purchase * item.quantity) }}</td>
+                            <td style="padding: 12px 10px; color: var(--text-primary); font-weight: 700;">₹{{ "{:,.2f}".format(item.price_at_purchase * item.quantity) }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <div style="display: flex; justify-content: flex-end; margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-                <div style="font-size: 1.3rem; font-weight: 800; color: #ffffff; display: flex; gap: 16px; align-items: baseline;">
+            <div style="display: flex; justify-content: flex-end; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+                <div style="font-size: 1.3rem; font-weight: 800; color: var(--text-primary); display: flex; gap: 16px; align-items: baseline;">
                     <span>Order Total:</span>
-                    <span style="font-size: 1.6rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">₹{{ "{:,.2f}".format(order.total_amount) }}</span>
+                    <span style="font-size: 1.6rem; color: var(--text-primary); font-weight: 800;">₹{{ "{:,.2f}".format(order.total_amount) }}</span>
                 </div>
             </div>
         </div>

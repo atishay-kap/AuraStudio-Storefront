@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -28,7 +28,7 @@
     <main class="page-container">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
             <div>
-                <h1 style="font-family: var(--font-display); font-size: 2rem; color: #ffffff; letter-spacing: -0.01em;">Customer Accounts &amp; Roles</h1>
+                <h1 style="font-family: var(--font-display); font-size: 2rem; color: var(--text-primary); letter-spacing: -0.01em;">Customer Accounts &amp; Roles</h1>
                 <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Directory of all registered client profiles, purchase histories, and permission levels</p>
             </div>
             <div style="display: flex; gap: 10px;">
@@ -54,19 +54,19 @@
             </div>
             <div class="metric-card">
                 <h3>Customer Lifetime Value (INR)</h3>
-                <div class="metric-value" style="color: #34d399;">₹{{ "{:,.2f}".format(user_data|sum(attribute='ltv')) }}</div>
+                <div class="metric-value" style="color: #059669;">₹{{ "{:,.2f}".format(user_data|sum(attribute='ltv')) }}</div>
             </div>
             <div class="metric-card">
                 <h3>Active Buying Customers</h3>
-                <div class="metric-value" style="color: #a78bfa;">{{ user_data|selectattr('completed_orders', 'greaterthan', 0)|list|length }}</div>
+                <div class="metric-value" style="color: var(--gold);">{{ user_data|selectattr('completed_orders', 'greaterthan', 0)|list|length }}</div>
             </div>
         </div>
 
-        <!-- Luxury Dark Table -->
-        <div class="card" style="background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; overflow-x: auto;">
+        <!-- Luxury Table -->
+        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; overflow-x: auto; box-shadow: var(--shadow-sm);">
             <table class="cart-table" style="width: 100%; border-collapse: collapse;">
                 <thead>
-                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-subtle);">
                         <th style="padding: 10px;">User Profile</th>
                         <th style="padding: 10px;">Email Address</th>
                         <th style="padding: 10px;">Role / Permission</th>
@@ -80,12 +80,12 @@
                 <tbody>
                     {% for item in user_data %}
                         {% set u = item.user %}
-                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                        <tr style="border-bottom: 1px solid var(--border-subtle);">
                             <td style="padding: 14px 10px;">
                                 <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div class="user-avatar-circle" style="width: 34px; height: 34px; border-radius: 50%; background: var(--accent-gradient); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">{{ u.name[0]|upper }}</div>
+                                    <div class="user-avatar-circle" style="width: 34px; height: 34px; border-radius: 50%; background: var(--noir); color: var(--gold-light); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">{{ u.name[0]|upper }}</div>
                                     <div>
-                                        <strong style="color: #ffffff; font-weight: 600;">{{ u.name }}</strong>
+                                        <strong style="color: var(--text-primary); font-weight: 600;">{{ u.name }}</strong>
                                         <div style="font-size: 0.75rem; color: var(--text-muted);">Account #{{ u.id }}</div>
                                     </div>
                                 </div>
@@ -93,21 +93,21 @@
                             <td style="padding: 14px 10px; color: var(--text-secondary);">{{ u.email }}</td>
                             <td style="padding: 14px 10px;">
                                 {% if u.is_admin %}
-                                    <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4);">&starf; Administrator</span>
+                                    <span class="badge" style="background: rgba(197, 160, 89, 0.15); color: var(--gold); border: 1px solid var(--border-subtle);">&starf; Administrator</span>
                                 {% else %}
-                                    <span class="badge" style="background: rgba(255, 255, 255, 0.08); color: #94a3b8;">Customer</span>
+                                    <span class="badge" style="background: rgba(0,0,0,0.06); color: var(--text-muted);">Customer</span>
                                 {% endif %}
                             </td>
-                            <td style="padding: 14px 10px; font-weight: 600; color: #ffffff;">{{ item.total_orders }}</td>
-                            <td style="padding: 14px 10px; color: #93c5fd;">{{ item.completed_orders }}</td>
+                            <td style="padding: 14px 10px; font-weight: 600; color: var(--text-primary);">{{ item.total_orders }}</td>
+                            <td style="padding: 14px 10px; color: #2563eb;">{{ item.completed_orders }}</td>
                             <td style="padding: 14px 10px;">
-                                <strong style="color: #34d399;">₹{{ "{:,.2f}".format(item.ltv) }}</strong>
+                                <strong style="color: #059669;">₹{{ "{:,.2f}".format(item.ltv) }}</strong>
                             </td>
                             <td style="padding: 14px 10px; color: var(--text-muted); font-size: 0.85rem;">{{ u.created_at.strftime("%b %d, %Y") }}</td>
                             <td style="padding: 14px 10px;">
                                 <form action="{{ url_for('admin.toggle_user_admin', user_id=u.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Change admin role for {{ u.name }}?');">
                                     {% if u.is_admin %}
-                                        <button type="submit" class="btn-secondary btn-small" style="padding: 4px 10px; font-size: 0.75rem; color: #fca5a5;" title="Revoke admin access">Demote to Customer</button>
+                                        <button type="submit" class="btn-secondary btn-small" style="padding: 4px 10px; font-size: 0.75rem; color: #dc2626;" title="Revoke admin access">Demote to Customer</button>
                                     {% else %}
                                         <button type="submit" class="btn-secondary btn-small" style="padding: 4px 10px; font-size: 0.75rem;" title="Grant admin access">Promote to Admin</button>
                                     {% endif %}

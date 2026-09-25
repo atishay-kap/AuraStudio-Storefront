@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
@@ -34,7 +34,7 @@
     <main class="page-container">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
             <div>
-                <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: #ffffff; letter-spacing: -0.02em;">My Order History</h1>
+                <h1 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--text-primary); letter-spacing: -0.02em;">My Order History</h1>
                 <p class="subtitle" style="color: var(--text-secondary); margin-top: 4px;">Live Indian fulfillment statuses, package tracking, and order management for {{ current_user.name }}</p>
             </div>
             <a href="{{ url_for('storefront.index') }}" class="nav-pill">&larr; Continue Shopping</a>
@@ -62,15 +62,15 @@
         {% if orders %}
             <div style="display: flex; flex-direction: column; gap: 24px;">
                 {% for order in orders %}
-                    <div class="card" style="background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); flex-wrap: wrap; gap: 12px;">
+                    <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 12px;">
                             <div>
-                                <span style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #ffffff;">Order #{{ order.id }}</span>
+                                <span style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: var(--text-primary);">Order #{{ order.id }}</span>
                                 <span class="meta-tag" style="margin-left: 10px; color: var(--text-muted); font-size: 0.82rem;">{{ order.created_at.strftime("%b %d, %Y at %I:%M %p") }}</span>
                             </div>
                             <div style="display: flex; gap: 10px; align-items: center;">
                                 {% if order.tracking_number %}
-                                    <span class="badge badge-info" style="padding: 4px 10px; background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.3);">
+                                    <span class="badge badge-info" style="padding: 4px 10px;">
                                         🚚 {{ order.courier_name or 'Express Courier' }}: <code>{{ order.tracking_number }}</code>
                                     </span>
                                 {% endif %}
@@ -81,7 +81,7 @@
                         <div style="margin: 16px 0; overflow-x: auto;">
                             <table class="cart-table mini-table" style="width: 100%; border-collapse: collapse;">
                                 <thead>
-                                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+                                    <tr style="text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-subtle);">
                                         <th style="padding: 8px 10px;">Item</th>
                                         <th style="padding: 8px 10px;">Qty</th>
                                         <th style="padding: 8px 10px;">Price</th>
@@ -90,37 +90,37 @@
                                 </thead>
                                 <tbody>
                                     {% for item in order.items %}
-                                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                                        <tr style="border-bottom: 1px solid var(--border-subtle);">
                                             <td style="padding: 12px 10px;">
-                                                <strong style="color: #ffffff; font-size: 0.9rem;">{{ item.product.name }}</strong>
+                                                <strong style="color: var(--text-primary); font-size: 0.9rem;">{{ item.product.name }}</strong>
                                                 <div class="meta-tag" style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
                                                     <span class="badge-size" style="font-size: 0.65rem; padding: 1px 6px;">Size {{ item.size or item.product.size }}</span>
                                                     <span style="color: var(--text-muted); font-size: 0.78rem;">&bull; {{ item.product.color }}</span>
                                                 </div>
                                             </td>
                                             <td style="padding: 12px 10px; color: var(--text-secondary);">{{ item.quantity }}</td>
-                                            <td style="padding: 12px 10px; color: #ffffff;">₹{{ "{:,.2f}".format(item.price_at_purchase) }}</td>
-                                            <td style="padding: 12px 10px; color: var(--accent-cyan); font-weight: 700;">₹{{ "{:,.2f}".format(item.price_at_purchase * item.quantity) }}</td>
+                                            <td style="padding: 12px 10px; color: var(--text-primary);">₹{{ "{:,.2f}".format(item.price_at_purchase) }}</td>
+                                            <td style="padding: 12px 10px; color: var(--text-primary); font-weight: 700;">₹{{ "{:,.2f}".format(item.price_at_purchase * item.quantity) }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
 
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.06); flex-wrap: wrap; gap: 14px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 14px;">
                             <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                                <strong style="color: #ffffff;">Destination:</strong> {{ order.shipping_address }}
+                                <strong style="color: var(--text-primary);">Destination:</strong> {{ order.shipping_address }}
                                 {% if order.estimated_delivery %}
-                                    <div class="meta-tag" style="margin-top: 2px; color: #6ee7b7;">Estimated Delivery: <strong>{{ order.estimated_delivery }}</strong></div>
+                                    <div class="meta-tag" style="margin-top: 2px; color: #059669; font-weight: 600;">Estimated Delivery: <strong>{{ order.estimated_delivery }}</strong></div>
                                 {% endif %}
                             </div>
                             <div style="display: flex; align-items: center; gap: 14px;">
-                                <span style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">₹{{ "{:,.2f}".format(order.total_amount) }}</span>
+                                <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">₹{{ "{:,.2f}".format(order.total_amount) }}</span>
                                 <a href="{{ url_for('storefront.customer_order_detail', order_id=order.id) }}" class="btn-secondary" style="padding: 8px 16px; font-size: 0.84rem; border-radius: var(--radius-sm);">View Receipt</a>
 
                                 {% if order.status == 'paid' %}
                                     <form action="{{ url_for('storefront.cancel_order', order_id=order.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Cancel Order #{{ order.id }} and process full INR refund?');">
-                                        <button type="submit" class="btn-danger" style="padding: 8px 16px; font-size: 0.84rem; border-radius: var(--radius-sm); background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); cursor: pointer;">Cancel Order</button>
+                                        <button type="submit" class="btn-danger" style="padding: 8px 16px; font-size: 0.84rem; border-radius: var(--radius-sm); cursor: pointer;">Cancel Order</button>
                                     </form>
                                 {% endif %}
                             </div>
@@ -129,8 +129,8 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="card empty-state" style="text-align: center; padding: 70px 20px; background: #0d111a; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
-                <h2 style="font-family: var(--font-display); color: #ffffff; margin-bottom: 8px;">No orders found</h2>
+            <div class="card empty-state" style="text-align: center; padding: 70px 20px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+                <h2 style="font-family: var(--font-display); color: var(--text-primary); margin-bottom: 8px;">No orders found</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 24px;">You haven't placed any runway orders under this filter.</p>
                 <a href="{{ url_for('storefront.index') }}" class="btn-primary-pill" style="padding: 12px 28px;">Shop Apparel Collections</a>
             </div>
